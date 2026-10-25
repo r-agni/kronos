@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #080c10;
+    color: #e2e8f0;
+    font-family: 'Chakra Petch', sans-serif;
+    user-select: none;
+    overflow: hidden;
+  }
+}
+
+/* Custom Tactical Scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(14, 20, 27, 0.7);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1f2937;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00f0ff;
+}
+
+/* Tactical glowing animations */
+@keyframes pulse-cyan {
+  0%, 100% { opacity: 0.9; filter: drop-shadow(0 0 6px rgba(0, 240, 255, 0.7)); }
+  50% { opacity: 0.4; filter: drop-shadow(0 0 2px rgba(0, 240, 255, 0.3)); }
+}
+
+@keyframes pulse-red {
+  0%, 100% { opacity: 1; filter: drop-shadow(0 0 10px rgba(255, 51, 68, 0.8)); }
+  50% { opacity: 0.4; filter: drop-shadow(0 0 2px rgba(255, 51, 68, 0.3)); }
+}
+
+.animate-pulse-cyan {
+  animation: pulse-cyan 2s infinite ease-in-out;
+}
+
+.animate-pulse-red {
+  animation: pulse-red 1s infinite ease-in-out;
+}
+
+/* Tactical CRT Scanline overlay */
+.scanlines {
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  ), linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.03),
+    rgba(0, 255, 0, 0.01),
+    rgba(0, 0, 255, 0.03)
+  );
+  background-size: 100% 3px, 3px 100%;
+  pointer-events: none;
+}
+
