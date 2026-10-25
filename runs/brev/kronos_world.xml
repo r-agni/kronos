@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mujoco model="kronos_1m_sim2real_thruster_hopper">
+  <compiler angle="radian" coordinate="local" inertiafromgeom="true"/>
+  <option timestep="0.002" gravity="0 0 -9.81" integrator="RK4"/>
+  <default>
+    <geom condim="3" friction="0.78 0.005 0.0001" rgba="0.2 0.8 0.9 1"/>
+  </default>
+  <worldbody>
+    <light directional="true" diffuse="0.8 0.8 0.8" pos="0 0 25" dir="0 0 -1"/>
+    <geom name="continuous_argon_sector_floor" type="plane" size="25 200 0.1" rgba="0.08 0.11 0.16 1"/>
+    <body name="rover_chassis_thruster_hopper" pos="0.40 38.50 0.62">
+      <freejoint name="rover_root"/>
+      <geom name="hull" type="box" size="0.55 1.15 0.22" mass="48" rgba="0.05 0.94 1.0 1"/>
+      <geom name="wheel_fl" type="cylinder" pos="-0.72 0.75 -0.18" size="0.35 0.12" euler="0 1.5708 0" mass="4.5"/>
+      <geom name="wheel_fr" type="cylinder" pos="0.72 0.75 -0.18" size="0.35 0.12" euler="0 1.5708 0" mass="4.5"/>
+      <geom name="wheel_rl" type="cylinder" pos="-0.72 -0.75 -0.18" size="0.35 0.12" euler="0 1.5708 0" mass="4.5"/>
+      <geom name="wheel_rr" type="cylinder" pos="0.72 -0.75 -0.18" size="0.35 0.12" euler="0 1.5708 0" mass="4.5"/>
+    </body>
+  </worldbody>
+</mujoco>

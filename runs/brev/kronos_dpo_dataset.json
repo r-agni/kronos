@@ -1,0 +1,438 @@
+{
+  "schema": "kronos-1m-robotics-dpo-v1",
+  "generatedAt": "2026-10-25T23:20:34.822Z",
+  "orchestrator": {
+    "managedAgent": "antigravity-preview-09-2026",
+    "model": "gemini-4-argon",
+    "contextWindowTokens": 1000000
+  },
+  "rubricEvaluation": {
+    "rubricText": "Penalize wheel slip > 20% and require clearance > 2.5m",
+    "overallOutcomeScore1to5": 1,
+    "compliancePct": 0,
+    "normalStepsCount": 0,
+    "suboptimalStepsCount": 0,
+    "failureStepsCount": 1,
+    "activeViolations": [
+      "64K context seam cliff halt (unbridged boundary tear ΔY = -2.4m)"
+    ]
+  },
+  "temporalSegments": [
+    {
+      "id": "seg_01",
+      "index": 1,
+      "label": "SEG-01: 64K WINDOW STITCH",
+      "startSec": 0,
+      "endSec": 0.5,
+      "instructionCaption": "[STITCH ARTIFACT @ Z=38.5m] Lost prior boundary elevation context; temporal sub-task horizon truncated.",
+      "stitchStatus": "window_fractured",
+      "dominantState": "route_blocked",
+      "meanReward": 0.12
+    }
+  ],
+  "denseProcessRewards0_5s": [
+    {
+      "id": "tick_1",
+      "timestampSec": 0,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "64K context seam cliff halt (unbridged boundary tear ΔY = -2.4m)",
+      "position": [
+        0.4,
+        0.82,
+        38.5
+      ],
+      "wheelSlipRatio": 0.34,
+      "clearanceMeters": 1.8
+    }
+  ],
+  "counterfactualDpoPreferencePairs": [
+    {
+      "forkId": "fork_1792970434822",
+      "simTimeSec": 0,
+      "triggerReason": "64K Seam Cliff Halt @ Z=38.5m",
+      "stateVector": {
+        "position": [
+          0.4,
+          0.82,
+          38.5
+        ],
+        "headingRad": 0,
+        "physicsRegime": "Lunar 0.16g Cryo-Ice"
+      },
+      "chosen": {
+        "policy": "argon_1m_counterfactual_optimal",
+        "outcomeScore": 4.9,
+        "actionDsl": "MORPH_ROVER { mode: \"thruster_hopper\", suspensionHeight: 1.45, trackWidthScale: 1.32, thrusterBoost: true }\nDEPLOY_COUNTERMEASURE { type: \"deployable_bridge\", position: [0, 0.3, 48.5], dimensions: [6.0, 0.5, 18.0] }",
+        "trajectory": [
+          [
+            0.4,
+            0.82,
+            38.5
+          ],
+          [
+            0.39,
+            1.33,
+            40.13
+          ],
+          [
+            0.38,
+            1.81,
+            41.75
+          ],
+          [
+            0.36,
+            2.26,
+            43.38
+          ],
+          [
+            0.35,
+            2.66,
+            45
+          ],
+          [
+            0.34,
+            2.98,
+            46.63
+          ],
+          [
+            0.33,
+            3.22,
+            48.25
+          ],
+          [
+            0.31,
+            3.37,
+            49.88
+          ],
+          [
+            0.3,
+            3.42,
+            51.5
+          ],
+          [
+            0.29,
+            3.37,
+            53.13
+          ],
+          [
+            0.28,
+            3.22,
+            54.75
+          ],
+          [
+            0.26,
+            2.98,
+            56.38
+          ],
+          [
+            0.25,
+            2.66,
+            58
+          ],
+          [
+            0.24,
+            2.26,
+            59.63
+          ],
+          [
+            0.23,
+            1.81,
+            61.25
+          ],
+          [
+            0.21,
+            1.33,
+            62.88
+          ],
+          [
+            0.2,
+            0.82,
+            64.5
+          ]
+        ]
+      },
+      "rejected": [
+        {
+          "policy": "vla_baseline_64k",
+          "outcomeScore": 1.2,
+          "actionDsl": "// REJECTED: Unmodified forward velocity into seam/chasm @ Z=50.5m",
+          "trajectory": [
+            [
+              0.4,
+              0.82,
+              38.5
+            ],
+            [
+              0.48,
+              0.82,
+              39.25
+            ],
+            [
+              0.55,
+              0.82,
+              40
+            ],
+            [
+              0.62,
+              0.82,
+              40.75
+            ],
+            [
+              0.68,
+              0.82,
+              41.5
+            ],
+            [
+              0.73,
+              0.82,
+              42.25
+            ],
+            [
+              0.77,
+              0.82,
+              43
+            ],
+            [
+              0.79,
+              0.82,
+              43.75
+            ],
+            [
+              0.8,
+              0.82,
+              44.5
+            ],
+            [
+              0.79,
+              0.8,
+              45.25
+            ],
+            [
+              0.77,
+              0.72,
+              46
+            ],
+            [
+              0.73,
+              0.63,
+              46.75
+            ],
+            [
+              0.68,
+              0.54,
+              47.5
+            ],
+            [
+              0.62,
+              0.45,
+              48.25
+            ],
+            [
+              0.55,
+              0.37,
+              49
+            ],
+            [
+              0.48,
+              0.28,
+              49.75
+            ],
+            [
+              0.4,
+              0.2,
+              50.5
+            ]
+          ],
+          "rejectionReason": "Fails to anticipate elevation discontinuity; halts at cliff boundary."
+        },
+        {
+          "policy": "reactive_lidar_swerve",
+          "outcomeScore": 3.1,
+          "actionDsl": "// REJECTED: High-slip lateral swerve (ΔX = -6.2m, wheelSlip = 44%)",
+          "trajectory": [
+            [
+              0.4,
+              0.92,
+              38.5
+            ],
+            [
+              -0.63,
+              0.92,
+              39.75
+            ],
+            [
+              -1.63,
+              0.92,
+              41
+            ],
+            [
+              -2.58,
+              0.92,
+              42.25
+            ],
+            [
+              -3.44,
+              0.92,
+              43.5
+            ],
+            [
+              -4.19,
+              0.92,
+              44.75
+            ],
+            [
+              -4.82,
+              0.92,
+              46
+            ],
+            [
+              -5.3,
+              0.92,
+              47.25
+            ],
+            [
+              -5.63,
+              0.92,
+              48.5
+            ],
+            [
+              -5.79,
+              0.92,
+              49.75
+            ],
+            [
+              -5.77,
+              0.92,
+              51
+            ],
+            [
+              -5.58,
+              0.92,
+              52.25
+            ],
+            [
+              -5.23,
+              0.92,
+              53.5
+            ],
+            [
+              -4.72,
+              0.92,
+              54.75
+            ],
+            [
+              -4.07,
+              0.92,
+              56
+            ],
+            [
+              -3.29,
+              0.92,
+              57.25
+            ],
+            [
+              -2.41,
+              0.92,
+              58.5
+            ]
+          ],
+          "rejectionReason": "Avoids primary obstacle but exceeds rubric wheel-slip threshold on low-friction deck."
+        },
+        {
+          "policy": "codesign_widetrack_crawl",
+          "outcomeScore": 4.1,
+          "actionDsl": "MORPH_ROVER { mode: \"wide_track_heavy\", suspensionHeight: 1.35, trackWidthScale: 1.38, thrusterBoost: false }",
+          "trajectory": [
+            [
+              0.4,
+              1.07,
+              38.5
+            ],
+            [
+              1.02,
+              1.07,
+              39.88
+            ],
+            [
+              1.62,
+              1.07,
+              41.25
+            ],
+            [
+              2.2,
+              1.07,
+              42.63
+            ],
+            [
+              2.73,
+              1.07,
+              44
+            ],
+            [
+              3.22,
+              1.07,
+              45.38
+            ],
+            [
+              3.65,
+              1.07,
+              46.75
+            ],
+            [
+              4,
+              1.07,
+              48.13
+            ],
+            [
+              4.28,
+              1.07,
+              49.5
+            ],
+            [
+              4.47,
+              1.07,
+              50.88
+            ],
+            [
+              4.58,
+              1.07,
+              52.25
+            ],
+            [
+              4.59,
+              1.07,
+              53.63
+            ],
+            [
+              4.52,
+              1.07,
+              55
+            ],
+            [
+              4.35,
+              1.07,
+              56.38
+            ],
+            [
+              4.1,
+              1.07,
+              57.75
+            ],
+            [
+              3.77,
+              1.07,
+              59.13
+            ],
+            [
+              3.37,
+              1.07,
+              60.5
+            ]
+          ],
+          "rejectionReason": "Maintains stability margin (29.4°) via 1.38x wide-track morph, but loses 38% forward velocity."
+        }
+      ]
+    }
+  ]
+}
