@@ -7,3 +7,4 @@ export * from './ProceduralDSL';
 export * from './SectorManager';
 export * from './BaselineSimulator';
 export * from './WorldCompiler';
+export * from './KronosEngine';
