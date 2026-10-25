@@ -8,3 +8,6 @@ export * from './SectorManager';
 export * from './BaselineSimulator';
 export * from './WorldCompiler';
 export * from './KronosEngine';
+export * from './KronosBenchmarkSuite';
+
+

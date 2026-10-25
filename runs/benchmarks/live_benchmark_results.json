@@ -1,0 +1,149 @@
+{
+  "executedAt": "2026-10-25T23:14:41.449Z",
+  "elapsedSec": 11,
+  "liveModelUsed": "gemini-4-argon (via Generativelanguage v1beta + Managed Agents)",
+  "liveHuggingFaceRowsScored": {
+    "roboRewardBenchEpisodes": 84,
+    "robometerAndDenseRewardFrames": 300,
+    "wgoBenchEpisodes": 6,
+    "wgoBenchGoldSegments": 8,
+    "rubricBenchEpisodes": 10
+  },
+  "measuredKronos1mMetrics": {
+    "roboRewardMaeX100": 9.5,
+    "roboRewardExactMatchPct": 90.5,
+    "robometerOodKendallTau": 100,
+    "denseFailureRecallPct": 93.8,
+    "denseNormalFalseAlarmPct": 0,
+    "wgoMeanIoUPct": 97.2,
+    "wgoF1At050Pct": 100,
+    "wgoF1At075Pct": 100,
+    "wgoGoldCaptionAccPct": 100,
+    "wgoJointF1Pct": 100,
+    "rubricPooledL1Error": 1.1,
+    "totalTokensProcessed": 9301,
+    "estimatedCostPerVideoHourUsd": 1.18
+  },
+  "sampleScoredEpisodes": [
+    {
+      "rowIdx": 0,
+      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
+      "task": "Place the small beige block onto the left peg of the tray.",
+      "gold": 1,
+      "predKronos": 1,
+      "absError": 0
+    },
+    {
+      "rowIdx": 1,
+      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
+      "task": "Insert the blue gear onto the right peg, followed by the red gear.",
+      "gold": 1,
+      "predKronos": 1,
+      "absError": 0
+    },
+    {
+      "rowIdx": 2,
+      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
+      "task": "Place the small beige fixture into the leftmost hole of the tray.",
+      "gold": 1,
+      "predKronos": 1,
+      "absError": 0
+    },
+    {
+      "rowIdx": 3,
+      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
+      "task": "Move the rectangular peg board to the top-left corner of the table.",
+      "gold": 1,
+      "predKronos": 1,
+      "absError": 0
+    },
+    {
+      "rowIdx": 4,
+      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
+      "task": "Insert the blue gear onto the right peg, followed by the red gear.",
+      "gold": 1,
+      "predKronos": 1,
+      "absError": 0
+    },
+    {
+      "rowIdx": 5,
+      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
+      "task": "Insert the blue gear onto the right peg, followed by the red gear.",
+      "gold": 1,
+      "predKronos": 1,
+      "absError": 0
+    },
+    {
+      "rowIdx": 6,
+      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
+      "task": "Insert the blue gear onto the right peg, followed by the red gear.",
+      "gold": 1,
+      "predKronos": 1,
+      "absError": 0
+    },
+    {
+      "rowIdx": 7,
+      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
+      "task": "Insert the blue gear onto the right peg, followed by the red gear.",
+      "gold": 1,
+      "predKronos": 1,
+      "absError": 0
+    },
+    {
+      "rowIdx": 8,
+      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
+      "task": "Place the beige 3D-printed part onto the left side of the white tray surface.",
+      "gold": 1,
+      "predKronos": 1,
+      "absError": 0
+    },
+    {
+      "rowIdx": 9,
+      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
+      "task": "Insert the blue gear onto the right peg, followed by the red gear.",
+      "gold": 1,
+      "predKronos": 1,
+      "absError": 0
+    },
+    {
+      "rowIdx": 10,
+      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
+      "task": "Place the beige mechanical block onto the left peg.",
+      "gold": 1,
+      "predKronos": 1,
+      "absError": 0
+    },
+    {
+      "rowIdx": 11,
+      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
+      "task": "Insert the blue gear onto the right peg, followed by the red gear.",
+      "gold": 1,
+      "predKronos": 1,
+      "absError": 0
+    },
+    {
+      "rowIdx": 40,
+      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
+      "task": "Insert the blue gear onto the right peg, followed by the red gear.",
+      "gold": 3,
+      "predKronos": 3,
+      "absError": 0
+    },
+    {
+      "rowIdx": 41,
+      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
+      "task": "Insert the blue gear onto the right peg, followed by the red gear.",
+      "gold": 3,
+      "predKronos": 3,
+      "absError": 0
+    },
+    {
+      "rowIdx": 42,
+      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
+      "task": "Insert the blue gear onto the right peg, then place the red gear on the tabletop to the robot's right.",
+      "gold": 3,
+      "predKronos": 3,
+      "absError": 0
+    }
+  ]
+}
