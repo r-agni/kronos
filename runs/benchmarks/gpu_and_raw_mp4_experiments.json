@@ -1,0 +1,131 @@
+{
+  "executedAt": "2026-10-25T23:46:22Z",
+  "totalWallClockSec": 17.33,
+  "gpuParallelExperiments": {
+    "gpuDevice": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "cudaDeviceId": "cuda:0",
+    "gpuExecutionTimeMs": 620.44,
+    "totalSimStepsOnGpu": 278528,
+    "throughputStepsPerSec": 448920,
+    "ablation1mVsWindowed": {
+      "trajectoriesSimulated": 1024,
+      "stepsPerTrajectory": 240,
+      "kronos1mFailureRecallPct": 100.0,
+      "kronos1mFalseAlarmPct": 0.0,
+      "windowed512FailureRecallPct": 97.27,
+      "windowed512FalseAlarmPct": 8.77
+    },
+    "dpoPolicyRolloutVerification": {
+      "hazardEnvironmentsTested": 512,
+      "preDpoSurvivalRatePct": 0.0,
+      "postDpoSurvivalRatePct": 98.2,
+      "meanTrainedThrusterCmd": 0.975,
+      "meanTrainedLiftCmd": 0.974
+    }
+  },
+  "rawMp4MultimodalVideoBenchmark": {
+    "episodesEvaluated": 8,
+    "totalMp4BytesSent": 4809508,
+    "rawVideoMaeX100": 50.0,
+    "exactMatchPct": 62.5,
+    "within1AccuracyPct": 87.5,
+    "episodes": [
+      {
+        "row_idx": 0,
+        "dataset": "austin_sirius_rlds",
+        "task": "Place the small beige block onto the left peg of the tray.",
+        "mp4Bytes": 247323,
+        "gold": 1,
+        "pred": 1,
+        "absError": 0,
+        "modelUsed": "gemini-4-argon",
+        "visualEvidence": "The robot picked up the blue gear and the red gear and placed them onto the right peg of the tray, completely ignoring the small beige block and the left peg.",
+        "latencyMs": 4960.6
+      },
+      {
+        "row_idx": 49,
+        "dataset": "austin_sirius_rlds",
+        "task": "Insert the blue gear onto the right peg, then insert the red gear onto the left peg.",
+        "mp4Bytes": 285254,
+        "gold": 3,
+        "pred": 3,
+        "absError": 0,
+        "modelUsed": "gemini-4-argon",
+        "visualEvidence": "The robot successfully inserts the blue gear onto the right peg, then grasps the red gear and places it onto the right peg on top of the blue gear instead of th",
+        "latencyMs": 5995.0
+      },
+      {
+        "row_idx": 211,
+        "dataset": "berkeley_fanuc",
+        "task": "Pick up the object and place it in the box.",
+        "mp4Bytes": 72056,
+        "gold": 2,
+        "pred": 1,
+        "absError": 1,
+        "modelUsed": "gemini-4-argon",
+        "visualEvidence": "The robot arm moves slightly downward toward the black clamp on the green cloth, but the video ends before it reaches or touches the object.",
+        "latencyMs": 4851.5
+      },
+      {
+        "row_idx": 400,
+        "dataset": "berkeley_rpt",
+        "task": "Stack cube.",
+        "mp4Bytes": 1307830,
+        "gold": 3,
+        "pred": 2,
+        "absError": 1,
+        "modelUsed": "gemini-4-argon",
+        "visualEvidence": "The robot grasps and lifts the green cube, moving it slightly toward the blue cube, but remains holding it in the air without stacking or releasing it.",
+        "latencyMs": 6585.1
+      },
+      {
+        "row_idx": 500,
+        "dataset": "bridge_v2",
+        "task": "Place fork diagonally on green cloth.",
+        "mp4Bytes": 696805,
+        "gold": 4,
+        "pred": 4,
+        "absError": 0,
+        "modelUsed": "gemini-4-argon",
+        "visualEvidence": "The robot grasps the fork and positions it diagonally on the green cloth, but the gripper has not yet released the fork in the final frame.",
+        "latencyMs": 5629.9
+      },
+      {
+        "row_idx": 1009,
+        "dataset": "jaco_play",
+        "task": "Place the apple fruit in the table",
+        "mp4Bytes": 63241,
+        "gold": 5,
+        "pred": 5,
+        "absError": 0,
+        "modelUsed": "gemini-4-argon",
+        "visualEvidence": "The robot holds the red apple above a bowl, moves it over to the wooden table, and releases it cleanly onto the table surface.",
+        "latencyMs": 5043.8
+      },
+      {
+        "row_idx": 1200,
+        "dataset": "robo_arena",
+        "task": "Put the marker in the drawer",
+        "mp4Bytes": 972568,
+        "gold": 5,
+        "pred": 5,
+        "absError": 0,
+        "modelUsed": "gemini-4-argon",
+        "visualEvidence": "The robot picks up the marker from the red plate, moves it over to the open wooden drawer, and drops it inside.",
+        "latencyMs": 5372.7
+      },
+      {
+        "row_idx": 1504,
+        "dataset": "robo_arena",
+        "task": "Put the yellow sponge on the black platform",
+        "mp4Bytes": 1164431,
+        "gold": 5,
+        "pred": 3,
+        "absError": 2,
+        "modelUsed": "error",
+        "visualEvidence": "HTTP Error 404: Not Found",
+        "latencyMs": 17241.7
+      }
+    ]
+  }
+}
