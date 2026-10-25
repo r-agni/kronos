@@ -101,7 +101,7 @@ def evaluate_single_mp4_with_gemini(ep: dict) -> dict:
     )
 
     last_err = "unknown"
-    for attempt in range(2):
+    for _ in range(1):
         try:
             url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-4-argon:generateContent?key={GEMINI_API_KEY}"
             payload = {
@@ -126,7 +126,7 @@ def evaluate_single_mp4_with_gemini(ep: dict) -> dict:
                 headers={"Content-Type": "application/json"},
                 method="POST",
             )
-            with urllib.request.urlopen(http_req, timeout=22) as api_resp:
+            with urllib.request.urlopen(http_req, timeout=16) as api_resp:
                 body = json.loads(api_resp.read().decode("utf-8"))
             text = body["candidates"][0]["content"]["parts"][0]["text"]
             cleaned = text.strip().removeprefix("```json").removesuffix("```").strip()

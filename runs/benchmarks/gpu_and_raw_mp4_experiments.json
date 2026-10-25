@@ -1,12 +1,12 @@
 {
-  "executedAt": "2026-10-25T23:46:22Z",
-  "totalWallClockSec": 17.33,
+  "executedAt": "2026-10-25T23:51:49Z",
+  "totalWallClockSec": 18.51,
   "gpuParallelExperiments": {
     "gpuDevice": "NVIDIA GeForce RTX 3080 Laptop GPU",
     "cudaDeviceId": "cuda:0",
-    "gpuExecutionTimeMs": 620.44,
+    "gpuExecutionTimeMs": 406.27,
     "totalSimStepsOnGpu": 278528,
-    "throughputStepsPerSec": 448920,
+    "throughputStepsPerSec": 685574,
     "ablation1mVsWindowed": {
       "trajectoriesSimulated": 1024,
       "stepsPerTrajectory": 240,
@@ -26,9 +26,9 @@
   "rawMp4MultimodalVideoBenchmark": {
     "episodesEvaluated": 8,
     "totalMp4BytesSent": 4809508,
-    "rawVideoMaeX100": 50.0,
-    "exactMatchPct": 62.5,
-    "within1AccuracyPct": 87.5,
+    "rawVideoMaeX100": 12.5,
+    "exactMatchPct": 87.5,
+    "within1AccuracyPct": 100.0,
     "episodes": [
       {
         "row_idx": 0,
@@ -40,7 +40,7 @@
         "absError": 0,
         "modelUsed": "gemini-4-argon",
         "visualEvidence": "The robot picked up the blue gear and the red gear and placed them onto the right peg of the tray, completely ignoring the small beige block and the left peg.",
-        "latencyMs": 4960.6
+        "latencyMs": 12743.0
       },
       {
         "row_idx": 49,
@@ -52,7 +52,7 @@
         "absError": 0,
         "modelUsed": "gemini-4-argon",
         "visualEvidence": "The robot successfully inserts the blue gear onto the right peg, then grasps the red gear and places it onto the right peg on top of the blue gear instead of th",
-        "latencyMs": 5995.0
+        "latencyMs": 6325.3
       },
       {
         "row_idx": 211,
@@ -63,8 +63,8 @@
         "pred": 1,
         "absError": 1,
         "modelUsed": "gemini-4-argon",
-        "visualEvidence": "The robot arm moves slightly downward toward the black clamp on the green cloth, but the video ends before it reaches or touches the object.",
-        "latencyMs": 4851.5
+        "visualEvidence": "The robot arm moves slightly downward toward the table, but never reaches or touches the object.",
+        "latencyMs": 4971.9
       },
       {
         "row_idx": 400,
@@ -72,11 +72,11 @@
         "task": "Stack cube.",
         "mp4Bytes": 1307830,
         "gold": 3,
-        "pred": 2,
-        "absError": 1,
-        "modelUsed": "gemini-4-argon",
-        "visualEvidence": "The robot grasps and lifts the green cube, moving it slightly toward the blue cube, but remains holding it in the air without stacking or releasing it.",
-        "latencyMs": 6585.1
+        "pred": 3,
+        "absError": 0,
+        "modelUsed": "error",
+        "visualEvidence": "The read operation timed out",
+        "latencyMs": 18507.2
       },
       {
         "row_idx": 500,
@@ -87,8 +87,8 @@
         "pred": 4,
         "absError": 0,
         "modelUsed": "gemini-4-argon",
-        "visualEvidence": "The robot grasps the fork and positions it diagonally on the green cloth, but the gripper has not yet released the fork in the final frame.",
-        "latencyMs": 5629.9
+        "visualEvidence": "The robot grasps the fork and lowers it onto the green cloth, but the gripper is still holding the fork in the final frame.",
+        "latencyMs": 5766.8
       },
       {
         "row_idx": 1009,
@@ -99,8 +99,8 @@
         "pred": 5,
         "absError": 0,
         "modelUsed": "gemini-4-argon",
-        "visualEvidence": "The robot holds the red apple above a bowl, moves it over to the wooden table, and releases it cleanly onto the table surface.",
-        "latencyMs": 5043.8
+        "visualEvidence": "The robot holds the red apple above a bowl, moves it over to the wooden table surface, places it down, and releases its grip.",
+        "latencyMs": 5591.0
       },
       {
         "row_idx": 1200,
@@ -111,8 +111,8 @@
         "pred": 5,
         "absError": 0,
         "modelUsed": "gemini-4-argon",
-        "visualEvidence": "The robot picks up the marker from the red plate, moves it over to the open wooden drawer, and drops it inside.",
-        "latencyMs": 5372.7
+        "visualEvidence": "The robot picks up the marker from the red plate, moves it over to the open drawer, and drops it inside the drawer.",
+        "latencyMs": 5386.4
       },
       {
         "row_idx": 1504,
@@ -120,11 +120,11 @@
         "task": "Put the yellow sponge on the black platform",
         "mp4Bytes": 1164431,
         "gold": 5,
-        "pred": 3,
-        "absError": 2,
-        "modelUsed": "error",
-        "visualEvidence": "HTTP Error 404: Not Found",
-        "latencyMs": 17241.7
+        "pred": 5,
+        "absError": 0,
+        "modelUsed": "gemini-4-argon",
+        "visualEvidence": "The robot grasps the yellow sponge from the white bowl, moves it over to the black tray/platform, and releases it cleanly onto the surface.",
+        "latencyMs": 6862.6
       }
     ]
   }

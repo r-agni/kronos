@@ -1,4 +1,6 @@
 import http from 'http';
+import fs from 'fs';
+import path from 'path';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -152,6 +154,18 @@ app.get('/api/benchmark/run', (_req: Request, res: Response) => {
     report,
     markdown: exportBenchmarkReportMarkdown(report),
   });
+});
+
+app.get('/api/experiments/latest', (_req: Request, res: Response) => {
+  try {
+    const expPath = path.join(process.cwd(), 'runs', 'benchmarks', 'gpu_and_raw_mp4_experiments.json');
+    const livePath = path.join(process.cwd(), 'runs', 'benchmarks', 'live_benchmark_results.json');
+    const gpuExp = fs.existsSync(expPath) ? JSON.parse(fs.readFileSync(expPath, 'utf-8')) : null;
+    const liveBench = fs.existsSync(livePath) ? JSON.parse(fs.readFileSync(livePath, 'utf-8')) : null;
+    res.json({ success: true, gpuExp, liveBench });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 app.post('/api/brev/train', async (req: Request, res: Response) => {
