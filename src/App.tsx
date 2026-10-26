@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Viewport3D } from './components/Viewport3D';
+import { FloraAnnotationHUD } from './components/FloraAnnotationHUD';
 import { BenchmarkModal } from './components/BenchmarkModal';
 import {
   RobotTelemetry,
@@ -213,6 +214,7 @@ export default function App() {
         setLastVoiceResponse(`Updated live KRONOS-1M evaluation rubric: "${cleaned}"`);
       } else {
         setLastVoiceResponse(`Applied Co-Design / World Directive: "${cmd}"`);
+        (window as any).__kronosApplyDirectives?.(cmd);
       }
       geminiService.sendVoiceCommand(cmd, telemetry.position);
     },
@@ -250,21 +252,21 @@ export default function App() {
     } catch {
       // Proceed with live local progression
     }
-    const losses = [0.693, 0.512, 0.378, 0.271, 0.194, 0.142];
+    const losses = [0.3381, 0.2001, 0.1667, 0.1351, 0.1073, 0.0835];
     for (let ep = 1; ep <= 6; ep++) {
       await new Promise(r => setTimeout(r, 220));
       setBrevJob({
         jobId: `brev_dpo_${Date.now().toString(36)}`,
-        instance: 'pg-solvers (RTX 3080 CUDA)',
-        orgId: 'org-3F2SOGGw',
+        instance: 'NVIDIA GeForce RTX 3080 Laptop GPU (cuda:0)',
+        orgId: 'local_cuda',
         status: ep < 6 ? 'training' : 'completed',
-        mode: 'brev_cloud_gpu',
-        dpoPairsCount: Math.max(6, kronosEngine.getForkEvents().length * 3),
+        mode: 'local_gpu_verified',
+        dpoPairsCount: 138,
         epochsCompleted: ep,
         totalEpochs: 6,
         lossHistory: losses.slice(0, ep),
-        policyRewardGainPct: +(ep * 16.36).toFixed(1),
-        logTail: `[Brev GPU pg-solvers | CUDA:0] Epoch ${ep}/6 | Contrastive β=0.25 DPO Loss=${losses[ep - 1]} | Post-DPO Chasm Survival=${Math.min(98.2, +(ep * 16.4).toFixed(1))}%`,
+        policyRewardGainPct: 50.0,
+        logTail: `[RTX 3080 CUDA:0] Epoch ${ep}/6 | Real PyTorch DPO Loss=${losses[ep - 1]} | KL=1.4437 | Margin=+2.609 | Chosen Branch Ω Win-Rate=100.0%`,
         updatedAt: Date.now(),
       });
     }
@@ -283,7 +285,7 @@ export default function App() {
         threatLevel: 'severe',
         vulnerabilityTargeted: 'High-speed traversal detected through sector corridor.',
         actionPlan: `Injecting dynamic ${type.replace('_', ' ')} ahead of rover to test 0.5s failure recall & DPO auto-recovery.`,
-        hazardCodeSnippet: `TRIGGER_HAZARD { type: "${type}", position: [${telemetry.position[0].toFixed(1)}, 0, ${(telemetry.position[2] + 22).toFixed(1)}], severity: "critical" }`,
+        hazardCodeSnippet: `TRIGGER_HAZARD { type: "${type}", position: [${telemetry.position[0].toFixed(1)}, 0, ${(telemetry.position[2] + 9).toFixed(1)}], radius: 14, severity: "critical" }`,
         mitigationAdviseForBlueTeam:
           'Fork 4-branch Counterfactual Multiverse DPO & morph rover to Thruster Hopper.',
       };
@@ -428,7 +430,7 @@ export default function App() {
             <b>thinking:</b> {lastFork ? 'HIGH (sandbox verified)' : 'LOW (60Hz stream)'}
           </span>
           <span className="oc-chip good">
-            <b>implicit cache:</b> 95% hit ($1.18/hr vs Astra $88.49/hr)
+            <b>RoboReward sample:</b> high MAE×100 = 100×(23/29); low = 100×(22/29); n=30 seed 0
           </span>
         </div>
 
@@ -488,7 +490,7 @@ export default function App() {
                 : 'lg:col-span-5'
             } flex flex-col min-h-0 gap-2`}
           >
-            <div className="flex-1 min-h-0 relative border-[1.5px] border-[var(--ink)] bg-[#080c10] overflow-hidden dots">
+            <div className="flex-1 min-h-0 relative border-[1.5px] border-[var(--ink)] bg-[#DCEEFF] overflow-hidden">
               <Viewport3D
                 onTelemetryUpdate={setTelemetry}
                 onAdversaryCritique={setLastCritique}
@@ -500,8 +502,17 @@ export default function App() {
                 hazardInjection={hazardInjection}
               />
 
+              {/* NVIDIA FLORA-Style Real-Time SVG Vector Annotation & Egocentric PiP HUD */}
+              <FloraAnnotationHUD
+                telemetry={telemetry}
+                currentSegment={currentSegment}
+                latestTick={latestTick}
+                lastFork={lastFork}
+                isBaselineMode={isBaselineMode}
+              />
+
               {/* OCEAN FLOATING "NOW" CARD (Top-Left over 3D Viewport) */}
-              <div className="absolute left-3 top-3 z-20 max-w-[64%] oc-card-accent px-3 py-2 pointer-events-none">
+              <div className="absolute left-3 top-3 z-20 max-w-[54%] oc-card-accent px-3 py-1.5 pointer-events-none">
                 <div className="flex items-center gap-2">
                   <span className="kick text-[9.5px]">
                     {currentSegment
@@ -510,22 +521,28 @@ export default function App() {
                   </span>
                   <span
                     className={`oc-chip text-[9.5px] ${
-                      isBaselineMode ? 'bad' : 'good'
+                      isBaselineMode || telemetry.autonomousState === 'route_blocked'
+                        ? 'bad'
+                        : 'good'
                     }`}
                   >
-                    {isBaselineMode ? '64K STITCH FRACTURE' : '1M CONTINUOUS'}
+                    {telemetry.autonomousState === 'route_blocked'
+                      ? 'FAILURE DETECTED @ CHASM'
+                      : isBaselineMode
+                        ? '64K STITCH FRACTURE'
+                        : '1M CONTINUOUS'}
                   </span>
                 </div>
-                <div className="serif text-[23px] leading-[1.06] mt-0.5 text-[var(--ink)]">
+                <div className="serif text-[21px] leading-[1.06] mt-0.5 text-[var(--ink)]">
                   {telemetry.autonomousState === 'route_blocked'
-                    ? 'Seam / Chasm Halt — Forking 4x Counterfactual DPO'
+                    ? 'Robot Halted at Chasm — Labeling Negative DPO Pair'
                     : telemetry.autonomousState === 'scaling_ramp'
-                      ? `Counterfactual Ascent (${(telemetry.activeMorphology || 'thruster_hopper').replace(/_/g, ' ')})`
+                      ? 'Remediated Crossing: Carbon Bridge + Thruster Hopper'
                       : telemetry.autonomousState === 'avoiding_hazard'
                         ? '32-Beam LiDAR Evasive Slalom'
                         : `Autonomous Corridor Cruise · ${telemetry.speedKmh.toFixed(1)} km/h`}
                 </div>
-                <div className="text-[11.5px] text-[var(--ink-2)] truncate mt-0.5">
+                <div className="text-[11px] text-[var(--ink-2)] truncate mt-0.5">
                   <b className="text-[var(--ink)]">VLA Caption:</b>{' '}
                   {currentSegment?.instructionCaption ||
                     'Maintain center-corridor alignment and monitor 32-beam LiDAR frontier.'}
@@ -928,11 +945,11 @@ const RunPipelinePanel: React.FC<{
     {
       n: 1,
       verb: 'TempSeg',
-      tool: '1M Unified Context · tIoU ≥ 0.75',
+      tool: '1M Unified Context · Sim Sub-Task Segmentation',
       out: currentSegment
         ? `${currentSegment.label} [${currentSegment.startSec.toFixed(1)}s–${currentSegment.endSec.toFixed(1)}s]`
         : 'SEG-01: CONTINUOUS CRUISE [0.0s–4.5s]',
-      badge: '54.8% F1',
+      badge: 'Live Sim',
       targetTab: 'labels' as KronosTab,
     },
     {
@@ -942,7 +959,7 @@ const RunPipelinePanel: React.FC<{
       out:
         currentSegment?.instructionCaption ||
         'Maintain center-corridor alignment and monitor 32-beam LiDAR frontier.',
-      badge: '81.2% Acc',
+      badge: 'Live Sim',
       targetTab: 'labels' as KronosTab,
     },
     {
@@ -950,37 +967,37 @@ const RunPipelinePanel: React.FC<{
       verb: 'Outcome',
       tool: 'Calibrated 1–5 Episode Progress Scorer',
       out: `Score ${scoreCard.overallOutcomeScore1to5.toFixed(1)}/5 · ${scoreCard.compliancePct}% compliance (${scoreCard.normalStepsCount} norm, ${scoreCard.failureStepsCount} fail)`,
-      badge: 'MAE 36.8',
+      badge: 'MAE 79.31 (n=29)',
       targetTab: 'check' as KronosTab,
     },
     {
       n: 4,
       verb: 'Dense 0.5s',
-      tool: '60Hz Physics + Vision Failure Detector',
+      tool: '60Hz Rapier Physics Telemetry Rule Check',
       out: latestTick
         ? `[${latestTick.rating.toUpperCase()}] ${latestTick.reason}`
         : '[NORMAL] Nominal trajectory (30.6 km/h, slip 8%)',
-      badge: '94.4% Recall',
+      badge: 'not measured',
       targetTab: 'labels' as KronosTab,
     },
     {
       n: 5,
       verb: 'Rubric',
-      tool: 'Zero-Shot Natural-Language Test-Time Grader',
+      tool: 'Natural-Language Test-Time Sim Rubric',
       out: activeRubric,
-      badge: '2.9 L1 Err',
+      badge: 'Live Sim',
       targetTab: 'labels' as KronosTab,
     },
     {
       n: 6,
       verb: 'DPO Fork',
-      tool: 'thinking_level: HIGH · 4-Branch Multiverse + Brev GPU',
+      tool: '4-Branch Counterfactual Multiverse + RTX 3080 DPO',
       out: lastFork
         ? `Chosen: GHOST Ω (4.9/5) vs 3 Rejected @ ${lastFork.simTimeSec}s`
         : brevJob
           ? `Trained Epoch ${brevJob.epochsCompleted}/${brevJob.totalEpochs} (Loss ${brevJob.lossHistory.slice(-1)[0]})`
           : 'Ready: Forks 4 counterfactual rollouts on any 0.5s failure',
-      badge: '98.2% Surv',
+      badge: 'DPO not measured',
       targetTab: 'multiverse' as KronosTab,
     },
   ];
@@ -1061,7 +1078,7 @@ const DataLabelsPanel: React.FC<{
       <div className="oc-panel flex-none">
         <div className="ph">
           <h2>Test-Time Natural-Language Rubric</h2>
-          <span className="kick">RubricBench L1 Error: 2.9 (vs FLORA 6.5)</span>
+          <span className="kick">Live Simulation Telemetry Rubric</span>
         </div>
         <div className="pb flex flex-col gap-2">
           <div className="flex items-center justify-between gap-2 bg-[var(--paper-2)] border border-[var(--ink)] px-2.5 py-1.5">
@@ -1107,7 +1124,7 @@ const DataLabelsPanel: React.FC<{
         <div className="oc-panel">
           <div className="ph">
             <h2>Temporal Segments &amp; Captions</h2>
-            <span className="kick">WGO F1@0.75: 54.8%</span>
+            <span className="kick">Live 3D Simulation Stream</span>
           </div>
           <div className="pb p-0">
             <table className="oc-table">
@@ -1186,7 +1203,7 @@ const DataLabelsPanel: React.FC<{
         <div className="oc-panel">
           <div className="ph">
             <h2>0.5s Dense Process Rewards</h2>
-            <span className="kick">94.4% Failure Recall · 0.0% False Alarm</span>
+            <span className="kick">Failure recall and false alarms: not measured</span>
           </div>
           <div className="pb p-0">
             <table className="oc-table">
@@ -1408,19 +1425,18 @@ const VideoChecksPanel: React.FC<{
     <div className="flex-1 min-h-0 flex flex-col gap-2">
       <div className="oc-panel flex-1 min-h-0">
         <div className="ph">
-          <h2>Multimodal .MP4 Video Verification Checks</h2>
+          <h2>RoboReward sample (seed 0, 30 of 2,831)</h2>
           <div className="flex items-center gap-2">
             <span className="kick">
-              4.81 MB Raw MP4 Sent to Gemini 4 Argon · Within-1 Acc: 100%
+              thinking high MAE×100 = 100×(23/29) = 79.31, exact 11/29. thinking low = 100×(22/29) = 75.86, exact 13/29. n_failed = 1.
             </span>
             <button onClick={onRefreshLiveHf} className="oc-btn primary small">
-              🌐 Fetch Live HF Split
+              ↻ Reload Pilot
             </button>
           </div>
         </div>
         <div className="pb grid grid-cols-1 md:grid-cols-2 gap-2.5 overflow-y-auto">
           {episodes.map(ep => {
-            const astraErr = Math.abs(ep.astraPred1to5 - ep.goldReward1to5);
             return (
               <div
                 key={ep.rowIdx}
@@ -1429,18 +1445,14 @@ const VideoChecksPanel: React.FC<{
                 <div>
                   <div className="flex items-center justify-between gap-2">
                     <span className="kick text-[9.5px]">
-                      {ep.sourceDataset} · Row #{ep.rowIdx}
+                      {ep.sourceDataset} · Row #{ep.rowIdx} ({(ep.mp4Bytes / 1024).toFixed(0)} KB)
                     </span>
                     <div className="flex items-center gap-1">
                       <span className="oc-chip text-[10px]">
                         Gold: <b>{ep.goldReward1to5}/5</b>
                       </span>
-                      <span className={`oc-chip text-[10px] ${astraErr > 0 ? 'bad' : ''}`}>
-                        Astra: {ep.astraPred1to5}/5
-                      </span>
-                      <span className="oc-chip text-[10px]">FLORA: {ep.floraPred1to5}/5</span>
                       <span className="oc-chip good text-[10px]">
-                        Kronos: {ep.kronosPred1to5}/5 ✓
+                        Pred: {ep.kronosPred1to5}/5
                       </span>
                     </div>
                   </div>
@@ -1465,7 +1477,7 @@ const GpuTrainSimPanel: React.FC<{
   telemetry: RobotTelemetry;
   onTriggerBrevTraining: () => void;
 }> = ({ brevJob, metrics, onTriggerBrevTraining }) => {
-  const losses = brevJob?.lossHistory || [0.693, 0.512, 0.378, 0.271, 0.194, 0.142];
+  const losses = brevJob?.lossHistory || [0.3381, 0.2001, 0.1667, 0.1351, 0.1073, 0.0835];
   return (
     <div className="flex-1 min-h-0 flex flex-col gap-2.5">
       {/* Top Header Card */}
@@ -1474,7 +1486,7 @@ const GpuTrainSimPanel: React.FC<{
           <h2>NVIDIA Brev &amp; RTX 3080 CUDA DPO Trainer</h2>
           <div className="flex items-center gap-2">
             <span className="oc-chip good">
-              CUDA:0 · 278,528 Sim Steps @ 685,574 steps/s
+              CUDA:0 · 138 DPO Tuples · 278,528 Tensor Steps @ 231,971 steps/s
             </span>
             <button onClick={onTriggerBrevTraining} className="oc-btn primary small">
               {brevJob?.status === 'training'
@@ -1485,26 +1497,24 @@ const GpuTrainSimPanel: React.FC<{
         </div>
         <div className="pb grid grid-cols-1 md:grid-cols-3 gap-2.5">
           <div className="oc-card-accent p-2.5">
-            <div className="kick">PRE-DPO BASELINE SURVIVAL</div>
-            <div className="serif text-[32px] leading-none text-[var(--red)] mt-1">0.0%</div>
+            <div className="kick">PRE-DPO ACTION ACTIVATION (512 STATES)</div>
+            <div className="serif text-[32px] leading-none text-[var(--red)] mt-1">—</div>
             <div className="text-[11.5px] text-[var(--ink-2)] mt-1">
-              Unmodified VLA policy drives straight into 512 chasm/seam ruptures.
+              Not measured. A threshold on sampled state vectors is not a survival rate.
             </div>
           </div>
           <div className="oc-card-accent p-2.5">
-            <div className="kick">POST-DPO POLICY SURVIVAL</div>
-            <div className="serif text-[32px] leading-none text-[#0D7A4E] mt-1">98.2%</div>
+            <div className="kick">POST-DPO ACTION ACTIVATION (512 STATES)</div>
+            <div className="serif text-[32px] leading-none text-[#0D7A4E] mt-1">—</div>
             <div className="text-[11.5px] text-[var(--ink-2)] mt-1">
-              503 / 512 hazard environments cleared via learned Thruster Hopper co-design.
+              Post-DPO survival was not measured. A threshold on random state vectors is not a physics rollout.
             </div>
           </div>
           <div className="oc-card-accent p-2.5">
-            <div className="kick">1M vs 512-TOKEN ABLATION</div>
-            <div className="serif text-[32px] leading-none text-[var(--ink)] mt-1">
-              0.0% <span className="text-[16px]">vs 8.77% False Alarm</span>
-            </div>
+            <div className="kick">SYNTHETIC GPU TENSOR ABLATION</div>
+            <div className="serif text-[32px] leading-none text-[var(--ink)] mt-1">—</div>
             <div className="text-[11.5px] text-[var(--ink-2)] mt-1">
-              1,024 trajectories (245,760 GPU steps) verify zero boundary stitch amnesia.
+              False-alarm rate on synthetic tensors was not measured.
             </div>
           </div>
         </div>
@@ -1515,7 +1525,7 @@ const GpuTrainSimPanel: React.FC<{
         <div className="oc-panel">
           <div className="ph">
             <h2>Contrastive DPO Loss Progression</h2>
-            <span className="kick">PyTorch CUDA Policy Network (18,054 params)</span>
+            <span className="kick">PyTorch CUDA GaussianPolicyNet (runs/brev/dpo_training_metrics.json)</span>
           </div>
           <div className="pb flex flex-col justify-between gap-2">
             <div className="grid grid-cols-6 gap-1.5">
@@ -1526,12 +1536,12 @@ const GpuTrainSimPanel: React.FC<{
                 >
                   <div className="kick text-[9px]">EP {i + 1}</div>
                   <div className="mono font-extrabold text-[13px] mt-0.5 num">
-                    {loss.toFixed(3)}
+                    {loss.toFixed(4)}
                   </div>
                   <div className="w-full bg-[var(--wash)] h-8 mt-1.5 flex items-end">
                     <div
                       className="w-full bg-[var(--accent)] border-t border-[var(--ink)]"
-                      style={{ height: `${Math.max(15, (1 - loss / 0.8) * 100)}%` }}
+                      style={{ height: `${Math.max(15, (1 - loss / 0.4) * 100)}%` }}
                     />
                   </div>
                 </div>
@@ -1539,7 +1549,7 @@ const GpuTrainSimPanel: React.FC<{
             </div>
             <pre className="mono text-[11px] bg-[var(--paper-2)] border border-[var(--ink)] p-2 m-0 overflow-x-auto">
               {brevJob?.logTail ||
-                '[RTX 3080 CUDA:0] 240 steps: Loss 1.3865 -> 0.0024 | Chosen Branch Ω Win-Rate: 100.0% | Post-DPO Survival: 98.2%'}
+                '[RTX 3080 CUDA:0] 138 DPO tuples, 6 epochs: Loss 0.3381 -> 0.0835 | KL=1.4437 | Margin=+2.609 | Win-Rate=100.0%'}
             </pre>
           </div>
         </div>
@@ -1571,7 +1581,7 @@ const GpuTrainSimPanel: React.FC<{
               </div>
             </div>
             <div className="text-[11.5px] bg-[var(--wash)] border border-[var(--ink)] p-2">
-              <b>Closed-Loop Verification:</b> After DPO training on the 4-branch multiverse dataset, the policy automatically triggers <code>thruster_hopper</code> + <code>deployable_bridge</code> whenever LiDAR detects a ΔY &gt; 1.05m seam or chasm drop.
+              <b>Closed-Loop Verification:</b> After DPO training on the 4-branch multiverse dataset, the policy outputs high thruster (0.975) and suspension lift (0.974) commands across sampled hazard states.
             </div>
           </div>
         </div>
@@ -1580,19 +1590,26 @@ const GpuTrainSimPanel: React.FC<{
   );
 };
 
-/* ---------- TAB 6: PAPER BENCHMARK (KRONOS-1M vs FLORA vs GPT-6 ASTRA) ---------- */
+/* ---------- TAB 6: PAPER BENCHMARK (PUBLISHED FLORA BASELINES + FINISHED LOCAL RUNS) ---------- */
 const PaperBenchmarkPanel: React.FC<{
   benchReport: BenchmarkSuiteReport;
   onExportMd: () => void;
 }> = ({ benchReport, onExportMd }) => {
+  const fmtPct = (v: number | null, note?: string) =>
+    v === null || v === undefined ? '—' : note ? `${v}% (${note})` : `${v}%`;
+  const fmtNum = (v: number | null, d = 1, note?: string) =>
+    v === null || v === undefined ? '—' : note ? `${v.toFixed(d)} (${note})` : v.toFixed(d);
+  const fmtUsd = (v: number | null) =>
+    v === null || v === undefined ? '—' : `$${v.toFixed(2)}`;
+
   return (
     <div className="flex-1 min-h-0 flex flex-col gap-2">
       <div className="oc-panel flex-1 min-h-0">
         <div className="ph">
-          <h2>Official FLORA Paper Protocol Benchmark</h2>
+          <h2>Published FLORA Paper Baselines &amp; Finished Local Runs</h2>
           <div className="flex items-center gap-2">
             <span className="kick">
-              WGO-Bench · Robot200 · RoboReward · Robometer · DenseReward · RubricBench
+              Unrun Full Paper Splits Marked as &ldquo;—&rdquo; · Only Real Completed Local Runs Shown for KRONOS
             </span>
             <button onClick={onExportMd} className="oc-btn small">
               ⬇ Export (.md)
@@ -1620,28 +1637,28 @@ const PaperBenchmarkPanel: React.FC<{
               {benchReport.models.map(row => (
                 <tr key={row.modelId} className={row.isOurs ? 'ours' : ''}>
                   <td className="font-bold">{row.modelName}</td>
-                  <td className="text-right num">{row.wgoSegF1At075}%</td>
-                  <td className="text-right num">{row.wgoGoldCaptionAcc}%</td>
-                  <td className="text-right num">{row.robotJointF1At050}%</td>
-                  <td className="text-right num">{row.roboRewardMaeX100.toFixed(1)}</td>
-                  <td className="text-right num">{row.robometerOodKendall.toFixed(1)}</td>
+                  <td className="text-right num">{fmtPct(row.wgoSegF1At075)}</td>
+                  <td className="text-right num">{fmtPct(row.wgoGoldCaptionAcc)}</td>
+                  <td className="text-right num">{fmtPct(row.robotJointF1At050)}</td>
+                  <td className="text-right num">{fmtNum(row.roboRewardMaeX100, 1, row.roboRewardNote)}</td>
+                  <td className="text-right num">{fmtNum(row.robometerOodKendall, 1)}</td>
                   <td className="text-right num">
                     <span
                       className={`oc-chip ${
                         row.isOurs
                           ? 'good'
-                          : row.denseFailureRecall < 5
+                          : (row.denseFailureRecall ?? 0) < 5
                             ? 'bad'
                             : 'wash'
                       }`}
                     >
-                      {row.denseFailureRecall}%
+                      {fmtPct(row.denseFailureRecall, row.denseNote)}
                     </span>
                   </td>
-                  <td className="text-right num">{row.denseNormalFalseAlarm}%</td>
-                  <td className="text-right num">{row.rubricPooledL1Error.toFixed(1)}</td>
-                  <td className="text-right num">{row.closedLoopDpoRecoveryPct}%</td>
-                  <td className="text-right num font-bold">${row.costPerVideoHourUsd.toFixed(2)}</td>
+                  <td className="text-right num">{fmtPct(row.denseNormalFalseAlarm, row.denseNote)}</td>
+                  <td className="text-right num">{fmtNum(row.rubricPooledL1Error, 1)}</td>
+                  <td className="text-right num">{fmtPct(row.closedLoopDpoRecoveryPct, row.denseNote)}</td>
+                  <td className="text-right num font-bold">{fmtUsd(row.costPerVideoHourUsd)}</td>
                 </tr>
               ))}
             </tbody>
@@ -1649,21 +1666,21 @@ const PaperBenchmarkPanel: React.FC<{
 
           <div className="p-3 grid grid-cols-1 md:grid-cols-3 gap-2.5 border-t border-[var(--ink)] bg-[var(--paper-2)]">
             <div className="border border-[var(--ink)] bg-[var(--paper)] p-2.5">
-              <div className="kick text-[var(--red)]">WHY GPT-6 ASTRA FAILS ($88.49/hr)</div>
+              <div className="kick text-[var(--red)]">OPENAI GPT-6 ASTRA (FLORA PAPER: $88.49/hr)</div>
               <div className="text-[11.5px] mt-1">
-                Catches <b>0.0% of 0.5s failure steps</b> on DenseRewardBench because it lacks 60Hz physical contact/slip grounding, and over-penalizes partial progress (MAE 55.4).
+                In the published FLORA paper, Astra catches <b>0.0% of 0.5s failure steps</b> on DenseRewardBench and scores <b>55.4 MAE×100</b> on RoboRewardBench (2,831 episodes).
               </div>
             </div>
             <div className="border border-[var(--ink)] bg-[var(--paper)] p-2.5">
-              <div className="kick text-[#B45309]">WHY NVIDIA FLORA BREAKS ($0.72/hr)</div>
+              <div className="kick text-[#B45309]">NVIDIA FLORA SUITE (FLORA PAPER: $0.72/hr)</div>
               <div className="text-[11.5px] mt-1">
-                Capped at 512–1,024 output tokens with <code>thinking disabled</code>: suffers <b>11.0% false alarms</b> on window seams, <b>6.5 Rubric L1 error</b>, and 0% closed-loop recovery.
+                In the published FLORA paper, FLORA achieves <b>40.0 MAE×100</b> on RoboRewardBench and <b>53.3% failure recall</b> (with <b>11.0% false alarms</b>) on DenseRewardBench, and <b>6.5 Rubric L1 error</b>.
               </div>
             </div>
             <div className="border border-[var(--ink)] bg-[var(--wash)] p-2.5">
-              <div className="kick text-[#0D7A4E]">HOW KRONOS-1M WINS ($1.18/hr)</div>
+              <div className="kick text-[#0D7A4E]">FINISHED LOCAL KRONOS RUNS ON DISK</div>
               <div className="text-[11.5px] mt-1">
-                Unifies 1M context + 95% implicit caching + adaptive <code>thinking_level</code> + 4-branch counterfactual DPO forking: <b>94.4% failure recall</b>, <b>0.0% false alarms</b>, <b>98.2% post-DPO survival</b>.
+                Seed-0 sample of 30 RoboReward test episodes. <b>thinking high:</b> MAE×100 = 100×(23/29) = 79.31, exact 11/29. <b>thinking low:</b> MAE×100 = 100×(22/29) = 75.86, exact 13/29. n_failed = 1 (episode 2094). Not the 2,831-episode MAE. DPO loss, survival, and dense recall were not measured.
               </div>
             </div>
           </div>

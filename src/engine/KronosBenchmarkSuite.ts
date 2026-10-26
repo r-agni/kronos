@@ -1,8 +1,8 @@
-                                                                                                                                                                                                                                                                                                                                                                                             import { KronosEngine } from './KronosEngine';
+import { KronosEngine } from './KronosEngine';
 import { RobotTelemetry } from '../types/simulation';
 
 /**
- * Exact Paper-Protocol Benchmark Row matching the official NVIDIA FLORA (Oct 20, 2026)
+ * Paper-Protocol Benchmark Row matching the official NVIDIA FLORA (Oct 20, 2026)
  * & OpenAI GPT-6 Astra evaluation tables across:
  *  - WGO-Bench (tIoU >= 0.75 1-to-1 matching: Seg F1@0.75, Gold-Window Acc, Joint F1@0.75)
  *  - DenseCaptionBench-Robot200 (Seg F1@0.5, Caption Point Quality, Joint F1@0.5)
@@ -11,6 +11,8 @@ import { RobotTelemetry } from '../types/simulation';
  *  - DenseRewardBench (0.5s steps: Macro F1, Balanced Acc, Bad-Action F1, Failure Recall, False Alarm)
  *  - RubricBench (40 episodes, 10 tasks: Pooled L1 Error, lower is better)
  *  - Cost & Scale ($ / hour of video, Mean Quality %)
+ *
+ * Unrun full-split columns on local pilot rows are explicitly represented as `null` (rendered as `—`).
  */
 export interface PaperBenchmarkModelRow {
   modelId: string;
@@ -18,30 +20,32 @@ export interface PaperBenchmarkModelRow {
   provider: string;
   license: string;
   // WGO-Bench (Public, tIoU >= 0.75)
-  wgoSegF1At075: number;
-  wgoGoldCaptionAcc: number;
-  wgoJointF1At075: number;
+  wgoSegF1At075: number | null;
+  wgoGoldCaptionAcc: number | null;
+  wgoJointF1At075: number | null;
   // DenseCaptionBench Robot200 (tIoU >= 0.50)
-  robotSegF1At050: number;
-  robotCaptionQuality: number;
-  robotJointF1At050: number;
+  robotSegF1At050: number | null;
+  robotCaptionQuality: number | null;
+  robotJointF1At050: number | null;
   // RoboRewardBench & RobometerBench
-  roboRewardMaeX100: number; // lower is better
-  robometerOodKendall: number;
-  robometerIdVoc: number;
-  robometerOodVoc: number;
+  roboRewardMaeX100: number | null; // lower is better
+  roboRewardNote?: string;
+  robometerOodKendall: number | null;
+  robometerIdVoc: number | null;
+  robometerOodVoc: number | null;
   // DenseRewardBench (0.5s Process Rewards)
-  denseMacroF1: number;
-  denseBalancedAcc: number;
-  denseBadActionF1: number;
-  denseFailureRecall: number;
-  denseNormalFalseAlarm: number; // lower is better
+  denseMacroF1: number | null;
+  denseBalancedAcc: number | null;
+  denseBadActionF1: number | null;
+  denseFailureRecall: number | null;
+  denseNormalFalseAlarm: number | null; // lower is better
+  denseNote?: string;
   // RubricBench
-  rubricPooledL1Error: number; // lower is better
+  rubricPooledL1Error: number | null; // lower is better
   // Closed-Loop Auto-Research & Cost
-  closedLoopDpoRecoveryPct: number;
-  costPerVideoHourUsd: number;
-  meanQualityPct: number;
+  closedLoopDpoRecoveryPct: number | null;
+  costPerVideoHourUsd: number | null;
+  meanQualityPct: number | null;
   isOurs?: boolean;
 }
 
@@ -50,22 +54,12 @@ export interface RealRoboRewardEpisodeEval {
   sourceDataset: string;
   task: string;
   videoUrl: string;
+  mp4Bytes: number;
+  latencyMs: number;
   goldReward1to5: number;
-  astraPred1to5: number;
-  floraPred1to5: number;
   kronosPred1to5: number;
   kronosRationale: string;
-}
-
-export interface RealWgoEpisodeEval {
-  episodeId: string;
-  family: 'homer' | 'droid' | 'galaxea';
-  instruction: string;
-  goldSegmentsCount: number;
-  meanIou: number;
-  f1At075: number;
-  captionAccPct: number;
-  jointF1At075: number;
+  modelUsed: string;
 }
 
 export interface BenchmarkSuiteReport {
@@ -84,7 +78,6 @@ export interface BenchmarkSuiteReport {
   };
   models: PaperBenchmarkModelRow[];
   roboRewardEpisodes?: RealRoboRewardEpisodeEval[];
-  wgoEpisodes?: RealWgoEpisodeEval[];
 }
 
 /**
@@ -145,7 +138,6 @@ export function computeKendallTauX100(pred: number[], gold: number[]): number {
   const denom = (n * (n - 1)) / 2;
   return +(((concordant - discordant) / denom) * 100).toFixed(1);
 }
-
 
 interface GroundTruthStep {
   telemetry: RobotTelemetry;
@@ -247,7 +239,6 @@ export function runKronosBenchmarkSuite(): BenchmarkSuiteReport {
   let falseNegativeMissedFailure = 0;
   let trueNormalConfirmed = 0;
   let falseAlarmOnNormal = 0;
-  let correctTotal = 0;
   let forksRecovered = 0;
   let totalFailures = 0;
 
@@ -258,7 +249,6 @@ export function runKronosBenchmarkSuite(): BenchmarkSuiteReport {
       const { newTick } = engine.stepTelemetry(step.telemetry, false);
       const predicted = newTick?.rating || 'normal';
 
-      if (predicted === step.expectedRating) correctTotal++;
       if (step.expectedRating === 'failure') {
         totalFailures++;
         if (predicted === 'failure') trueFailureCaught++;
@@ -287,7 +277,7 @@ export function runKronosBenchmarkSuite(): BenchmarkSuiteReport {
   const models: PaperBenchmarkModelRow[] = [
     {
       modelId: 'claude-opus-5',
-      modelName: 'Claude Opus 5',
+      modelName: 'Claude Opus 5 (FLORA Paper)',
       provider: 'Anthropic',
       license: 'Proprietary',
       wgoSegF1At075: 25.5,
@@ -306,13 +296,38 @@ export function runKronosBenchmarkSuite(): BenchmarkSuiteReport {
       denseFailureRecall: 0.3,
       denseNormalFalseAlarm: 1.8,
       rubricPooledL1Error: 17.1,
-      closedLoopDpoRecoveryPct: 0.0,
-      costPerVideoHourUsd: 42.10,
-      meanQualityPct: 41.8,
+      closedLoopDpoRecoveryPct: null,
+      costPerVideoHourUsd: 41.70,
+      meanQualityPct: 30.4,
+    },
+    {
+      modelId: 'kimi-k3',
+      modelName: 'Moonshot Kimi K3 (FLORA Paper)',
+      provider: 'Moonshot AI',
+      license: 'Open-Weight',
+      wgoSegF1At075: 26.1,
+      wgoGoldCaptionAcc: 50.6,
+      wgoJointF1At075: 16.7,
+      robotSegF1At050: 41.2,
+      robotCaptionQuality: 48.0,
+      robotJointF1At050: 22.2,
+      roboRewardMaeX100: 68.2,
+      robometerOodKendall: 63.5,
+      robometerIdVoc: 97.5,
+      robometerOodVoc: 98.6,
+      denseMacroF1: 31.2,
+      denseBalancedAcc: 39.8,
+      denseBadActionF1: 33.0,
+      denseFailureRecall: 0.3,
+      denseNormalFalseAlarm: 2.1,
+      rubricPooledL1Error: 15.6,
+      closedLoopDpoRecoveryPct: null,
+      costPerVideoHourUsd: null,
+      meanQualityPct: 43.2,
     },
     {
       modelId: 'gpt-5-6-sol',
-      modelName: 'OpenAI GPT-5.6 Sol',
+      modelName: 'OpenAI GPT-5.6 Sol (FLORA Paper)',
       provider: 'OpenAI',
       license: 'Proprietary',
       wgoSegF1At075: 33.7,
@@ -331,13 +346,13 @@ export function runKronosBenchmarkSuite(): BenchmarkSuiteReport {
       denseFailureRecall: 1.0,
       denseNormalFalseAlarm: 2.4,
       rubricPooledL1Error: 8.4,
-      closedLoopDpoRecoveryPct: 0.0,
-      costPerVideoHourUsd: 29.40,
+      closedLoopDpoRecoveryPct: null,
+      costPerVideoHourUsd: null,
       meanQualityPct: 47.9,
     },
     {
       modelId: 'gpt-6-astra',
-      modelName: 'OpenAI GPT-6 Astra (Frontier VLM)',
+      modelName: 'OpenAI GPT-6 Astra (FLORA Paper)',
       provider: 'OpenAI',
       license: 'Proprietary',
       wgoSegF1At075: 46.0,
@@ -356,13 +371,13 @@ export function runKronosBenchmarkSuite(): BenchmarkSuiteReport {
       denseFailureRecall: 0.0,
       denseNormalFalseAlarm: 0.9,
       rubricPooledL1Error: 3.6,
-      closedLoopDpoRecoveryPct: 0.0,
+      closedLoopDpoRecoveryPct: null,
       costPerVideoHourUsd: 88.49,
       meanQualityPct: 53.7,
     },
     {
       modelId: 'nvidia-flora-suite',
-      modelName: 'NVIDIA FLORA (9B + 27B + 27B Suite)',
+      modelName: 'NVIDIA FLORA Suite (FLORA Paper)',
       provider: 'NVIDIA GEAR',
       license: 'OneWay NonComm',
       wgoSegF1At075: 50.3,
@@ -381,34 +396,92 @@ export function runKronosBenchmarkSuite(): BenchmarkSuiteReport {
       denseFailureRecall: 53.3,
       denseNormalFalseAlarm: 11.0,
       rubricPooledL1Error: 6.5,
-      closedLoopDpoRecoveryPct: 0.0,
+      closedLoopDpoRecoveryPct: null,
       costPerVideoHourUsd: 0.72,
       meanQualityPct: 57.1,
     },
     {
-      modelId: 'kronos-1m-argon',
-      modelName: 'KRONOS-1M (Gemini 4 Argon + Managed Agent)',
-      provider: 'Google Argon + Brev',
+      modelId: 'kronos-1m-argon-high',
+      modelName: 'KRONOS-1M gemini-4-argon thinking high (sample)',
+      provider: 'Gemini 4 Argon',
       license: 'Apache-2.0',
-      wgoSegF1At075: 54.8,
-      wgoGoldCaptionAcc: 81.2,
-      wgoJointF1At075: 44.5,
-      robotSegF1At050: 74.6,
-      robotCaptionQuality: 83.4,
-      robotJointF1At050: 62.2,
-      roboRewardMaeX100: 36.8,
-      robometerOodKendall: 84.6,
-      robometerIdVoc: 99.2,
-      robometerOodVoc: 99.8,
-      denseMacroF1: 68.4,
-      denseBalancedAcc: 74.1,
-      denseBadActionF1: 71.2,
+      wgoSegF1At075: null,
+      wgoGoldCaptionAcc: null,
+      wgoJointF1At075: null,
+      robotSegF1At050: null,
+      robotCaptionQuality: null,
+      robotJointF1At050: null,
+      roboRewardMaeX100: 79.3103448275862,
+      roboRewardNote: '100*(23/29); exact 11/29; n_failed=1; seed 0; 30 of 2831',
+      robometerOodKendall: null,
+      robometerIdVoc: null,
+      robometerOodVoc: null,
+      denseMacroF1: null,
+      denseBalancedAcc: null,
+      denseBadActionF1: null,
+      denseFailureRecall: null,
+      denseNormalFalseAlarm: null,
+      denseNote: 'not measured',
+      rubricPooledL1Error: null,
+      closedLoopDpoRecoveryPct: null,
+      costPerVideoHourUsd: null,
+      meanQualityPct: null,
+      isOurs: true,
+    },
+    {
+      modelId: 'kronos-1m-argon-low',
+      modelName: 'KRONOS-1M gemini-4-argon thinking low (sample)',
+      provider: 'Gemini 4 Argon',
+      license: 'Apache-2.0',
+      wgoSegF1At075: null,
+      wgoGoldCaptionAcc: null,
+      wgoJointF1At075: null,
+      robotSegF1At050: null,
+      robotCaptionQuality: null,
+      robotJointF1At050: null,
+      roboRewardMaeX100: 75.86206896551724,
+      roboRewardNote: '100*(22/29); exact 13/29; n_failed=1; same 30 episodes',
+      robometerOodKendall: null,
+      robometerIdVoc: null,
+      robometerOodVoc: null,
+      denseMacroF1: null,
+      denseBalancedAcc: null,
+      denseBadActionF1: null,
+      denseFailureRecall: null,
+      denseNormalFalseAlarm: null,
+      denseNote: 'not measured',
+      rubricPooledL1Error: null,
+      closedLoopDpoRecoveryPct: null,
+      costPerVideoHourUsd: null,
+      meanQualityPct: null,
+      isOurs: true,
+    },
+    {
+      modelId: 'kronos-1m-pilot-and-sim',
+      modelName: 'KRONOS-1M (8-Clip MP4 Pilot & 46-Step Local Sim)',
+      provider: 'Gemini 4 Argon + Rapier Sim',
+      license: 'Apache-2.0',
+      wgoSegF1At075: null,
+      wgoGoldCaptionAcc: null,
+      wgoJointF1At075: null,
+      robotSegF1At050: null,
+      robotCaptionQuality: null,
+      robotJointF1At050: null,
+      roboRewardMaeX100: 0.0,
+      roboRewardNote: 'n=8 raw .mp4 pilot (thinking:high)',
+      robometerOodKendall: null,
+      robometerIdVoc: null,
+      robometerOodVoc: null,
+      denseMacroF1: null,
+      denseBalancedAcc: null,
+      denseBadActionF1: null,
       denseFailureRecall: failureRecallPct,
       denseNormalFalseAlarm: falseAlarmPct,
-      rubricPooledL1Error: 2.9,
+      denseNote: 'n=46 local sim steps',
+      rubricPooledL1Error: null,
       closedLoopDpoRecoveryPct: recoveryPct,
-      costPerVideoHourUsd: 1.18,
-      meanQualityPct: 69.8,
+      costPerVideoHourUsd: null,
+      meanQualityPct: null,
       isOurs: true,
     },
   ];
@@ -418,111 +491,113 @@ export function runKronosBenchmarkSuite(): BenchmarkSuiteReport {
       rowIdx: 0,
       sourceDataset: 'austin_sirius_rlds',
       task: 'Place the small beige block onto the left peg of the tray.',
-      videoUrl: 'https://huggingface.co/datasets/teetone/RoboReward/resolve/main/test/austin_sirius_dataset_converted_externally_to_rlds/austin_sirius_dataset_converted_externally_to_rlds_originalsplit_train_index_527.mp4',
+      videoUrl:
+        'https://huggingface.co/datasets/teetone/RoboReward/resolve/main/test/austin_sirius_dataset_converted_externally_to_rlds/austin_sirius_dataset_converted_externally_to_rlds_originalsplit_train_index_527.mp4',
+      mp4Bytes: 247323,
+      latencyMs: 8826.4,
       goldReward1to5: 1,
-      astraPred1to5: 1,
-      floraPred1to5: 1,
       kronosPred1to5: 1,
-      kronosRationale: 'Wrong-object manipulation (red piece instead of beige block); 0 goal progress.',
+      modelUsed: 'gemini-4-argon (thinking:high)',
+      kronosRationale:
+        'The robot grasps and places the blue and red gears onto the right peg of the tray, making no movement toward the small beige block or the left peg.',
     },
     {
       rowIdx: 49,
       sourceDataset: 'austin_sirius_rlds',
       task: 'Insert the blue gear onto the right peg, then insert the red gear onto the left peg.',
-      videoUrl: 'https://huggingface.co/datasets/teetone/RoboReward/resolve/main/test/austin_sirius_dataset_converted_externally_to_rlds/austin_sirius_dataset_converted_externally_to_rlds_originalsplit_train_index_342_1.mp4',
+      videoUrl:
+        'https://huggingface.co/datasets/teetone/RoboReward/resolve/main/test/austin_sirius_dataset_converted_externally_to_rlds/austin_sirius_dataset_converted_externally_to_rlds_originalsplit_train_index_342_1.mp4',
+      mp4Bytes: 285254,
+      latencyMs: 8645.1,
       goldReward1to5: 3,
-      astraPred1to5: 1,
-      floraPred1to5: 3,
       kronosPred1to5: 3,
-      kronosRationale: 'Blue gear inserted on right peg (50% subgoal complete), red gear mis-stacked -> Partial (3).',
+      modelUsed: 'gemini-4-argon (thinking:high)',
+      kronosRationale:
+        'The robot successfully inserts the blue gear onto the right peg, then picks up the red gear and inserts it onto the right peg on top of the blue gear instead of',
     },
     {
       rowIdx: 211,
       sourceDataset: 'berkeley_fanuc',
       task: 'Pick up the object and place it in the box.',
-      videoUrl: 'https://huggingface.co/datasets/teetone/RoboReward/resolve/main/test/berkeley_fanuc_manipulation/berkeley_fanuc_manipulation_originalsplit_train_index_160_attempt_1_score_2.mp4',
+      videoUrl:
+        'https://huggingface.co/datasets/teetone/RoboReward/resolve/main/test/berkeley_fanuc_manipulation/berkeley_fanuc_manipulation_originalsplit_train_index_160_attempt_1_score_2.mp4',
+      mp4Bytes: 72056,
+      latencyMs: 6489.9,
       goldReward1to5: 2,
-      astraPred1to5: 1,
-      floraPred1to5: 2,
       kronosPred1to5: 2,
-      kronosRationale: 'Grasped and lifted white object from green cloth, failed final box placement -> Minimal (2).',
+      modelUsed: 'gemini-4-argon (thinking:high)',
+      kronosRationale:
+        'The robot arm moves purposefully down toward the object on the green cloth, but the clip ends before it reaches or grasps the object.',
     },
     {
-      rowIdx: 410,
-      sourceDataset: 'berkeley_rpt_rlds',
-      task: 'Stack the blue cube on top of the green cube and keep the grippers contacting it at the end.',
-      videoUrl: 'https://huggingface.co/datasets/teetone/RoboReward/resolve/main/test/berkeley_rpt_converted_externally_to_rlds/berkeley_rpt_converted_externally_to_rlds_originalsplit_train_index_234_1.mp4',
-      goldReward1to5: 4,
-      astraPred1to5: 5,
-      floraPred1to5: 3,
-      kronosPred1to5: 4,
-      kronosRationale: 'Primary stack satisfied; auxiliary end-contact constraint missed -> Near Completion (4).',
-    },
-    {
-      rowIdx: 800,
-      sourceDataset: 'fractal20220817',
-      task: 'Place green rice chip bag into white bowl',
-      videoUrl: 'https://huggingface.co/datasets/teetone/RoboReward/resolve/main/test/fractal20220817_data/fractal20220817_data_originalsplit_train_index_25052_attempt_1_score_3.mp4',
+      rowIdx: 400,
+      sourceDataset: 'berkeley_rpt',
+      task: 'Stack cube.',
+      videoUrl:
+        'https://huggingface.co/datasets/teetone/RoboReward/resolve/main/test/berkeley_rpt_converted_externally_to_rlds/berkeley_rpt_converted_externally_to_rlds_originalsplit_train_index_568_attempt_1_score_3.mp4',
+      mp4Bytes: 1307830,
+      latencyMs: 9092.1,
       goldReward1to5: 3,
-      astraPred1to5: 1,
-      floraPred1to5: 3,
       kronosPred1to5: 3,
-      kronosRationale: 'Grasped and translated green bag, missed bowl containment -> Partial Completion (3).',
+      modelUsed: 'gemini-4-argon (thinking:high)',
+      kronosRationale:
+        'The robot successfully grasps and lifts the green cube, moving it around in the air, but never places or stacks it onto the blue cube before the video ends.',
+    },
+    {
+      rowIdx: 500,
+      sourceDataset: 'bridge_v2',
+      task: 'Place fork diagonally on green cloth.',
+      videoUrl:
+        'https://huggingface.co/datasets/teetone/RoboReward/resolve/main/test/bridge/bridge_originalsplit_train_index_3700_attempt_1_score_4.mp4',
+      mp4Bytes: 696805,
+      latencyMs: 12933.8,
+      goldReward1to5: 4,
+      kronosPred1to5: 4,
+      modelUsed: 'gemini-4-argon (thinking:high)',
+      kronosRationale:
+        'The robot grasps the fork, lifts it, and positions it diagonally over the green cloth, but the gripper is still holding the fork in the final frame without clea',
     },
     {
       rowIdx: 1009,
       sourceDataset: 'jaco_play',
       task: 'Place the apple fruit in the table',
-      videoUrl: 'https://huggingface.co/datasets/teetone/RoboReward/resolve/main/test/jaco_play/jaco_play_originalsplit_train_index_914.mp4',
+      videoUrl:
+        'https://huggingface.co/datasets/teetone/RoboReward/resolve/main/test/jaco_play/jaco_play_originalsplit_train_index_914.mp4',
+      mp4Bytes: 63241,
+      latencyMs: 5713.2,
       goldReward1to5: 5,
-      astraPred1to5: 5,
-      floraPred1to5: 5,
       kronosPred1to5: 5,
-      kronosRationale: 'Grasped red apple, translated off plate, released cleanly on tabletop -> Perfect (5).',
+      modelUsed: 'gemini-4-argon (thinking:high)',
+      kronosRationale:
+        'The robot moves the grasped red apple away from the bowl, lowers it onto the wooden table surface, and opens its gripper to cleanly release it.',
     },
     {
       rowIdx: 1200,
       sourceDataset: 'robo_arena',
       task: 'Put the marker in the drawer',
-      videoUrl: 'https://huggingface.co/datasets/teetone/RoboReward/resolve/main/test/robo_arena/c12c4455-e161-48cb-80e4-fd3782f81615_B_right.mp4',
+      videoUrl:
+        'https://huggingface.co/datasets/teetone/RoboReward/resolve/main/test/robo_arena/c12c4455-e161-48cb-80e4-fd3782f81615_B_right.mp4',
+      mp4Bytes: 972568,
+      latencyMs: 17916.4,
       goldReward1to5: 5,
-      astraPred1to5: 5,
-      floraPred1to5: 4,
       kronosPred1to5: 5,
-      kronosRationale: 'Marker placed inside open drawer cavity and released -> Perfect Completion (5).',
-    },
-  ];
-
-  const wgoEpisodes: RealWgoEpisodeEval[] = [
-    {
-      episodeId: 'homer_1',
-      family: 'homer',
-      instruction: 'use pitcher to pour water into tall glass and wine glass',
-      goldSegmentsCount: 6,
-      meanIou: 0.84,
-      f1At075: 66.7,
-      captionAccPct: 83.3,
-      jointF1At075: 55.6,
+      modelUsed: 'gemini-4-argon (thinking:high)',
+      kronosRationale:
+        'The robot grasps the marker from the red plate, re-grasps it after it slips onto the table, drops it onto the open drawer, and nudges it so the marker settles i',
     },
     {
-      episodeId: 'robointer_droid_000001',
-      family: 'droid',
-      instruction: 'pick up the object and place it into container (6-DoF EEF + gripper state)',
-      goldSegmentsCount: 3,
-      meanIou: 0.88,
-      f1At075: 66.7,
-      captionAccPct: 88.9,
-      jointF1At075: 59.3,
-    },
-    {
-      episodeId: 'galaxea_011',
-      family: 'galaxea',
-      instruction: 'pour liquid and classify test tube on marble bar counter (bilateral joints + EEF)',
-      goldSegmentsCount: 5,
-      meanIou: 0.82,
-      f1At075: 60.0,
-      captionAccPct: 80.0,
-      jointF1At075: 48.0,
+      rowIdx: 1504,
+      sourceDataset: 'robo_arena',
+      task: 'Put the yellow sponge on the black platform',
+      videoUrl:
+        'https://huggingface.co/datasets/teetone/RoboReward/resolve/main/test/robo_arena/65e00006-71e6-4edf-af62-7dec377ccb98_A_wrist.mp4',
+      mp4Bytes: 1164431,
+      latencyMs: 8686.5,
+      goldReward1to5: 5,
+      kronosPred1to5: 5,
+      modelUsed: 'gemini-4-argon (thinking:high)',
+      kronosRationale:
+        'The robot grasps the yellow sponge from the white bowl, moves it over the black platform, and cleanly releases it onto the platform before retracting.',
     },
   ];
 
@@ -530,7 +605,7 @@ export function runKronosBenchmarkSuite(): BenchmarkSuiteReport {
     runId: `bench_kronos_${Date.now().toString(36)}`,
     timestamp: new Date().toISOString(),
     evaluationMode: 'real_hf_datasets_scored',
-    episodesEvaluated: 24,
+    episodesEvaluated: 30,
     total05sStepsEvaluated: corpus.length,
     executionTimeMs: elapsedMs,
     confusionMatrixOurs: {
@@ -541,61 +616,34 @@ export function runKronosBenchmarkSuite(): BenchmarkSuiteReport {
     },
     models,
     roboRewardEpisodes,
-    wgoEpisodes,
   };
 }
 
-export async function runLiveHuggingFaceBenchmark(offset: number = 48): Promise<BenchmarkSuiteReport> {
-  const t0 = performance.now();
-  const baseReport = runKronosBenchmarkSuite();
-  try {
-    const url = `https://datasets-server.huggingface.co/rows?dataset=teetone/RoboReward&config=default&split=test&offset=${offset}&length=12`;
-    const resp = await fetch(url);
-    if (resp.ok) {
-      const data = await resp.json();
-      if (Array.isArray(data.rows) && data.rows.length > 0) {
-        const liveEps: RealRoboRewardEpisodeEval[] = data.rows.map((item: any) => {
-          const r = item.row || {};
-          const gold = Number(r.reward ?? 3);
-          const srcUrl = String(r.video?.src || '');
-          const srcParts = srcUrl.split('/test/');
-          const dsName = srcParts[1] ? srcParts[1].split('/')[0] : 'robo_reward_test';
-          const checkText = String(r.gpt5_mini_check || '');
-          // Astra systematically under-scores partial progress (score 3 -> 1) per FLORA Sec 4.2
-          const astraPred = gold === 3 ? 1 : gold;
-          const floraPred = gold === 4 && checkText.includes('auxiliary') ? 3 : gold;
-          const kronosPred = gold;
-          return {
-            rowIdx: Number(item.row_idx ?? 0),
-            sourceDataset: dsName,
-            task: String(r.task || 'Manipulation task'),
-            videoUrl: srcUrl,
-            goldReward1to5: gold,
-            astraPred1to5: astraPred,
-            floraPred1to5: floraPred,
-            kronosPred1to5: kronosPred,
-            kronosRationale: checkText
-              ? checkText.slice(0, 120) + '...'
-              : `Scored ${kronosPred}/5 on live HF test episode #${item.row_idx}`,
-          };
-        });
-        baseReport.roboRewardEpisodes = liveEps;
-        baseReport.episodesEvaluated = liveEps.length + (baseReport.wgoEpisodes?.length || 0);
-        baseReport.evaluationMode = 'live_gemini_argon_api';
-      }
-    }
-  } catch {
-    // Keep embedded HF split rows if offline
-  }
-  baseReport.executionTimeMs = Math.max(1, Math.round(performance.now() - t0));
-  return baseReport;
+export async function runLiveHuggingFaceBenchmark(_offset: number = 0): Promise<BenchmarkSuiteReport> {
+  return runKronosBenchmarkSuite();
+}
+
+function fmtPct(val: number | null, note?: string): string {
+  if (val === null || val === undefined) return '— (Not Run)';
+  return note ? `${val}% (${note})` : `${val}%`;
+}
+
+function fmtNum(val: number | null, digits: number = 1, note?: string): string {
+  if (val === null || val === undefined) return '— (Not Run)';
+  const formatted = val.toFixed(digits);
+  return note ? `${formatted} (${note})` : formatted;
+}
+
+function fmtUsd(val: number | null): string {
+  if (val === null || val === undefined) return '— (Not Run)';
+  return `$${val.toFixed(2)}`;
 }
 
 export function exportBenchmarkReportMarkdown(report: BenchmarkSuiteReport): string {
-  const header = `# KRONOS-1M vs. NVIDIA FLORA & OpenAI GPT-6 Astra (${report.runId})\n| Model | WGO Joint F1@0.75 ↑ | Robot200 F1@0.5 ↑ | RoboReward MAE×100 ↓ | Robometer OOD τ ↑ | Dense Macro-F1 ↑ | Fail Recall ↑ | False Alarm ↓ | Rubric L1 ↓ | Cost ($/hr) ↓ |\n| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |`;
+  const header = `# Published NVIDIA FLORA Paper Baselines & Finished Local KRONOS Runs (${report.runId})\n| Model | WGO Joint F1@0.75 ↑ | Robot200 F1@0.5 ↑ | RoboReward MAE×100 ↓ | Robometer OOD τ ↑ | Dense Macro-F1 ↑ | Fail Recall ↑ | False Alarm ↓ | Rubric L1 ↓ | Cost ($/hr) ↓ |\n| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |`;
   const rows = report.models.map(m => {
     const b = m.isOurs ? '**' : '';
-    return `| ${b}${m.modelName}${b} | ${b}${m.wgoJointF1At075}%${b} | ${b}${m.robotJointF1At050}%${b} | ${b}${m.roboRewardMaeX100}${b} | ${b}${m.robometerOodKendall}${b} | ${b}${m.denseMacroF1}%${b} | ${b}${m.denseFailureRecall}%${b} | ${b}${m.denseNormalFalseAlarm}%${b} | ${b}${m.rubricPooledL1Error}${b} | ${b}$${m.costPerVideoHourUsd.toFixed(2)}${b} |`;
+    return `| ${b}${m.modelName}${b} | ${b}${fmtPct(m.wgoJointF1At075)}${b} | ${b}${fmtPct(m.robotJointF1At050)}${b} | ${b}${fmtNum(m.roboRewardMaeX100, 1, m.roboRewardNote)}${b} | ${b}${fmtNum(m.robometerOodKendall, 1)}${b} | ${b}${fmtPct(m.denseMacroF1)}${b} | ${b}${fmtPct(m.denseFailureRecall, m.denseNote)}${b} | ${b}${fmtPct(m.denseNormalFalseAlarm, m.denseNote)}${b} | ${b}${fmtNum(m.rubricPooledL1Error, 1)}${b} | ${b}${fmtUsd(m.costPerVideoHourUsd)}${b} |`;
   });
   return [header, ...rows].join('\n');
 }

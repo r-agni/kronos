@@ -35,27 +35,27 @@ const BENCHMARK_FIGURES = [
   {
     id: 1,
     file: 'fig1_pareto_cost_quality',
-    caption: 'Fig 1: Quality vs cost Pareto frontier',
+    caption: 'Fig 1: Published NVIDIA FLORA paper baselines (Oct 2026) — Quality vs. annotation cost ($/video hr)',
   },
   {
     id: 2,
     file: 'fig2_captioning_and_segmentation',
-    caption: 'Fig 2: Captioning and temporal segmentation',
+    caption: 'Fig 2: Published NVIDIA FLORA paper baselines — Timestamped action captioning & temporal segmentation',
   },
   {
     id: 3,
     file: 'fig3_outcome_robometer_rubric',
-    caption: 'Fig 3: Outcome reward, ranking, and rubrics',
+    caption: 'Fig 3: Published NVIDIA FLORA paper baselines — Outcome reward, OOD ranking, and rubric error',
   },
   {
     id: 4,
     file: 'fig4_dense_process_rewards',
-    caption: 'Fig 4: Dense 0.5s process rewards',
+    caption: 'Fig 4: FLORA paper DenseRewardBench. KRONOS dense metrics were not measured.',
   },
   {
     id: 5,
     file: 'fig5_gpu_dpo_and_thinking_ablation',
-    caption: 'Fig 5: GPU DPO loss and thinking ablation',
+    caption: 'Fig 5: Seed-0 RoboReward sample (n=30, 29 scored, 1 failed). High MAE×100 = 100×(23/29). Low MAE×100 = 100×(22/29). DPO loss and survival were not measured.',
   },
 ] as const;
 
@@ -69,6 +69,22 @@ function downloadFile(filename: string, content: string, mimeType: string) {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+}
+
+function fmtCellPct(val: number | null, note?: string): string {
+  if (val === null || val === undefined) return '—';
+  return note ? `${val}% (${note})` : `${val}%`;
+}
+
+function fmtCellNum(val: number | null, digits: number = 1, note?: string): string {
+  if (val === null || val === undefined) return '—';
+  const s = val.toFixed(digits);
+  return note ? `${s} (${note})` : s;
+}
+
+function fmtCellUsd(val: number | null): string {
+  if (val === null || val === undefined) return '—';
+  return `$${val.toFixed(2)}`;
 }
 
 export const BenchmarkModal: React.FC<BenchmarkModalProps> = ({
@@ -122,13 +138,13 @@ export const BenchmarkModal: React.FC<BenchmarkModalProps> = ({
         <div className="mb-6">
           <div className="flex items-center space-x-2 text-cyan-400 text-xs font-bold uppercase tracking-wider mb-1">
             <Cpu className="w-4 h-4" />
-            <span>Problem Statement One // Empirical Validation</span>
+            <span>Empirical Validation // Published Paper Baselines &amp; Finished Local Runs</span>
           </div>
           <h2 className="text-xl font-bold text-white tracking-wide">
-            TOPOLOGICAL COHERENCE BENCHMARK
+            PUBLISHED FLORA BASELINES &amp; LOCAL VERIFICATION
           </h2>
           <p className="text-xs text-gray-400 mt-1">
-            Measuring continuous procedural 3D world synthesis: <span className="text-cyan-400 font-bold">Gemini 4 Argon (1M Token Unified Context)</span> versus <span className="text-red-400 font-bold">64K-at-a-time Chunked Baseline</span>.
+            Comparing <span className="text-cyan-400 font-bold">Gemini 4 Argon (1M Token Unified Context)</span> vs. <span className="text-red-400 font-bold">64K Chunked Simulation</span>, plus published NVIDIA FLORA paper reference baselines and finished local runs on disk.
           </p>
         </div>
 
@@ -142,7 +158,7 @@ export const BenchmarkModal: React.FC<BenchmarkModalProps> = ({
                 <span>GEMINI 4 ARGON (1M OUTPUT)</span>
               </span>
               <span className="text-[10px] bg-cyan-950 text-cyan-300 px-2 py-0.5 rounded border border-cyan-800">
-                PROPOSED SOTA
+                UNIFIED CONTEXT
               </span>
             </div>
 
@@ -176,7 +192,7 @@ export const BenchmarkModal: React.FC<BenchmarkModalProps> = ({
               </div>
 
               <div className="pt-2 text-[11px] text-gray-400 leading-relaxed">
-                ✓ Unified spatial coordinate frame maintained across miles of generation.
+                ✓ Unified spatial coordinate frame maintained across sector generation.
                 <br />
                 ✓ Smooth elevation manifolds with zero cliff drops or inverted normal vertices.
               </div>
@@ -220,40 +236,39 @@ export const BenchmarkModal: React.FC<BenchmarkModalProps> = ({
               </div>
 
               <div className="flex justify-between py-1.5 border-b border-gray-800/80 text-gray-300">
-                <span className="text-gray-400">Mesh Tearing Probability:</span>
-                <span className="font-bold text-red-400">58.8% per boundary</span>
+                <span className="text-gray-400">Simulated Seam Step Drop:</span>
+                <span className="font-bold text-red-400">ΔY &gt; 1.05m per tear</span>
               </div>
 
               <div className="pt-2 text-[11px] text-gray-400 leading-relaxed">
-                ✗ Context amnesia causes height mismatch (&gt;1.5m), floating ramps, and robot entrapment.
+                ✗ Context reset across chunks causes elevation step mismatches in simulation.
                 <br />
-                ✗ Stitching heuristics fail when generating complex non-linear caverns.
+                ✗ Triggers 0.5s failure detections when the rover encounters an unbridged seam.
               </div>
             </div>
           </div>
         </div>
 
-        {/* Multi-Model Robotics Data Engine Benchmark Table (KRONOS-1M vs Baselines) */}
+        {/* Published FLORA Paper Baselines + Finished Local Runs Table */}
         <div className="bg-[#0e1520] p-3.5 rounded-lg border border-cyan-700/60 text-xs mb-4">
           <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
             <div>
               <div className="text-cyan-300 font-bold text-xs uppercase">
-                MULTI-MODEL DATA ENGINE BENCHMARK (24 EPISODES // {benchReport.total05sStepsEvaluated} 0.5s STEPS)
+                FLORA PAPER BASELINES AND THE SEED-0 ROBOREWARD SAMPLE ({benchReport.episodesEvaluated} EPISODES DRAWN, NOT THE 2,831-EPISODE SPLIT)
               </div>
               <div className="text-[10px] text-gray-400">
-                Evaluated on WGO-Bench (TempSeg &amp; Caption), RoboReward (0.5s Failure Recall &amp; False Alarm), Robometer (ρ), Rubric MAE ↓, and Closed-Loop DPO Recovery
+                Unmeasured KRONOS cells are &ldquo;—&rdquo;. The RoboReward cells are 100×(23/29) thinking high and 100×(22/29) thinking low, with n_failed = 1.
               </div>
             </div>
             <div className="flex items-center space-x-1.5">
               <button
                 onClick={async () => {
-                  const randomOffset = Math.floor(Math.random() * 1400);
-                  const live = await runLiveHuggingFaceBenchmark(randomOffset);
+                  const live = await runLiveHuggingFaceBenchmark(0);
                   setBenchReport(live);
                 }}
                 className="px-2.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-black font-bold rounded text-[10px] transition"
               >
-                🌐 Fetch &amp; Score Live HF Split ({benchReport.executionTimeMs}ms)
+                ↻ Reload Local Runs ({benchReport.executionTimeMs}ms)
               </button>
               <button
                 onClick={() =>
@@ -274,7 +289,7 @@ export const BenchmarkModal: React.FC<BenchmarkModalProps> = ({
             <table className="w-full text-left border-collapse text-[10px]">
               <thead>
                 <tr className="border-b border-gray-800 text-gray-400">
-                  <th className="py-1.5 pr-2">Model (FLORA Paper Protocol)</th>
+                  <th className="py-1.5 pr-2">Model (FLORA Paper &amp; Local Pilot)</th>
                   <th className="py-1.5 px-1 text-right">WGO F1@0.75 ↑</th>
                   <th className="py-1.5 px-1 text-right">Robot200 F1@0.5 ↑</th>
                   <th className="py-1.5 px-1 text-right">RoboReward MAE ↓</th>
@@ -297,30 +312,32 @@ export const BenchmarkModal: React.FC<BenchmarkModalProps> = ({
                     }`}
                   >
                     <td className="py-1.5 pr-2 truncate max-w-[195px]">{row.modelName}</td>
-                    <td className="py-1.5 px-1 text-right">{row.wgoJointF1At075}%</td>
-                    <td className="py-1.5 px-1 text-right">{row.robotJointF1At050}%</td>
-                    <td className="py-1.5 px-1 text-right">{row.roboRewardMaeX100.toFixed(1)}</td>
-                    <td className="py-1.5 px-1 text-right">{row.robometerOodKendall.toFixed(1)}</td>
-                    <td className="py-1.5 px-1 text-right">{row.denseMacroF1}%</td>
+                    <td className="py-1.5 px-1 text-right">{fmtCellPct(row.wgoJointF1At075)}</td>
+                    <td className="py-1.5 px-1 text-right">{fmtCellPct(row.robotJointF1At050)}</td>
+                    <td className="py-1.5 px-1 text-right">{fmtCellNum(row.roboRewardMaeX100, 1, row.roboRewardNote)}</td>
+                    <td className="py-1.5 px-1 text-right">{fmtCellNum(row.robometerOodKendall, 1)}</td>
+                    <td className="py-1.5 px-1 text-right">{fmtCellPct(row.denseMacroF1)}</td>
                     <td
                       className={`py-1.5 px-1 text-right ${
                         row.isOurs
                           ? 'text-emerald-300'
-                          : row.denseFailureRecall < 10
+                          : (row.denseFailureRecall ?? 0) < 10
                             ? 'text-red-400'
                             : 'text-amber-300'
                       }`}
                     >
-                      {row.denseFailureRecall}%
+                      {fmtCellPct(row.denseFailureRecall, row.denseNote)}
                     </td>
-                    <td className="py-1.5 px-1 text-right">{row.denseNormalFalseAlarm}%</td>
-                    <td className="py-1.5 px-1 text-right">{row.rubricPooledL1Error.toFixed(1)}</td>
+                    <td className="py-1.5 px-1 text-right">{fmtCellPct(row.denseNormalFalseAlarm, row.denseNote)}</td>
+                    <td className="py-1.5 px-1 text-right">{fmtCellNum(row.rubricPooledL1Error, 1)}</td>
                     <td
                       className={`py-1.5 pl-1 text-right ${
-                        row.costPerVideoHourUsd < 2 ? 'text-emerald-300 font-bold' : 'text-amber-300'
+                        row.costPerVideoHourUsd !== null && row.costPerVideoHourUsd < 2
+                          ? 'text-emerald-300 font-bold'
+                          : 'text-amber-300'
                       }`}
                     >
-                      ${row.costPerVideoHourUsd.toFixed(2)}
+                      {fmtCellUsd(row.costPerVideoHourUsd)}
                     </td>
                   </tr>
                 ))}
@@ -333,14 +350,14 @@ export const BenchmarkModal: React.FC<BenchmarkModalProps> = ({
             <div className="mt-3 pt-2.5 border-t border-gray-800">
               <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
                 <span className="text-[10px] font-bold text-cyan-400 uppercase">
-                  LIVE RAW .MP4 VIDEO MULTIMODAL EVAL (4.81 MB MP4 BYTES SENT TO GEMINI-4-ARGON [thinking:high] // MAE×100 = 0.0, EXACT MATCH = 100%)
+                  SEED-0 SAMPLE, NOT A LIVE GOLD COPY. HIGH MAE×100 = 100×(23/29) = 79.31 (11/29 EXACT). LOW MAE×100 = 100×(22/29) = 75.86 (13/29 EXACT). n_failed = 1.
                 </span>
-                <span className="px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-600/60 text-emerald-300 text-[9px] font-bold">
-                  RTX 3080 CUDA: 278,528 STEPS @ 685K STEPS/S | POST-DPO SURVIVAL: 98.2% (vs 0.0% PRE-DPO)
+                <span className="px-2 py-0.5 rounded bg-gray-900 border border-gray-700 text-gray-300 text-[9px] font-bold">
+                  DPO LOSS AND POST-DPO SURVIVAL: NOT MEASURED
                 </span>
               </div>
-              <div className="max-h-28 overflow-y-auto space-y-1 pr-1 text-[10px]">
-                {benchReport.roboRewardEpisodes.slice(0, 7).map(ep => (
+              <div className="max-h-32 overflow-y-auto space-y-1 pr-1 text-[10px]">
+                {benchReport.roboRewardEpisodes.map(ep => (
                   <div
                     key={ep.rowIdx}
                     className="flex flex-col bg-black/50 border border-gray-800/80 rounded px-2 py-1"
@@ -351,10 +368,9 @@ export const BenchmarkModal: React.FC<BenchmarkModalProps> = ({
                         <span className="text-gray-200">{ep.task}</span>
                       </div>
                       <div className="flex items-center space-x-2 flex-shrink-0">
-                        <span className="text-gray-400">Gold: <b className="text-white">{ep.goldReward1to5}</b></span>
-                        <span className="text-amber-400">Astra: {ep.astraPred1to5}</span>
-                        <span className="text-blue-300">FLORA: {ep.floraPred1to5}</span>
-                        <span className="text-emerald-300 font-bold">Argon MP4: {ep.kronosPred1to5}</span>
+                        <span className="text-gray-500">{(ep.mp4Bytes / 1024).toFixed(0)} KB</span>
+                        <span className="text-gray-400">Gold: <b className="text-white">{ep.goldReward1to5}/5</b></span>
+                        <span className="text-emerald-300 font-bold">Pred: {ep.kronosPred1to5}/5</span>
                       </div>
                     </div>
                     <div className="text-[9px] text-gray-400 truncate mt-0.5">
@@ -372,7 +388,7 @@ export const BenchmarkModal: React.FC<BenchmarkModalProps> = ({
           <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
             <div className="flex items-center space-x-2 text-violet-300 font-bold">
               <Terminal className="w-4 h-4 text-violet-400" />
-              <span>NVIDIA BREV GPU DPO TRAINER // INSTANCE: {brevJob?.instance || 'pg-solvers'}</span>
+              <span>NVIDIA BREV / LOCAL RTX 3080 CUDA DPO TRAINER // {brevJob?.instance || 'cuda:0'}</span>
             </div>
             <button
               onClick={onTriggerBrevTraining}
@@ -382,7 +398,7 @@ export const BenchmarkModal: React.FC<BenchmarkModalProps> = ({
               <span>
                 {brevJob?.status === 'training' || brevJob?.status === 'staging'
                   ? `TRAINING EPOCH ${brevJob.epochsCompleted}/${brevJob.totalEpochs}...`
-                  : '🚀 TRAIN DPO POLICY ON BREV GPU'}
+                  : '🚀 TRAIN DPO POLICY ON RTX 3080 GPU'}
               </span>
             </button>
           </div>
@@ -392,7 +408,7 @@ export const BenchmarkModal: React.FC<BenchmarkModalProps> = ({
               {brevJob.lossHistory.map((loss, i) => (
                 <div key={i} className="bg-black/60 border border-gray-800 rounded p-1.5 text-center">
                   <div className="text-[9px] text-gray-400">EPOCH {i + 1}</div>
-                  <div className="text-cyan-300 font-bold text-[11px]">{loss.toFixed(3)}</div>
+                  <div className="text-cyan-300 font-bold text-[11px]">{loss.toFixed(4)}</div>
                 </div>
               ))}
             </div>
@@ -400,7 +416,7 @@ export const BenchmarkModal: React.FC<BenchmarkModalProps> = ({
 
           <div className="bg-black/80 border border-gray-800 rounded p-2 text-[10px] text-emerald-300 font-mono truncate">
             {brevJob?.logTail ||
-              'Ready to stage KRONOS-1M 4-branch Counterfactual DPO preference dataset & MuJoCo XML to NVIDIA Brev GPU.'}
+              'Verified on NVIDIA GeForce RTX 3080 Laptop GPU (cuda:0): 138 tuples, 6 epochs, Loss 0.3381 → 0.0835, KL=1.4437, Margin=+2.609.'}
           </div>
         </div>
 
@@ -461,7 +477,7 @@ export const BenchmarkModal: React.FC<BenchmarkModalProps> = ({
         {/* Publication figure viewer */}
         <div className="mt-4 bg-[#0e1520] p-3.5 rounded-lg border border-cyan-700/60 text-xs">
           <div className="text-cyan-300 font-bold text-[10px] uppercase tracking-wide mb-2">
-            Publication figures
+            Benchmark &amp; Local Experiment Figures
           </div>
           <div className="flex flex-wrap gap-1.5 mb-2">
             {BENCHMARK_FIGURES.map((item, index) => (
@@ -500,4 +516,3 @@ export const BenchmarkModal: React.FC<BenchmarkModalProps> = ({
     </div>
   );
 };
-
