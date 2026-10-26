@@ -91,17 +91,17 @@ def evaluate_single_mp4_with_gemini(ep: dict) -> dict:
     prompt = (
         f"You are evaluating a raw robot video clip on RoboRewardBench.\n"
         f"Commanded Task: \"{ep['task']}\"\n"
-        "Watch the video frames carefully from start to end and grade task completion on the 1-5 integer scale:\n"
-        "1 = No goal-relevant change to the target object, or wrong object manipulated.\n"
-        "2 = Minimal progress (robot approaches/grasps/nudges target object, but fails to move it to target destination).\n"
-        "3 = Partial completion (completed first subgoal or moved object near target, but missed primary spatial placement/stacking).\n"
-        "4 = Near completion (primary object & primary spatial placement achieved, only missed a minor auxiliary detail like gripper still holding object at final frame).\n"
-        "5 = Perfect completion (target object placed at goal and released cleanly).\n"
+        "Watch the video frames carefully from start to end and grade task completion on the exact 1-5 RoboRewardBench rubric:\n"
+        "1 = No Success: Robot manipulates the wrong object OR makes zero purposeful movement toward the target object.\n"
+        "2 = Minimal Progress: Robot moves purposefully toward the target object or makes brief contact/nudge, even if it does not complete a grasp or lift.\n"
+        "3 = Partial Completion: Robot successfully grasps and lifts/moves the target object (or completes the first subgoal of a multi-part task), but fails the final placement/stacking relation.\n"
+        "4 = Near Completion: Robot places the target object in the correct target relation/location, missing only a minor auxiliary detail (e.g., gripper still holding/touching the object at the end, or slight alignment offset).\n"
+        "5 = Perfect Completion: Target object is placed at the goal location and cleanly released by the gripper.\n"
         "Respond ONLY with JSON: {\"predicted_score\": 1|2|3|4|5, \"visual_evidence\": \"one sentence describing what the robot actually did in the video\"}"
     )
 
     last_err = "unknown"
-    for _ in range(1):
+    for t_level in ["high", "low"]:
         try:
             url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-4-argon:generateContent?key={GEMINI_API_KEY}"
             payload = {
@@ -116,7 +116,7 @@ def evaluate_single_mp4_with_gemini(ep: dict) -> dict:
                 ],
                 "generationConfig": {
                     "responseMimeType": "application/json",
-                    "thinking_config": {"thinking_level": "low"},
+                    "thinking_config": {"thinking_level": t_level},
                 },
             }
 
@@ -126,7 +126,7 @@ def evaluate_single_mp4_with_gemini(ep: dict) -> dict:
                 headers={"Content-Type": "application/json"},
                 method="POST",
             )
-            with urllib.request.urlopen(http_req, timeout=16) as api_resp:
+            with urllib.request.urlopen(http_req, timeout=24) as api_resp:
                 body = json.loads(api_resp.read().decode("utf-8"))
             text = body["candidates"][0]["content"]["parts"][0]["text"]
             cleaned = text.strip().removeprefix("```json").removesuffix("```").strip()
@@ -140,7 +140,7 @@ def evaluate_single_mp4_with_gemini(ep: dict) -> dict:
                 "gold": ep["gold_reward"],
                 "pred": pred,
                 "absError": abs(pred - ep["gold_reward"]),
-                "modelUsed": "gemini-4-argon",
+                "modelUsed": f"gemini-4-argon (thinking:{t_level})",
                 "visualEvidence": str(parsed.get("visual_evidence", ""))[:160],
                 "latencyMs": round((time.perf_counter() - t0) * 1000, 1),
             }
