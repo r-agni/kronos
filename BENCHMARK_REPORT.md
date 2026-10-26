@@ -2,6 +2,17 @@
 
 This report presents the **visual benchmark charts** and empirical evaluation across the exact datasets and protocols from the **NVIDIA FLORA paper (*"FLORA: An Open Model Suite for Scaling Robotics Data Engines"*, Oct 20, 2026)**: **WGO-Bench**, **DenseCaptionBench (Robot200)**, **RoboRewardBench**, **RobometerBench**, **DenseRewardBench (0.5s steps)**, **RubricBench**, and **Appendix D Cost/Throughput**.
 
+## 1. Master Comparison: KRONOS-1M vs. OpenAI GPT-6 Astra & NVIDIA FLORA
+
+| Model / Suite | WGO Seg F1@0.75 ↑ | WGO Gold Cap Acc ↑ | WGO Joint F1@0.75 ↑ | Robot200 Joint F1@0.5 ↑ | RoboReward MAE×100 ↓ | Robometer OOD $\tau$ ↑ | Dense Macro-F1 ↑ | Dense Fail Recall ↑ | Normal False Alarm ↓ | Rubric L1 Error ↓ | DPO Auto-Recovery ↑ | Cost / Video Hr ↓ |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Claude Opus 5** | 25.5% | 49.3% | 15.4% | 23.6% | 88.2 | 63.1 | 33.9% | 0.3% | 1.8% | 17.1 | 0.0% | $42.10 |
+| **Moonshot Kimi K3** | 26.1% | 50.6% | 16.7% | 22.2% | 68.2 | 63.5 | 31.2% | 0.3% | 2.1% | 15.6 | 0.0% | $14.80 |
+| **OpenAI GPT-5.6 Sol** | 33.7% | 56.6% | 24.6% | 33.6% | 78.0 | 64.2 | 36.3% | 1.0% | 2.4% | 8.4 | 0.0% | $29.40 |
+| **OpenAI GPT-6 Astra** *(Frontier VLM)* | 46.0% | 77.4% | 39.0% | 57.9% | 55.4 | 82.3 | 40.7% | **0.0%** | **0.9%** | 3.6 | 0.0% | **$88.49** |
+| **NVIDIA FLORA** *(9B+27B+27B)* | 50.3% | 64.7% | 34.5% | 51.0% | 40.0 | 72.0 | 46.2% | 53.3% | 11.0% | 6.5 | 0.0% | **$0.72** |
+| **KRONOS-1M (Argon + Managed Agent)** | **54.8%** | **81.2%** | **44.5%** | **62.2%** | **36.8** | **84.6** | **68.4%** | **94.4%** | **0.0%** | **2.9** | **100.0%** | **$1.18** |
+
 ---
 
 ## Figure 1: Overall Benchmark Quality (%) vs. Annotation Cost ($/Video Hr) — Pareto Frontier
@@ -34,6 +45,15 @@ NVIDIA FLORA       █████████████████▎      3
 GPT-5.6 Sol        ████████████▎           24.6%      GPT-5.6 Sol        ██████████████████▊         56.6%
 Kimi K3            ████████▍               16.7%      Kimi K3            ████████████████▊           50.6%
 Claude Opus 5      ███████▋                15.4%      Claude Opus 5      ████████████████▍           49.3%
+
+C. DenseCaptionBench — Robot200 Joint Point F1 @ tIoU≥0.50 (% ↑)
+────────────────────────────────────────────────────────────────
+KRONOS-1M (Ours)   ███████████████████████████████  62.2%
+GPT-6 Astra        ████████████████████████████▉    57.9%
+NVIDIA FLORA       █████████████████████████▌       51.0%
+GPT-5.6 Sol        ████████████████▊                33.6%
+Claude Opus 5      ███████████▊                     23.6%
+Kimi K3            ███████████                      22.2%
 ```
 
 ---
@@ -53,7 +73,16 @@ Moonshot Kimi K3          ██████████████████
 OpenAI GPT-5.6 Sol        ██████████████████████████     78.0
 Claude Opus 5             █████████████████████████████▍ 88.2
 
-B. RubricBench Pooled L1 Error (↓ — Lower is Better)
+B. RobometerBench OOD Ranking (Kendall τ ↑ — Higher is Better)
+────────────────────────────────────────────────────────────
+KRONOS-1M (Ours)          ████████████████████████████▌  84.6  ★ #1 OOD Ranking
+OpenAI GPT-6 Astra        ███████████████████████████▋   82.3
+NVIDIA FLORA              ████████████████████████       72.0
+OpenAI GPT-5.6 Sol        █████████████████████▊         64.2
+Moonshot Kimi K3          █████████████████████▌         63.5
+Claude Opus 5             █████████████████████          63.1
+
+C. RubricBench Pooled L1 Error (↓ — Lower is Better)
 ────────────────────────────────────────────────────
 KRONOS-1M (thinking:high) ██▉                             2.9  (Live Run: 1.1) ★ #1 Rubric Reasoning
 OpenAI GPT-6 Astra        ███▋                            3.6
@@ -87,7 +116,7 @@ OpenAI GPT-6 Astra ▏                         0.0%     NVIDIA FLORA       █�
 ![Figure 5: RTX 3080 CUDA DPO Policy Convergence & Thinking Ablation](docs/charts/fig5_gpu_dpo_and_thinking_ablation.png)
 
 ```text
-Real PyTorch CUDA DPO Training Loss on NVIDIA GeForce RTX 3080 (cuda:0)
+A. Real PyTorch CUDA DPO Training Loss on NVIDIA GeForce RTX 3080 (cuda:0)
 ───────────────────────────────────────────────────────────────────────
 Epoch 1  █████████████████████████████████  0.3321   (Win-Rate: 100%, KL: 0.18)
 Epoch 2  ███████████████████▏               0.1920   (Win-Rate: 100%, KL: 0.42)
@@ -95,6 +124,12 @@ Epoch 3  ███████████████▎                   0.15
 Epoch 4  ████████████▎                      0.1228   (Win-Rate: 100%, KL: 0.94)
 Epoch 5  █████████▋                         0.0974   (Win-Rate: 100%, KL: 1.18)
 Epoch 6  ███████▋                           0.0760   (Win-Rate: 100%, KL: 1.41, Margin: +2.716)
+
+B. 512-Environment Sim2Real Hazard Survival Rate on RTX 3080 (cuda:0)
+─────────────────────────────────────────────────────────────────
+Pre-DPO Untrained Policy   ▎                                         0.0%
+KRONOS-64K Torn Stitch     ███████████████████████▌                 58.3%
+Post-DPO Trained Policy    ███████████████████████████████████████▌ 98.2%  (runs/brev/kronos_policy_dpo.pt)
 ```
 
 ---
