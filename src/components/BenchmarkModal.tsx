@@ -31,6 +31,34 @@ interface BenchmarkModalProps {
   onTriggerBrevTraining?: () => void;
 }
 
+const BENCHMARK_FIGURES = [
+  {
+    id: 1,
+    file: 'fig1_pareto_cost_quality',
+    caption: 'Fig 1: Quality vs cost Pareto frontier',
+  },
+  {
+    id: 2,
+    file: 'fig2_captioning_and_segmentation',
+    caption: 'Fig 2: Captioning and temporal segmentation',
+  },
+  {
+    id: 3,
+    file: 'fig3_outcome_robometer_rubric',
+    caption: 'Fig 3: Outcome reward, ranking, and rubrics',
+  },
+  {
+    id: 4,
+    file: 'fig4_dense_process_rewards',
+    caption: 'Fig 4: Dense 0.5s process rewards',
+  },
+  {
+    id: 5,
+    file: 'fig5_gpu_dpo_and_thinking_ablation',
+    caption: 'Fig 5: GPU DPO loss and thinking ablation',
+  },
+] as const;
+
 function downloadFile(filename: string, content: string, mimeType: string) {
   const blob = new Blob([content], { type: mimeType });
   const url = URL.createObjectURL(blob);
@@ -54,6 +82,8 @@ export const BenchmarkModal: React.FC<BenchmarkModalProps> = ({
   const [benchReport, setBenchReport] = React.useState<BenchmarkSuiteReport>(() =>
     runKronosBenchmarkSuite()
   );
+  const [activeFigure, setActiveFigure] = React.useState(0);
+  const figure = BENCHMARK_FIGURES[activeFigure] ?? BENCHMARK_FIGURES[0];
 
   if (!isOpen) return null;
 
@@ -76,7 +106,7 @@ export const BenchmarkModal: React.FC<BenchmarkModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-      <div className="bg-[#0b1017] border border-cyan-800/80 rounded-xl max-w-3xl w-full p-6 shadow-2xl relative overflow-hidden font-mono">
+      <div className="bg-[#0b1017] border border-cyan-800/80 rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl relative font-mono">
         {/* Glow Accent */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500" />
 
@@ -426,6 +456,35 @@ export const BenchmarkModal: React.FC<BenchmarkModalProps> = ({
               <span>Export OpenUSD Stage (.usda)</span>
             </button>
           </div>
+        </div>
+
+        {/* Publication figure viewer */}
+        <div className="mt-4 bg-[#0e1520] p-3.5 rounded-lg border border-cyan-700/60 text-xs">
+          <div className="text-cyan-300 font-bold text-[10px] uppercase tracking-wide mb-2">
+            Publication figures
+          </div>
+          <div className="flex flex-wrap gap-1.5 mb-2">
+            {BENCHMARK_FIGURES.map((item, index) => (
+              <button
+                key={item.file}
+                type="button"
+                onClick={() => setActiveFigure(index)}
+                className={`px-2.5 py-1 rounded text-[10px] font-bold transition ${
+                  index === activeFigure
+                    ? 'bg-cyan-600 text-black'
+                    : 'bg-gray-900 hover:bg-gray-800 border border-gray-700 text-cyan-300'
+                }`}
+              >
+                Fig {item.id}
+              </button>
+            ))}
+          </div>
+          <img
+            src={`/charts/${figure.file}.png`}
+            alt={figure.caption}
+            className="max-w-full max-h-64 w-full h-auto object-contain rounded border border-gray-800 bg-black/50"
+          />
+          <p className="mt-1.5 text-[11px] text-gray-400">{figure.caption}</p>
         </div>
 
         {/* Footer */}
