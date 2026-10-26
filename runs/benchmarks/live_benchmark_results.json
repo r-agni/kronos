@@ -1,149 +1,71 @@
 {
-  "executedAt": "2026-10-25T23:14:41.449Z",
-  "elapsedSec": 11,
-  "liveModelUsed": "gemini-4-argon (via Generativelanguage v1beta + Managed Agents)",
-  "liveHuggingFaceRowsScored": {
-    "roboRewardBenchEpisodes": 84,
-    "robometerAndDenseRewardFrames": 300,
-    "wgoBenchEpisodes": 6,
-    "wgoBenchGoldSegments": 8,
-    "rubricBenchEpisodes": 10
-  },
-  "measuredKronos1mMetrics": {
-    "roboRewardMaeX100": 9.5,
-    "roboRewardExactMatchPct": 90.5,
-    "robometerOodKendallTau": 100,
-    "denseFailureRecallPct": 93.8,
-    "denseNormalFalseAlarmPct": 0,
-    "wgoMeanIoUPct": 97.2,
-    "wgoF1At050Pct": 100,
-    "wgoF1At075Pct": 100,
-    "wgoGoldCaptionAccPct": 100,
-    "wgoJointF1Pct": 100,
-    "rubricPooledL1Error": 1.1,
-    "totalTokensProcessed": 9301,
-    "estimatedCostPerVideoHourUsd": 1.18
-  },
-  "sampleScoredEpisodes": [
-    {
-      "rowIdx": 0,
-      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
-      "task": "Place the small beige block onto the left peg of the tray.",
-      "gold": 1,
-      "predKronos": 1,
-      "absError": 0
+  "executedAt": "2026-10-26T01:00:11Z",
+  "liveModelUsed": "gemini-4-argon (raw .mp4 inline_data evaluation)",
+  "finishedLocalRuns": {
+    "honestSeed0RoboRewardSample": {
+      "artifact": "runs/benchmarks/honest_roboreward_eval.json",
+      "dataset": "teetone/RoboReward (test split, seed=0 random sample)",
+      "attemptedEpisodes": 30,
+      "scoredEpisodes": 29,
+      "failedEpisodes": [2094],
+      "thinkingHigh": {
+        "maeX100": 79.31,
+        "exactMatchPct": 37.93,
+        "exactMatchCount": 11,
+        "totalTokens": 64744
+      },
+      "thinkingLow": {
+        "maeX100": 75.86,
+        "exactMatchPct": 44.83,
+        "exactMatchCount": 13,
+        "totalTokens": 53247
+      }
     },
-    {
-      "rowIdx": 1,
-      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
-      "task": "Insert the blue gear onto the right peg, followed by the red gear.",
-      "gold": 1,
-      "predKronos": 1,
-      "absError": 0
+    "rawMp4Pilot8Clips": {
+      "artifact": "runs/benchmarks/gpu_and_raw_mp4_experiments.json",
+      "dataset": "teetone/RoboReward (test split, 8 handpicked clips)",
+      "episodesEvaluated": 8,
+      "episodeRowIndices": [0, 49, 211, 400, 500, 1009, 1200, 1504],
+      "totalMp4BytesSent": 4809508,
+      "rawVideoMaeX100": 0.0,
+      "exactMatchPct": 100.0,
+      "within1AccuracyPct": 100.0
     },
-    {
-      "rowIdx": 2,
-      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
-      "task": "Place the small beige fixture into the leftmost hole of the tray.",
-      "gold": 1,
-      "predKronos": 1,
-      "absError": 0
+    "localRapierPhysicsTelemetryCheck": {
+      "totalSimStepsEvaluated": 46,
+      "failureRecallPct": 94.4,
+      "trueFailureCaught": 17,
+      "totalFailureSteps": 18,
+      "normalFalseAlarmPct": 0.0,
+      "falseAlarmOnNormal": 0,
+      "totalNormalSteps": 18
     },
-    {
-      "rowIdx": 3,
-      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
-      "task": "Move the rectangular peg board to the top-left corner of the table.",
-      "gold": 1,
-      "predKronos": 1,
-      "absError": 0
-    },
-    {
-      "rowIdx": 4,
-      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
-      "task": "Insert the blue gear onto the right peg, followed by the red gear.",
-      "gold": 1,
-      "predKronos": 1,
-      "absError": 0
-    },
-    {
-      "rowIdx": 5,
-      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
-      "task": "Insert the blue gear onto the right peg, followed by the red gear.",
-      "gold": 1,
-      "predKronos": 1,
-      "absError": 0
-    },
-    {
-      "rowIdx": 6,
-      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
-      "task": "Insert the blue gear onto the right peg, followed by the red gear.",
-      "gold": 1,
-      "predKronos": 1,
-      "absError": 0
-    },
-    {
-      "rowIdx": 7,
-      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
-      "task": "Insert the blue gear onto the right peg, followed by the red gear.",
-      "gold": 1,
-      "predKronos": 1,
-      "absError": 0
-    },
-    {
-      "rowIdx": 8,
-      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
-      "task": "Place the beige 3D-printed part onto the left side of the white tray surface.",
-      "gold": 1,
-      "predKronos": 1,
-      "absError": 0
-    },
-    {
-      "rowIdx": 9,
-      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
-      "task": "Insert the blue gear onto the right peg, followed by the red gear.",
-      "gold": 1,
-      "predKronos": 1,
-      "absError": 0
-    },
-    {
-      "rowIdx": 10,
-      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
-      "task": "Place the beige mechanical block onto the left peg.",
-      "gold": 1,
-      "predKronos": 1,
-      "absError": 0
-    },
-    {
-      "rowIdx": 11,
-      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
-      "task": "Insert the blue gear onto the right peg, followed by the red gear.",
-      "gold": 1,
-      "predKronos": 1,
-      "absError": 0
-    },
-    {
-      "rowIdx": 40,
-      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
-      "task": "Insert the blue gear onto the right peg, followed by the red gear.",
-      "gold": 3,
-      "predKronos": 3,
-      "absError": 0
-    },
-    {
-      "rowIdx": 41,
-      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
-      "task": "Insert the blue gear onto the right peg, followed by the red gear.",
-      "gold": 3,
-      "predKronos": 3,
-      "absError": 0
-    },
-    {
-      "rowIdx": 42,
-      "dataset": "austin_sirius_dataset_converted_externally_to_rlds",
-      "task": "Insert the blue gear onto the right peg, then place the red gear on the tabletop to the robot's right.",
-      "gold": 3,
-      "predKronos": 3,
-      "absError": 0
+    "localRtx3080CudaDpoTraining": {
+      "artifact": "runs/brev/dpo_training_metrics.json",
+      "device": "cuda:0",
+      "gpuName": "NVIDIA GeForce RTX 3080 Laptop GPU",
+      "dpoTuplesTrained": 138,
+      "epochs": 6,
+      "lossHistory": [0.3381, 0.2001, 0.1667, 0.1351, 0.1073, 0.0835],
+      "winRateHistoryPct": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0],
+      "klDivergence": 1.4437,
+      "finalRewardMargin": 2.609,
+      "policyActionThresholdCheck512States": {
+        "sampledStatesTested": 512,
+        "preDpoActionActivationPct": 0.0,
+        "postDpoActionActivationPct": 98.2,
+        "meanTrainedThrusterCmd": 0.975,
+        "meanTrainedLiftCmd": 0.974
+      }
     }
-  ]
+  },
+  "unrunFullBenchmarkSplits": {
+    "wgoBench100Episodes": null,
+    "denseCaptionBenchRobot200": null,
+    "roboRewardBenchFull2831Episodes": null,
+    "robometerBenchOod567Episodes": null,
+    "denseRewardBenchFull4861Steps": null,
+    "rubricBenchFull40Episodes": null,
+    "costPerVideoHourUsd": null
+  }
 }

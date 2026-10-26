@@ -3,3 +3,6 @@ node_modules/
 dist/
 *.tsbuildinfo
 .vite/
+runs/benchmarks/_mp4_cache/
+runs/benchmarks/_roboreward_test.parquet
+__pycache__/
