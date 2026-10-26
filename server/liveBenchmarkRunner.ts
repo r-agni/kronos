@@ -1,10 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
-import {
-  computeKendallTauX100,
-  optimalIntervalAssignmentIoUs,
-} from '../src/engine/KronosBenchmarkSuite.js';
+import { optimalIntervalAssignmentIoUs } from '../src/engine/KronosBenchmarkSuite.js';
 
 dotenv.config();
 
@@ -223,159 +220,32 @@ export async function executeFullLiveBenchmarks() {
   console.log(`      -> Fetched ${wgoEpisodes.length} WGO-Bench episodes (${totalWgoGoldSegs} gold segments from macrodata/WGO-Bench)`);
   console.log(`      -> Fetched ${robometerRows.length} RobometerBench / DenseRewardBench OOD frame steps (robometer/rbm-1m-ood)\n`);
 
-  // 2. Run 4 Parallel Live Gemini 4 Argon Batches on All 84 RoboRewardBench Episodes
-  console.log('[2/5] Running Live Gemini 4 Argon API on RoboRewardBench (84 episodes in 4 batches)...');
-  const apiPredMap = new Map<number, number>();
+  // Video RoboReward scores live in runs/benchmarks/honest_roboreward_eval.json.
+  // This runner must not grade from gpt5_mini_check (it contains the gold rationale)
+  // and must not fill a missing model score with the gold label or a default of 3.
+  console.log('[2/5] Skipping text-only RoboReward scoring. Use server/honestRoboRewardEval.py.');
   let totalTokensUsed = 0;
+  const scoredEpisodes: Array<{
+    rowIdx: number;
+    dataset: string;
+    task: string;
+    gold: number;
+    predKronos: number;
+    absError: number;
+  }> = [];
+  const nFailedRoboReward = roboRewardRows.length;
+  const roboRewardMaeX100 = null;
+  const exactMatchPct = null;
+  console.log(
+    `      -> ${nFailedRoboReward} fetched rows were not scored here (n_failed=${nFailedRoboReward}). No gold substitution.`
+  );
 
-  if (GEMINI_API_KEY && roboRewardRows.length > 0) {
-    const chunks: RoboRewardRow[][] = [];
-    for (let i = 0; i < roboRewardRows.length; i += 21) {
-      chunks.push(roboRewardRows.slice(i, i + 21));
-    }
-    const batchResults = await Promise.all(
-      chunks.map(async chunk => {
-        const items = chunk.map(r => ({
-          id: r.row_idx,
-          task: r.task,
-          visual_observation: redactScoreLeaks(r.checkText).slice(0, 250),
-        }));
-        const prompt = `Grade each robot manipulation episode on the 1-5 RoboRewardBench scale (1=No change/wrong object, 2=Minimal progress/grasped or nudged only, 3=Partial completion/missed major placement or stacking, 4=Near completion/only missed auxiliary release or alignment constraint, 5=Perfect completion). Return JSON array [{"id":number,"score":number}]:\n${JSON.stringify(items)}`;
-        return callGeminiArgonJson(prompt, 'low');
-      })
-    );
+  console.log('[3/5] Robometer tau and dense failure metrics are not measured. Predictions are not derived from quality labels.');
+  const kendallTau = null;
+  const failRecallPct = null;
+  const falseAlarmPct = null;
 
-    for (const res of batchResults) {
-      totalTokensUsed += res.tokens;
-      if (Array.isArray(res.parsed)) {
-        for (const item of res.parsed) {
-          if (typeof item.id === 'number' && typeof item.score === 'number') {
-            apiPredMap.set(item.id, Math.max(1, Math.min(5, Math.round(item.score))));
-          }
-        }
-      }
-    }
-    console.log(`      -> Live Gemini 4 Argon API scored ${apiPredMap.size}/${roboRewardRows.length} episodes (${totalTokensUsed} tokens)`);
-  }
-
-  const scoredEpisodes = roboRewardRows.map(r => {
-    const cleanObs = redactScoreLeaks(r.checkText).toLowerCase();
-    let predKronos = apiPredMap.get(r.row_idx) ?? 3;
-    if (!apiPredMap.has(r.row_idx)) {
-      if (
-        cleanObs.includes('no goal-relevant') ||
-        cleanObs.includes('never picks up') ||
-        cleanObs.includes('remains in the same position') ||
-        cleanObs.includes('wrong-object') ||
-        cleanObs.includes('remains unmoved') ||
-        cleanObs.includes('no observable change') ||
-        cleanObs.includes('no meaningful change')
-      ) {
-        predKronos = 1;
-      } else if (
-        cleanObs.includes('auxiliary') ||
-        cleanObs.includes('single minor') ||
-        cleanObs.includes('still held by the gripper') ||
-        cleanObs.includes('still holding') ||
-        cleanObs.includes('not centered') ||
-        cleanObs.includes('not left rotated')
-      ) {
-        predKronos = 4;
-      } else if (
-        cleanObs.includes('small but insufficient') ||
-        cleanObs.includes('minimal change') ||
-        cleanObs.includes('slight nudge') ||
-        cleanObs.includes('small displacement') ||
-        cleanObs.includes('never brings it into the box') ||
-        cleanObs.includes('never places the object inside')
-      ) {
-        predKronos = 2;
-      } else if (
-        cleanObs.includes('all core requirements are met') ||
-        cleanObs.includes('no missing auxiliary') ||
-        cleanObs.includes('no missing major') ||
-        cleanObs.includes('releasing it there') ||
-        cleanObs.includes('resting on the table')
-      ) {
-        predKronos = 5;
-      } else {
-        predKronos = 3;
-      }
-    }
-    return {
-      rowIdx: r.row_idx,
-      dataset: r.datasetName,
-      task: r.task,
-      gold: r.reward,
-      predKronos,
-      absError: Math.abs(predKronos - r.reward),
-    };
-  });
-
-  const nEp = Math.max(1, scoredEpisodes.length);
-  const roboRewardMaeX100 = +(
-    (scoredEpisodes.reduce((s, e) => s + e.absError, 0) / nEp) *
-    100
-  ).toFixed(1);
-  const exactMatchPct = +(
-    (scoredEpisodes.filter(e => e.absError === 0).length / nEp) *
-    100
-  ).toFixed(1);
-
-  console.log('[3/5] Evaluating RobometerBench & DenseRewardBench on live rbm-1m-ood split...');
-  let tpFail = 0;
-  let fnFail = 0;
-  let tpNorm = 0;
-  let fpFailOnNorm = 0;
-  let totalNorm = 0;
-
-  const episodeMap = new Map<string, { id: string; quality: string; maxTs: number; frames: number }>();
-  for (const row of robometerRows) {
-    const q = String(row.quality_label || 'successful').toLowerCase();
-    const id = String(row.id || '');
-    const prev = episodeMap.get(id) || { id, quality: q, maxTs: 0, frames: 0 };
-    prev.maxTs = Math.max(prev.maxTs, Number(row.timestamp || 0));
-    prev.frames += 1;
-    episodeMap.set(id, prev);
-
-    let predClass: 'normal' | 'suboptimal' | 'failure' = 'normal';
-    if (id.includes('failure') || q === 'failure') {
-      predClass = Number(row.frame_index) % 19 === 0 ? 'suboptimal' : 'failure';
-    } else if (id.includes('suboptimal') || q === 'suboptimal') {
-      predClass = Number(row.frame_index) % 17 === 0 ? 'normal' : 'suboptimal';
-    } else {
-      predClass = Number(row.frame_index) % 47 === 0 ? 'suboptimal' : 'normal';
-    }
-
-    if (q === 'failure') {
-      if (predClass === 'failure') tpFail++;
-      else fnFail++;
-    } else if (q !== 'suboptimal') {
-      totalNorm++;
-      if (predClass === 'normal') tpNorm++;
-      else if (predClass === 'failure') fpFailOnNorm++;
-    }
-  }
-
-  const epList = Array.from(episodeMap.values());
-  const predEpScores: number[] = [];
-  const goldEpScores: number[] = [];
-  epList.forEach((ep, idx) => {
-    const goldVal =
-      ep.quality === 'successful'
-        ? 4.8 - idx * 0.02
-        : ep.quality === 'suboptimal'
-          ? 2.8 - idx * 0.02
-          : 1.1 - idx * 0.02;
-    goldEpScores.push(goldVal);
-    predEpScores.push(goldVal - idx * 0.01);
-  });
-
-  const kendallTau = computeKendallTauX100(predEpScores, goldEpScores);
-  const failRecallPct = +((tpFail / Math.max(1, tpFail + fnFail)) * 100).toFixed(1);
-  const falseAlarmPct = +((fpFailOnNorm / Math.max(1, totalNorm)) * 100).toFixed(1);
-
-  console.log('[4/5] Running Live Blind Gemini 4 Argon API on WGO-Bench (12 episodes, 132 gold segments) & RubricBench...');
+  console.log('[4/5] Running Live Blind Gemini 4 Argon API on WGO-Bench & RubricBench...');
   const wgoGoldAll: Array<[number, number]> = [];
   const wgoPredAll: Array<[number, number]> = [];
   let wgoMatchedCaptions = 0;
@@ -398,19 +268,11 @@ export async function executeFullLiveBenchmarks() {
   const [wgoApiRes, rubricApiRes] = await Promise.all([
     wgoSubset.length > 0
       ? callGeminiArgonJson(
-          `Partition each WGO-Bench robot manipulation episode [0, durationSec] into contiguous [start_sec, end_sec] subtask intervals based on the detected visual transition cue timestamps and predict the concise manipulation subtask caption. Return JSON array [{"id":string,"segments":[{"start_sec":number,"end_sec":number,"subtask":string}]}]:\n${JSON.stringify(
+          `Partition each WGO-Bench robot manipulation episode [0, durationSec] into contiguous [start_sec, end_sec] subtask intervals based only on the task instruction and total duration. Return JSON array [{"id":string,"segments":[{"start_sec":number,"end_sec":number,"subtask":string}]}]:\n${JSON.stringify(
             wgoSubset.map(e => ({
               id: e.id,
               instruction: e.instruction,
               durationSec: e.durationSec,
-              transitionCues: e.segments.map((s, idx) => ({
-                idx,
-                cueWindow: [
-                  +(Math.max(0, s.start_sec + (idx % 2 === 0 ? 0.18 : -0.15))).toFixed(2),
-                  +(s.end_sec + (idx % 3 === 0 ? -0.22 : 0.16)).toFixed(2),
-                ],
-                visualHint: s.subtask.split(' ').slice(0, 3).join(' '),
-              })),
             }))
           )}`,
           'low'
@@ -438,10 +300,7 @@ export async function executeFullLiveBenchmarks() {
     const epPredIntervals: Array<[number, number]> =
       predSegs.length > 0
         ? predSegs.map((s: any) => [Number(s.start_sec || 0), Number(s.end_sec || ep.durationSec)])
-        : goldSegs.map((_, idx) => [
-            +((idx * ep.durationSec) / goldSegs.length).toFixed(2),
-            +(((idx + 1) * ep.durationSec) / goldSegs.length).toFixed(2),
-          ]);
+        : [];
 
     const epIoUs = optimalIntervalAssignmentIoUs(epGoldIntervals, epPredIntervals);
     wgoGoldAll.push(...epGoldIntervals);
@@ -452,10 +311,10 @@ export async function executeFullLiveBenchmarks() {
         .toLowerCase()
         .split(/\W+/)
         .filter(w => w.length > 2);
-      const predCaption = String(predSegs[i]?.subtask || ep.instruction).toLowerCase();
-      const overlap = goldWords.some(w => predCaption.includes(w));
+      const predCaption = String(predSegs[i]?.subtask || '').toLowerCase();
+      const overlap = predCaption.length > 0 && goldWords.some(w => predCaption.includes(w));
       if (overlap) wgoMatchedCaptions++;
-      if ((epIoUs[i] ?? 0) >= 0.5 && overlap) wgoJointHits075++;
+      if ((epIoUs[i] ?? 0) >= 0.75 && overlap) wgoJointHits075++;
     }
   }
 
@@ -474,12 +333,16 @@ export async function executeFullLiveBenchmarks() {
       }
     }
   }
-  const rubricL1Error = +(
-    rubricCases.reduce((s, c) => {
-      const pred = predRubricMap.get(c.id) ?? c.gold;
-      return s + Math.abs(c.gold - pred) * 0.2;
-    }, 0) / rubricCases.length
-  ).toFixed(2);
+  const scoredRubricCases = rubricCases.filter(c => predRubricMap.has(c.id));
+  const rubricL1Error =
+    scoredRubricCases.length > 0
+      ? +(
+          scoredRubricCases.reduce((s, c) => {
+            const pred = predRubricMap.get(c.id)!;
+            return s + Math.abs(c.gold - pred) * 0.2;
+          }, 0) / scoredRubricCases.length
+        ).toFixed(2)
+      : null;
 
   const elapsedSec = ((Date.now() - t0) / 1000).toFixed(2);
 
@@ -507,7 +370,7 @@ export async function executeFullLiveBenchmarks() {
       wgoJointF1Pct: wgoJointF1,
       rubricPooledL1Error: rubricL1Error,
       totalTokensProcessed: totalTokensUsed,
-      estimatedCostPerVideoHourUsd: 1.18,
+      estimatedCostPerVideoHourUsd: null,
     },
     sampleScoredEpisodes: scoredEpisodes.slice(0, 15),
   };
@@ -522,9 +385,9 @@ export async function executeFullLiveBenchmarks() {
 
   console.log('\n=== LIVE BENCHMARK EXECUTION COMPLETE ===');
   console.log(`Wall-Clock Execution Time : ${elapsedSec}s (${totalTokensUsed} live Gemini 4 Argon tokens)`);
-  console.log(`Live HF RoboReward Rows   : ${scoredEpisodes.length} episodes -> MAE×100 = ${roboRewardMaeX100} (Exact Match: ${exactMatchPct}%)`);
-  console.log(`Live HF Robometer Frames  : ${robometerRows.length} steps   -> OOD Kendall τ = ${kendallTau}`);
-  console.log(`Dense 0.5s Failure Recall : ${failRecallPct}% (Normal False-Alarm = ${falseAlarmPct}%)`);
+  console.log(`Live HF RoboReward Rows   : scored ${scoredEpisodes.length}, not scored here ${nFailedRoboReward} -> MAE×100 = ${roboRewardMaeX100} (Exact Match: ${exactMatchPct})`);
+  console.log(`Live HF Robometer Frames  : ${robometerRows.length} fetched, Kendall τ = ${kendallTau} (not measured)`);
+  console.log(`Dense 0.5s Failure Recall : ${failRecallPct} (Normal False-Alarm = ${falseAlarmPct})`);
   console.log(`Live Blind WGO-Bench (${wgoGoldAll.length} segs): Seg F1@0.75 = ${wgoF1At075}% | Seg F1@0.5 = ${wgoF1At050}% | mIoU = ${wgoMeanIoU}% | Cap Acc = ${wgoCaptionAcc}% | Joint F1 = ${wgoJointF1}%`);
   console.log(`Live Blind RubricBench    : Pooled L1 Error = ${rubricL1Error}`);
   process.exit(0);

@@ -1,0 +1,2492 @@
+{
+  "status": "complete",
+  "protocol": {
+    "dataset": "huggingface.co/datasets/teetone/RoboReward",
+    "split": "test",
+    "population_n": 2831,
+    "result_label": "pre-registered random sample; not the paper's 2,831-episode MAE",
+    "sample_n": 30,
+    "seed": 0,
+    "rng": "Python 3.12 random.Random(0).sample(range(2831), 30)",
+    "episode_ids": [
+      1577,
+      1722,
+      165,
+      1060,
+      2094,
+      1990,
+      1658,
+      1242,
+      1952,
+      1466,
+      2389,
+      894,
+      2067,
+      570,
+      1154,
+      572,
+      388,
+      2532,
+      1026,
+      2181,
+      2465,
+      601,
+      1270,
+      404,
+      302,
+      2801,
+      1352,
+      1933,
+      2292,
+      412
+    ],
+    "excluded_handpicked_8": [
+      0,
+      49,
+      211,
+      400,
+      500,
+      1009,
+      1200,
+      1504
+    ],
+    "overlap_with_handpicked_8": [],
+    "model": "gemini-4-argon",
+    "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-4-argon:generateContent",
+    "thinking_levels_requested": [
+      "high",
+      "low"
+    ],
+    "media": "dataset mp4 bytes as inline_data video/mp4",
+    "prompt_contains": "commanded task + public 1-5 rubric from arXiv:2601.00675",
+    "prompt_excludes": [
+      "gold reward",
+      "gpt5_mini_check rationale",
+      "video filename and URL (791 test filenames contain a score token)"
+    ],
+    "rubric": "1 = No success: The final state shows no goal-relevant change for the task command.\n2 = Minimal progress: The final state shows a small but insufficient change toward the goal.\n3 = Partial completion: The final state shows good progress but violates major requirements or multiple requirements.\n4 = Near completion: The final state is correct in region and intent but misses a single minor requirement.\n5 = Perfect completion: The final state satisfies all the requirements.",
+    "mae_definition": "MAE x 100 = 100 * mean(abs(pred - gold)) over episodes with a parseable 1-5 score. Failures stay in n_failed and are not filled with gold.",
+    "full_split_rule": "After the first high and low calls, estimate full-split wall clock as (high_latency + low_latency) * 2831 / 3 / 3600. If that exceeds 2 hours, score only this sample.",
+    "dollar_cost": "not measured; no price field is returned by the API and no gemini-4-argon list price was applied",
+    "reported_n": 30
+  },
+  "decision": {
+    "full_split": false,
+    "run_low": true,
+    "estimated_full_split_hours": 6.501,
+    "probe_high_latency_s": 18.518,
+    "probe_low_latency_s": 6.282,
+    "probe_high_usage": {
+      "promptTokenCount": 2767,
+      "candidatesTokenCount": 47,
+      "totalTokenCount": 3799,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 353
+        },
+        {
+          "modality": "VIDEO",
+          "tokenCount": 2414
+        }
+      ],
+      "candidatesTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 47
+        }
+      ],
+      "thoughtsTokenCount": 985
+    },
+    "probe_low_usage": {
+      "promptTokenCount": 2767,
+      "candidatesTokenCount": 44,
+      "totalTokenCount": 2811,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 353
+        },
+        {
+          "modality": "VIDEO",
+          "tokenCount": 2414
+        }
+      ],
+      "candidatesTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 44
+        }
+      ]
+    },
+    "reason": "first high latency 18.5s; estimated full split 6.50 h at concurrency 3 (both levels). Full split exceeds 2 hours, so the seed-0 sample of 30 is the reported set. remaining low calls estimated at 1.0 min"
+  },
+  "episodes": [
+    {
+      "episode_id": 1577,
+      "task": "Drop the rubber ducks in the drawer and then close the drawer.",
+      "gold": 2,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/robo_arena/30425a50-58e7-42b3-900e-0be6577549d5_D_right.mp4",
+      "video_bytes": 550216,
+      "video_sha256": "073aac4fa9a48fa3d482c235d47515fdf3fd4def6bd5aff6abc88c19e96783a9",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 3,
+          "raw_model_text": "{\"predicted_score\": 3, \"visual_evidence\": \"The robot picks up only one of the two rubber ducks and drops it toward the drawer area while the second rubber duck remains untouched on the table.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 2767,
+            "candidatesTokenCount": 47,
+            "totalTokenCount": 3799,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 353
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 2414
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 47
+              }
+            ],
+            "thoughtsTokenCount": 985
+          },
+          "latency_ms": 18518.5,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 2,
+          "raw_model_text": "{\"predicted_score\": 2, \"visual_evidence\": \"The robot picked up one rubber duck and dropped it into the drawer, leaving the second duck on the counter and the drawer open.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 2767,
+            "candidatesTokenCount": 44,
+            "totalTokenCount": 2811,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 353
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 2414
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 44
+              }
+            ]
+          },
+          "latency_ms": 6281.5,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 1722,
+      "task": "Stir the pot with the plastic spoon.",
+      "gold": 3,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/robo_arena/c4a07785-34a4-4e66-b9f1-7225123075de_C_wrist.mp4",
+      "video_bytes": 789577,
+      "video_sha256": "30d942edd5161fc4d4e843b8213a5dbc91cffbb04cbd5ad9a38e20da8b0f22d6",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 1,
+          "raw_model_text": "{\"predicted_score\": 1, \"visual_evidence\": \"The robot picked up the wooden spoon instead of the plastic spoon and held it in the air without stirring the pot.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 3200,
+            "candidatesTokenCount": 41,
+            "totalTokenCount": 3624,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 360
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 2840
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 41
+              }
+            ],
+            "thoughtsTokenCount": 383
+          },
+          "latency_ms": 8415.6,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 1,
+          "raw_model_text": "{\"predicted_score\": 1, \"visual_evidence\": \"The robot grasps the wooden spoon instead of the plastic spoon and moves it briefly near the pot without stirring.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 3200,
+            "candidatesTokenCount": 39,
+            "totalTokenCount": 3239,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 360
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 2840
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 39
+              }
+            ]
+          },
+          "latency_ms": 4761.4,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 165,
+      "task": "Put the ranch bottle into the pot with its cap pointing away from the camera.",
+      "gold": 4,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/berkeley_autolab_ur5/berkeley_autolab_ur5_originalsplit_train_index_78.mp4",
+      "video_bytes": 972236,
+      "video_sha256": "94b13abaa8c76c763b1bbddd6e53a8205cfa3c891642084435a7860e89bf6592",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 4,
+          "raw_model_text": "{\"predicted_score\": 4, \"visual_evidence\": \"The ranch bottle is placed inside the pot, but its green cap is pointing toward the camera rather than away from it.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 918,
+            "candidatesTokenCount": 42,
+            "totalTokenCount": 1404,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 306
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 612
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 42
+              }
+            ],
+            "thoughtsTokenCount": 444
+          },
+          "latency_ms": 9691.6,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 4,
+          "raw_model_text": "{\"predicted_score\": 4, \"visual_evidence\": \"The ranch bottle is placed into the pot, though the green cap is pointing toward the bottom of the frame rather than away.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 918,
+            "candidatesTokenCount": 43,
+            "totalTokenCount": 961,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 306
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 612
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 43
+              }
+            ]
+          },
+          "latency_ms": 4793.5,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 1060,
+      "task": "Push and topple a plastic toy tank",
+      "gold": 3,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/kaist_nonprehensile_converted_externally_to_rlds/kaist_nonprehensile_converted_externally_to_rlds_originalsplit_train_index_172_attempt_1_score_3.mp4",
+      "video_bytes": 1536791,
+      "video_sha256": "c94e5333e41b5813cb77aadacceece2ddaedccfaafd4ec0017a16ad5f7628a98",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 3,
+          "raw_model_text": "{\"predicted_score\": 3, \"visual_evidence\": \"The robot arm pushes the blue plastic toy across the mat, but it remains upright and is not toppled.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 770,
+            "candidatesTokenCount": 40,
+            "totalTokenCount": 1195,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 294
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 476
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 40
+              }
+            ],
+            "thoughtsTokenCount": 385
+          },
+          "latency_ms": 10627.8,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 2,
+          "raw_model_text": "{\"predicted_score\": 2, \"visual_evidence\": \"The robot arm pushes the blue plastic toy tank across the green mat, but it remains upright in the final frame rather than being toppled.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 770,
+            "candidatesTokenCount": 46,
+            "totalTokenCount": 816,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 294
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 476
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 46
+              }
+            ]
+          },
+          "latency_ms": 4862.8,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 2094,
+      "task": "Layout laundry",
+      "gold": 1,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/roboturk/roboturk_originalsplit_train_index_10_attempt_1_score_1.mp4",
+      "video_bytes": 43415,
+      "video_sha256": "8a3780297b1a05e5ff92a4655aab499de7a92842fe4eb745adc35b75f4cd90bb",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": null,
+          "raw_model_text": "",
+          "error": "http 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Request contains an invalid argument.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n",
+          "http_status": 400,
+          "usage": null,
+          "latency_ms": 1613.3,
+          "schema": "camel"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": null,
+          "raw_model_text": "",
+          "error": "http 400: {\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Request contains an invalid argument.\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n",
+          "http_status": 400,
+          "usage": null,
+          "latency_ms": 1888.8,
+          "schema": "camel"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 1990,
+      "task": "Fold the blue towel.",
+      "gold": 2,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/robo_arena/d4cc364e-1e96-4d22-8e08-8cb935759528_G_left.mp4",
+      "video_bytes": 62818,
+      "video_sha256": "013f0c56226f41f81937ddbe105ac0901552d0f75e0222c4a2caaa888d677205",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 1,
+          "raw_model_text": "{\"predicted_score\": 1, \"visual_evidence\": \"The robot arm remains stationary in the top right corner and never interacts with the blue towel, resulting in no change to its state.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 1226,
+            "candidatesTokenCount": 44,
+            "totalTokenCount": 1495,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 303
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 923
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 44
+              }
+            ],
+            "thoughtsTokenCount": 225
+          },
+          "latency_ms": 8396.6,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 1,
+          "raw_model_text": "{\"predicted_score\": 1, \"visual_evidence\": \"The robot arm barely moves and makes no contact with the blue towel, leaving it unchanged on the table.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 1226,
+            "candidatesTokenCount": 39,
+            "totalTokenCount": 1265,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 303
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 923
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 39
+              }
+            ]
+          },
+          "latency_ms": 9762.7,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 1658,
+      "task": "Clean up the table",
+      "gold": 3,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/robo_arena/65bd8481-0d09-46d3-ae7f-8cb87d961bbf_A_left.mp4",
+      "video_bytes": 590518,
+      "video_sha256": "efa383671891bf967562cf16fbbcd32caf1b885bc194c5d167d5a3b625928bd8",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 2,
+          "raw_model_text": "{\"predicted_score\": 2, \"visual_evidence\": \"The robot picked up the green wrapper from the board and held it next to the bin without dropping it inside, leaving the other two objects untouched on the board.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 3196,
+            "candidatesTokenCount": 50,
+            "totalTokenCount": 3630,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 356
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 2840
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 50
+              }
+            ],
+            "thoughtsTokenCount": 384
+          },
+          "latency_ms": 25894.2,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 2,
+          "raw_model_text": "{\"predicted_score\": 2, \"visual_evidence\": \"The robot grasps the green wrapper and moves it off the board, but fails to place it into the trash bin and leaves the other trash on the board.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 3196,
+            "candidatesTokenCount": 49,
+            "totalTokenCount": 3245,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 356
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 2840
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 49
+              }
+            ]
+          },
+          "latency_ms": 4044.6,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 1242,
+      "task": "Put the screwdriver out of the box",
+      "gold": 5,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/robo_arena/962289d6-47ba-43cf-8d9a-6fb8d8893507_E_wrist.mp4",
+      "video_bytes": 438761,
+      "video_sha256": "e79152e4c24df79ad6b0c9602f8910d480513e335fe8c236476593abda455128",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 5,
+          "raw_model_text": "{\"predicted_score\": 5, \"visual_evidence\": \"The screwdriver has been grasped from inside the box, moved outside, and released onto the surface next to the box.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 1374,
+            "candidatesTokenCount": 41,
+            "totalTokenCount": 1639,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 309
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 1065
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 41
+              }
+            ],
+            "thoughtsTokenCount": 224
+          },
+          "latency_ms": 8025.8,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 5,
+          "raw_model_text": "{\"predicted_score\": 5, \"visual_evidence\": \"The robot gripper grasps the screwdriver, lifts it out of the box, and releases it onto the gray surface outside the box.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 1374,
+            "candidatesTokenCount": 43,
+            "totalTokenCount": 1417,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 309
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 1065
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 43
+              }
+            ]
+          },
+          "latency_ms": 4470.4,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 1952,
+      "task": "Move both red cups on top of the box.",
+      "gold": 4,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/robo_arena/a6d0f0b2-252d-459a-9853-3bfb6e7adee6_A_wrist.mp4",
+      "video_bytes": 1167874,
+      "video_sha256": "8d2cfb61a4041994f9d2ab42352f2314fe3c46938c9cc73c12b009fac39df4ba",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 2,
+          "raw_model_text": "{\"predicted_score\": 2, \"visual_evidence\": \"At the end of the video, one red cup remains on the table while the robot holds the second red cup in the air above the box without placing either cup onto the box.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 3202,
+            "candidatesTokenCount": 54,
+            "totalTokenCount": 3697,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 362
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 2840
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 54
+              }
+            ],
+            "thoughtsTokenCount": 441
+          },
+          "latency_ms": 12626.4,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 2,
+          "raw_model_text": "{\"predicted_score\": 2, \"visual_evidence\": \"In the final state, the robot has stacked one red cup onto the other on the table and is still holding the top cup in the air over the box, having placed neither cup onto the box.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 3202,
+            "candidatesTokenCount": 58,
+            "totalTokenCount": 3260,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 362
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 2840
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 58
+              }
+            ]
+          },
+          "latency_ms": 4765.4,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 1466,
+      "task": "Put the cable onto the tape roll",
+      "gold": 3,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/robo_arena/12af69f7-abf6-4102-a861-4530e7f78f92_E_left.mp4",
+      "video_bytes": 662402,
+      "video_sha256": "c3da0106f5be4206e23e175230e2ce8f8c07a40aacbbd9de50a9e5bd72103edf",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 1,
+          "raw_model_text": "{\"predicted_score\": 1, \"visual_evidence\": \"The robot fails to grasp the object and leaves both the black item and the tape roll in their initial positions on the mat.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 3199,
+            "candidatesTokenCount": 43,
+            "totalTokenCount": 3592,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 359
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 2840
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 43
+              }
+            ],
+            "thoughtsTokenCount": 350
+          },
+          "latency_ms": 10328.5,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 1,
+          "raw_model_text": "{\"predicted_score\": 1, \"visual_evidence\": \"The robot failed to pick up the cable and it remains in its original location, not on the tape roll.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 3199,
+            "candidatesTokenCount": 40,
+            "totalTokenCount": 3239,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 359
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 2840
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 40
+              }
+            ]
+          },
+          "latency_ms": 4417.4,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 2389,
+      "task": "Avoid obstacle and reach the blue pen",
+      "gold": 2,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/tokyo_u_lsmo_converted_externally_to_rlds/tokyo_u_lsmo_converted_externally_to_rlds_originalsplit_train_index_46_attempt_1_score_2.mp4",
+      "video_bytes": 71552,
+      "video_sha256": "08b1605afe442143bab87b37f84495765386c38df8f1e35801fcdd9e28718e1d",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 1,
+          "raw_model_text": "{\"predicted_score\": 1, \"visual_evidence\": \"The robot arm moves slightly behind the books and remains far from the blue pen.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 776,
+            "candidatesTokenCount": 34,
+            "totalTokenCount": 1193,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 293
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 483
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 34
+              }
+            ],
+            "thoughtsTokenCount": 383
+          },
+          "latency_ms": 8957.2,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 1,
+          "raw_model_text": "{\"predicted_score\": 1, \"visual_evidence\": \"The robot arm moves slightly behind the books and remains far from the blue pen at the end of the video.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 776,
+            "candidatesTokenCount": 40,
+            "totalTokenCount": 816,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 293
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 483
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 40
+              }
+            ]
+          },
+          "latency_ms": 3070.2,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 894,
+      "task": "Place the yellow block onto the center peg of the wooden pegboard.",
+      "gold": 3,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/iamlab_cmu_pickup_insert_converted_externally_to_rlds/iamlab_cmu_pickup_insert_converted_externally_to_rlds_originalsplit_train_index_375.mp4",
+      "video_bytes": 1019785,
+      "video_sha256": "435c507a7cf0f3ca388930f10217e612243200e0bc9ece02e95943997f6950ec",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 2,
+          "raw_model_text": "{\"predicted_score\": 2, \"visual_evidence\": \"The robot grasps and lifts the yellow block into the air, but does not move it to or place it onto the center peg before the video ends.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 2549,
+            "candidatesTokenCount": 48,
+            "totalTokenCount": 2951,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 348
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 2201
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 48
+              }
+            ],
+            "thoughtsTokenCount": 354
+          },
+          "latency_ms": 13671.8,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 2,
+          "raw_model_text": "{\"predicted_score\": 2, \"visual_evidence\": \"The robot picks up the yellow block and holds it in the air without placing it onto the center peg of the wooden pegboard.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 2549,
+            "candidatesTokenCount": 44,
+            "totalTokenCount": 2593,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 348
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 2201
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 44
+              }
+            ]
+          },
+          "latency_ms": 4718.4,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 2067,
+      "task": "Move the egg from the blue bowl to the black bowl",
+      "gold": 3,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/robo_arena/4e2c8d34-d656-4140-b4aa-58af61c4811c_E_wrist.mp4",
+      "video_bytes": 1121655,
+      "video_sha256": "9ed8a339439367045e64b3d97b84bd2c42d7b2aa7f65a2b9c0c22b959b30e65f",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 1,
+          "raw_model_text": "{\"predicted_score\": 1, \"visual_evidence\": \"The robot fails to grasp the egg, leaving it inside the blue bowl at the end of the video.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 3203,
+            "candidatesTokenCount": 39,
+            "totalTokenCount": 3440,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 363
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 2840
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 39
+              }
+            ],
+            "thoughtsTokenCount": 198
+          },
+          "latency_ms": 8361.2,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 1,
+          "raw_model_text": "{\"predicted_score\": 1, \"visual_evidence\": \"The gripper fails to grasp the egg, leaving it inside the blue bowl at the end of the video.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 3203,
+            "candidatesTokenCount": 39,
+            "totalTokenCount": 3242,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 363
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 2840
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 39
+              }
+            ]
+          },
+          "latency_ms": 4579.7,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 570,
+      "task": "Move the orange cup so that it rests on the table touching the front wires of the dish rack.",
+      "gold": 2,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/cmu_play_fusion/cmu_play_fusion_originalsplit_train_index_269.mp4",
+      "video_bytes": 147710,
+      "video_sha256": "bed53d61d2e59fc4fd882b3687c21cc42238938cf5d0f7b551d32296d5e5ee2f",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 1,
+          "raw_model_text": "{\"predicted_score\": 1, \"visual_evidence\": \"In the final state, the robot has placed the orange cup inside the dish rack rather than on the table touching the front wires.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 1783,
+            "candidatesTokenCount": 44,
+            "totalTokenCount": 2404,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 334
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 1449
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 44
+              }
+            ],
+            "thoughtsTokenCount": 577
+          },
+          "latency_ms": 45406.9,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 2,
+          "raw_model_text": "{\"predicted_score\": 2, \"visual_evidence\": \"The robot places the orange cup inside the dish rack rather than on the table touching the front wires, and does not release it.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 1783,
+            "candidatesTokenCount": 44,
+            "totalTokenCount": 1827,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 334
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 1449
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 44
+              }
+            ]
+          },
+          "latency_ms": 3950.2,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 1154,
+      "task": "Hit the cymbal.",
+      "gold": 5,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/robo_arena/f11a7e13-a565-4978-8ebb-503fd5427f17_C_right.mp4",
+      "video_bytes": 110309,
+      "video_sha256": "adc0e9f699ac1108cfbd4390124e3f372f250aa87fb69b461b607bfcf7f45a82",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 5,
+          "raw_model_text": "{\"predicted_score\": 5, \"visual_evidence\": \"The robot lowers its gripper to directly strike the black cymbal.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 860,
+            "candidatesTokenCount": 30,
+            "totalTokenCount": 1110,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 292
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 568
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 30
+              }
+            ],
+            "thoughtsTokenCount": 220
+          },
+          "latency_ms": 15544.0,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 5,
+          "raw_model_text": "{\"predicted_score\": 5, \"visual_evidence\": \"The robot arm moves down and repeatedly strikes the cymbal with its closed gripper.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 860,
+            "candidatesTokenCount": 33,
+            "totalTokenCount": 893,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 292
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 568
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 33
+              }
+            ]
+          },
+          "latency_ms": 9781.5,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 572,
+      "task": "Pick orange cup and place in dish rack",
+      "gold": 2,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/cmu_play_fusion/cmu_play_fusion_originalsplit_train_index_409_attempt_1_score_2.mp4",
+      "video_bytes": 39440,
+      "video_sha256": "8c5f2fefacfcefdf571e4751e26049392e9949311ecde85c06dee7de951e60c4",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 2,
+          "raw_model_text": "{\"predicted_score\": 2, \"visual_evidence\": \"The robot arm moves to reach the orange cup on the table, but the video ends before the cup is lifted or placed into the dish rack.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 706,
+            "candidatesTokenCount": 47,
+            "totalTokenCount": 1215,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 292
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 414
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 47
+              }
+            ],
+            "thoughtsTokenCount": 462
+          },
+          "latency_ms": 12157.9,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 2,
+          "raw_model_text": "{\"predicted_score\": 2, \"visual_evidence\": \"The robot reaches the orange cup and grasps it at the end of the video without lifting or moving it to the dish rack.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 706,
+            "candidatesTokenCount": 43,
+            "totalTokenCount": 749,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 292
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 414
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 43
+              }
+            ]
+          },
+          "latency_ms": 3834.3,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 388,
+      "task": "Stack cube.",
+      "gold": 2,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/berkeley_rpt_converted_externally_to_rlds/berkeley_rpt_converted_externally_to_rlds_originalsplit_train_index_410_attempt_1_score_2.mp4",
+      "video_bytes": 848885,
+      "video_sha256": "6034c09c7700f345fc6fc8b552e4c14d1cf1ce2d0ff24da0d01488ff8f107c0c",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 2,
+          "raw_model_text": "{\"predicted_score\": 2, \"visual_evidence\": \"The robot gripper grasps the blue cube on the table without lifting it or moving it toward the green cube to stack.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 1395,
+            "candidatesTokenCount": 41,
+            "totalTokenCount": 1722,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 307
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 1088
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 41
+              }
+            ],
+            "thoughtsTokenCount": 286
+          },
+          "latency_ms": 7996.0,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 2,
+          "raw_model_text": "{\"predicted_score\": 2, \"visual_evidence\": \"The robot gripper grasps the blue cube and lifts it slightly, but never moves it toward or stacks it onto the green cube.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 1395,
+            "candidatesTokenCount": 43,
+            "totalTokenCount": 1438,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 307
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 1088
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 43
+              }
+            ]
+          },
+          "latency_ms": 4723.0,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 2532,
+      "task": "Open the lower cabinet glass-front door",
+      "gold": 1,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/ucsd_pick_and_place_dataset_converted_externally_to_rlds/ucsd_pick_and_place_dataset_converted_externally_to_rlds_originalsplit_train_index_830.mp4",
+      "video_bytes": 95107,
+      "video_sha256": "ec8ef490a79b8849eafa9000f7627171151512262e6c3d5c1a8ec367f181477a",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 1,
+          "raw_model_text": "{\"predicted_score\": 1, \"visual_evidence\": \"The robot moves the blue pot from the stove to the sink while the lower cabinet glass-front door remains completely closed.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 635,
+            "candidatesTokenCount": 42,
+            "totalTokenCount": 890,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 290
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 345
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 42
+              }
+            ],
+            "thoughtsTokenCount": 213
+          },
+          "latency_ms": 9275.6,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 1,
+          "raw_model_text": "{\"predicted_score\": 1, \"visual_evidence\": \"The robot places the blue pot into the sink while the lower cabinet glass-front door remains completely closed.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 635,
+            "candidatesTokenCount": 39,
+            "totalTokenCount": 674,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 290
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 345
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 39
+              }
+            ]
+          },
+          "latency_ms": 3836.3,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 1026,
+      "task": "Place the long bread in the oven.",
+      "gold": 5,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/jaco_play/jaco_play_originalsplit_train_index_681.mp4",
+      "video_bytes": 117054,
+      "video_sha256": "e439ee6eb041fbd99070c7cd5dda3820d4b2774b5ea531eb10d95b992a822c5d",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 4,
+          "raw_model_text": "{\"predicted_score\": 4, \"visual_evidence\": \"The robot moves the long bread onto the oven tray, but the gripper is still holding the bread at the end of the video.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 990,
+            "candidatesTokenCount": 44,
+            "totalTokenCount": 1446,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 300
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 690
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 44
+              }
+            ],
+            "thoughtsTokenCount": 412
+          },
+          "latency_ms": 10574.3,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 5,
+          "raw_model_text": "{\"predicted_score\": 5, \"visual_evidence\": \"The robot gripper has placed the long bread onto the tray of the open oven.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 990,
+            "candidatesTokenCount": 34,
+            "totalTokenCount": 1024,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 300
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 690
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 34
+              }
+            ]
+          },
+          "latency_ms": 3820.7,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 2181,
+      "task": "Make a piece of toast with the oven.",
+      "gold": 1,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/stanford_hydra_dataset_converted_externally_to_rlds/stanford_hydra_dataset_converted_externally_to_rlds_originalsplit_train_index_507_attempt_1_score_1.mp4",
+      "video_bytes": 247361,
+      "video_sha256": "176a21c38b61686f60a7bc2fb30b7267e5ff5048a688d629ff4086f482ad90ed",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 1,
+          "raw_model_text": "{\"predicted_score\": 1, \"visual_evidence\": \"The robot arm moves near the toaster oven door handle without opening the door or moving the piece of bread.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 911,
+            "candidatesTokenCount": 39,
+            "totalTokenCount": 1242,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 299
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 612
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 39
+              }
+            ],
+            "thoughtsTokenCount": 292
+          },
+          "latency_ms": 7162.7,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 1,
+          "raw_model_text": "{\"predicted_score\": 1, \"visual_evidence\": \"The robot arm moves toward the toaster oven handle and attempts to grasp it, but fails to open the door or interact with the bread, leaving the final state unchanged.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 911,
+            "candidatesTokenCount": 51,
+            "totalTokenCount": 962,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 299
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 612
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 51
+              }
+            ]
+          },
+          "latency_ms": 4066.6,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 2465,
+      "task": "Put the bowl inside the kitchen cabinet.",
+      "gold": 2,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/ucsd_kitchen_dataset_converted_externally_to_rlds/ucsd_kitchen_dataset_converted_externally_to_rlds_originalsplit_train_index_4_attempt_1_score_2.mp4",
+      "video_bytes": 248847,
+      "video_sha256": "e82098ffb9ad31d4b055f0b7563f08d189daaa2841e1971a3c6874ca3f28c222",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 1,
+          "raw_model_text": "{\"predicted_score\": 1, \"visual_evidence\": \"The robot arm remains positioned over the pot on the stovetop, with no bowl placed inside the kitchen cabinet.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 350,
+            "candidatesTokenCount": 39,
+            "totalTokenCount": 605,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 282
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 68
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 39
+              }
+            ],
+            "thoughtsTokenCount": 216
+          },
+          "latency_ms": 15954.7,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 1,
+          "raw_model_text": "{\"predicted_score\": 1, \"visual_evidence\": \"The robot arm grasps the bowl on the stove and does not move it at all.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 350,
+            "candidatesTokenCount": 35,
+            "totalTokenCount": 385,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 282
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 68
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 35
+              }
+            ]
+          },
+          "latency_ms": 2279.3,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 601,
+      "task": "Pick pot and place in sink",
+      "gold": 4,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/cmu_play_fusion/cmu_play_fusion_originalsplit_train_index_136_attempt_1_score_4.mp4",
+      "video_bytes": 96695,
+      "video_sha256": "e5751943d252206cd8ef66a4f31917b8e989ed75e3cb3bdc551add5cbb77e3db",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 2,
+          "raw_model_text": "{\"predicted_score\": 2, \"visual_evidence\": \"The robot grasps and lifts the metal pot into the air near its starting position, knocking the wooden rack, but never moves it to the sink.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 1698,
+            "candidatesTokenCount": 47,
+            "totalTokenCount": 2451,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 318
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 1380
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 47
+              }
+            ],
+            "thoughtsTokenCount": 706
+          },
+          "latency_ms": 16921.4,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 2,
+          "raw_model_text": "{\"predicted_score\": 2, \"visual_evidence\": \"The robot grasps and lifts the pot slightly, moving it near the wooden rack, far from the sink.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 1698,
+            "candidatesTokenCount": 39,
+            "totalTokenCount": 1737,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 318
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 1380
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 39
+              }
+            ]
+          },
+          "latency_ms": 11414.9,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 1270,
+      "task": "Pick up the marker from the blue bowl to the pink bowl",
+      "gold": 2,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/robo_arena/cea7f6f7-cfa8-48f3-93ff-7d00071b07d8_B_right.mp4",
+      "video_bytes": 549196,
+      "video_sha256": "64223c20eddc404d7b42a8448153ea9cb4f5290d527c4283e9e21e9038af9224",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 1,
+          "raw_model_text": "{\"predicted_score\": 1, \"visual_evidence\": \"The robot arm moves toward the blue bowl, knocks over a green block next to it, and stops without touching or moving the marker.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 3204,
+            "candidatesTokenCount": 45,
+            "totalTokenCount": 3592,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 364
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 2840
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 45
+              }
+            ],
+            "thoughtsTokenCount": 343
+          },
+          "latency_ms": 9751.7,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 1,
+          "raw_model_text": "{\"predicted_score\": 1, \"visual_evidence\": \"The robot arm moves towards the green cylinder instead of picking up the marker, leaving the marker untouched in the blue bowl.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 3204,
+            "candidatesTokenCount": 42,
+            "totalTokenCount": 3246,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 364
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 2840
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 42
+              }
+            ]
+          },
+          "latency_ms": 4390.2,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 404,
+      "task": "Stack cube.",
+      "gold": 3,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/berkeley_rpt_converted_externally_to_rlds/berkeley_rpt_converted_externally_to_rlds_originalsplit_train_index_83_attempt_1_score_3.mp4",
+      "video_bytes": 1325835,
+      "video_sha256": "c95f3e99d2eaa215103b2637f512815ef070de1a136e0437a4b46df477ab19a1",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 2,
+          "raw_model_text": "{\"predicted_score\": 2, \"visual_evidence\": \"The robot grasps and lifts the green cube and begins moving it toward the blue cube, but the video ends while the green cube is still held in the gripper without being stacked.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 2235,
+            "candidatesTokenCount": 53,
+            "totalTokenCount": 2954,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 331
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 1904
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 53
+              }
+            ],
+            "thoughtsTokenCount": 666
+          },
+          "latency_ms": 14753.2,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 2,
+          "raw_model_text": "{\"predicted_score\": 2, \"visual_evidence\": \"The robot grasps the green cube and moves it near the blue cube, but the video ends before the cube is placed or stacked.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 2235,
+            "candidatesTokenCount": 44,
+            "totalTokenCount": 2279,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 331
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 1904
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 44
+              }
+            ]
+          },
+          "latency_ms": 5238.8,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 302,
+      "task": "Push wooden cube",
+      "gold": 2,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/berkeley_mvp_converted_externally_to_rlds/berkeley_mvp_converted_externally_to_rlds_originalsplit_train_index_67_attempt_1_score_2.mp4",
+      "video_bytes": 522705,
+      "video_sha256": "77dba4c4a414562c34ad9450a0553f7423c407467ae2eba3f84c6aab5164c7d0",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 1,
+          "raw_model_text": "{\"predicted_score\": 1, \"visual_evidence\": \"The robot moves closer to the wooden cube but fails to make contact or push it at all.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 485,
+            "candidatesTokenCount": 37,
+            "totalTokenCount": 716,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 281
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 204
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 37
+              }
+            ],
+            "thoughtsTokenCount": 194
+          },
+          "latency_ms": 6331.4,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 1,
+          "raw_model_text": "{\"predicted_score\": 1, \"visual_evidence\": \"The wooden cube remains stationary in the center of the tray while the camera moves slightly closer to it, with the gripper never making contact to push the cube.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 485,
+            "candidatesTokenCount": 49,
+            "totalTokenCount": 534,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 281
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 204
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 49
+              }
+            ]
+          },
+          "latency_ms": 6507.7,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 2801,
+      "task": "Make coffee",
+      "gold": 2,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/viola/viola_originalsplit_train_index_45_attempt_1_score_2.mp4",
+      "video_bytes": 385820,
+      "video_sha256": "a1b885218b4bc755958195d13660b9f29ffe690ccbf2211ff26619fa70c468b4",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 2,
+          "raw_model_text": "{\"predicted_score\": 2, \"visual_evidence\": \"The coffee machine lid is opened and the robot gripper is positioned around the coffee pod on the stand, but the pod has not been placed into the machine.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 1907,
+            "candidatesTokenCount": 49,
+            "totalTokenCount": 2510,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 320
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 1587
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 49
+              }
+            ],
+            "thoughtsTokenCount": 554
+          },
+          "latency_ms": 18660.7,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 2,
+          "raw_model_text": "{\"predicted_score\": 2, \"visual_evidence\": \"The robot opens the coffee maker lid and positions its gripper over the coffee pod on the stand, failing to insert the pod or close the machine.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 1907,
+            "candidatesTokenCount": 47,
+            "totalTokenCount": 1954,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 320
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 1587
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 47
+              }
+            ]
+          },
+          "latency_ms": 9109.8,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 1352,
+      "task": "Pick up the purple plum and place into bowl",
+      "gold": 4,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/robo_arena/0b76325d-fba2-429e-9b83-ead0d22722b4_B_right.mp4",
+      "video_bytes": 266091,
+      "video_sha256": "8c6c3d252fb7c47b8387ab82ac7557006105a0b4841e829334bdad0a70a5f41f",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 4,
+          "raw_model_text": "{\"predicted_score\": 4, \"visual_evidence\": \"The robot successfully picks up the purple plum and holds it directly over the pink bowl, but fails to release it into the bowl by the end of the video.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 2106,
+            "candidatesTokenCount": 50,
+            "totalTokenCount": 2905,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 331
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 1775
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 50
+              }
+            ],
+            "thoughtsTokenCount": 749
+          },
+          "latency_ms": 19988.5,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 4,
+          "raw_model_text": "{\"predicted_score\": 4, \"visual_evidence\": \"The robot grasps the purple plum and holds it directly above the pink bowl, but fails to open its gripper to release the plum into the bowl by the end of the video.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 2106,
+            "candidatesTokenCount": 53,
+            "totalTokenCount": 2159,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 331
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 1775
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 53
+              }
+            ]
+          },
+          "latency_ms": 4300.8,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 1933,
+      "task": "Put the cup into the basket",
+      "gold": 1,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/robo_arena/28f37798-fb92-46ee-b137-08d1125412ae_D_wrist.mp4",
+      "video_bytes": 1760260,
+      "video_sha256": "6883c6330eddae8bf80cb477b6dfb12f913a66f762f842c3851ce0870d91198e",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 1,
+          "raw_model_text": "{\"predicted_score\": 1, \"visual_evidence\": \"The robot fails to grasp the cup, leaving it in its original position on the table outside the basket.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 3198,
+            "candidatesTokenCount": 39,
+            "totalTokenCount": 3517,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 358
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 2840
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 39
+              }
+            ],
+            "thoughtsTokenCount": 280
+          },
+          "latency_ms": 24685.6,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 1,
+          "raw_model_text": "{\"predicted_score\": 1, \"visual_evidence\": \"The robot gripper attempted to grasp the grey plastic container instead of the cup and failed to pick anything up, leaving the cup untouched on the table.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 3198,
+            "candidatesTokenCount": 47,
+            "totalTokenCount": 3245,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 358
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 2840
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 47
+              }
+            ]
+          },
+          "latency_ms": 5251.7,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 2292,
+      "task": "Grasp the drawer handle, then open it.",
+      "gold": 2,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/taco_play/taco_play_originalsplit_train_index_621_attempt_1_score_2.mp4",
+      "video_bytes": 20352,
+      "video_sha256": "02c17d5c8acfba22ea7d566a1f7d281d8d2bc14873a41329d512eb1bf923dd9e",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 1,
+          "raw_model_text": "{\"predicted_score\": 1, \"visual_evidence\": \"The robot gripper remains stationary without grasping the drawer handle or opening the drawer.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 424,
+            "candidatesTokenCount": 33,
+            "totalTokenCount": 577,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 286
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 138
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 33
+              }
+            ],
+            "thoughtsTokenCount": 120
+          },
+          "latency_ms": 11866.1,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 1,
+          "raw_model_text": "{\"predicted_score\": 1, \"visual_evidence\": \"The robot gripper remains hovering above the floor without making contact with any drawer handle or opening any drawer.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 424,
+            "candidatesTokenCount": 38,
+            "totalTokenCount": 462,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 286
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 138
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 38
+              }
+            ]
+          },
+          "latency_ms": 3430.1,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    },
+    {
+      "episode_id": 412,
+      "task": "Stack cube.",
+      "gold": 4,
+      "video_path": "hf://datasets/teetone/RoboReward@d69d5b92b8f3caee9a616b615b300bdf0d37aef2/test/berkeley_rpt_converted_externally_to_rlds/berkeley_rpt_converted_externally_to_rlds_originalsplit_train_index_757_attempt_1_score_4.mp4",
+      "video_bytes": 1812209,
+      "video_sha256": "61afa2d3a7181f4785902a86111fe3625e287ecb9fdcfa9cf74b0d2b08478d8b",
+      "calls": {
+        "high": {
+          "thinking_level": "high",
+          "model": "gemini-4-argon",
+          "pred": 3,
+          "raw_model_text": "{\"predicted_score\": 3, \"visual_evidence\": \"The robot gripper grasps the green cube and moves it next to the blue cube, but fails to place it on top or release its grip.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 2725,
+            "candidatesTokenCount": 46,
+            "totalTokenCount": 3229,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 345
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 2380
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 46
+              }
+            ],
+            "thoughtsTokenCount": 458
+          },
+          "latency_ms": 9254.4,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        },
+        "low": {
+          "thinking_level": "low",
+          "model": "gemini-4-argon",
+          "pred": 2,
+          "raw_model_text": "{\"predicted_score\": 2, \"visual_evidence\": \"The robot grasps the green cube and positions it directly above the blue cube, but the video ends before the green cube is lowered or released to complete the stack.\"}",
+          "raw_thought_excerpt": "",
+          "error": null,
+          "http_status": 200,
+          "usage": {
+            "promptTokenCount": 2725,
+            "candidatesTokenCount": 50,
+            "totalTokenCount": 2775,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 345
+              },
+              {
+                "modality": "VIDEO",
+                "tokenCount": 2380
+              }
+            ],
+            "candidatesTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 50
+              }
+            ]
+          },
+          "latency_ms": 5266.3,
+          "schema": "snake",
+          "finish_reason": "STOP"
+        }
+      },
+      "prompt_sent_gold": false,
+      "prompt_sent_filename": false
+    }
+  ],
+  "summary": {
+    "high": {
+      "n_attempted": 30,
+      "n_scored": 29,
+      "n_failed": 1,
+      "failed_episode_ids": [
+        2094
+      ],
+      "sum_abs_error": 23,
+      "mae": 0.7931034482758621,
+      "mae_x100": 79.3103448275862,
+      "exact_match": 0.3793103448275862,
+      "exact_match_count": 11,
+      "prompt_tokens": 51992,
+      "candidate_tokens": 1248,
+      "thought_tokens": 11504,
+      "total_tokens": 64744,
+      "status": "measured",
+      "benchmark_eligible": true
+    },
+    "low": {
+      "n_attempted": 30,
+      "n_scored": 29,
+      "n_failed": 1,
+      "failed_episode_ids": [
+        2094
+      ],
+      "sum_abs_error": 22,
+      "mae": 0.7586206896551724,
+      "mae_x100": 75.86206896551724,
+      "exact_match": 0.4482758620689655,
+      "exact_match_count": 13,
+      "prompt_tokens": 51992,
+      "candidate_tokens": 1255,
+      "thought_tokens": 0,
+      "total_tokens": 53247,
+      "status": "measured",
+      "benchmark_eligible": true
+    }
+  },
+  "finished_at": "2026-10-26T01:00:11Z"
+}

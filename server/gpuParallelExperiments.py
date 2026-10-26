@@ -8,6 +8,7 @@ import base64
 import json
 import math
 import os
+import re
 import time
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -100,7 +101,7 @@ def evaluate_single_mp4_with_gemini(ep: dict) -> dict:
         "Respond ONLY with JSON: {\"predicted_score\": 1|2|3|4|5, \"visual_evidence\": \"one sentence describing what the robot actually did in the video\"}"
     )
 
-    last_err = "unknown"
+    calls = {}
     for t_level in ["high", "low"]:
         try:
             url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-4-argon:generateContent?key={GEMINI_API_KEY}"
@@ -119,7 +120,6 @@ def evaluate_single_mp4_with_gemini(ep: dict) -> dict:
                     "thinking_config": {"thinking_level": t_level},
                 },
             }
-
             http_req = urllib.request.Request(
                 url,
                 data=json.dumps(payload).encode("utf-8"),
@@ -128,34 +128,34 @@ def evaluate_single_mp4_with_gemini(ep: dict) -> dict:
             )
             with urllib.request.urlopen(http_req, timeout=24) as api_resp:
                 body = json.loads(api_resp.read().decode("utf-8"))
-            text = body["candidates"][0]["content"]["parts"][0]["text"]
-            cleaned = text.strip().removeprefix("```json").removesuffix("```").strip()
+            parts = body["candidates"][0]["content"]["parts"]
+            text = "\n".join(p.get("text", "") for p in parts if not p.get("thought")).strip()
+            cleaned = text.removeprefix("```json").removesuffix("```").strip()
             parsed = json.loads(cleaned)
-            pred = max(1, min(5, int(parsed.get("predicted_score", 3))))
-            return {
-                "row_idx": ep["row_idx"],
-                "dataset": ep["dataset"],
-                "task": ep["task"],
-                "mp4Bytes": len(mp4_bytes),
-                "gold": ep["gold_reward"],
+            raw_score = parsed.get("predicted_score")
+            pred = int(raw_score) if raw_score in (1, 2, 3, 4, 5) else None
+            calls[t_level] = {
                 "pred": pred,
-                "absError": abs(pred - ep["gold_reward"]),
-                "modelUsed": f"gemini-4-argon (thinking:{t_level})",
-                "visualEvidence": str(parsed.get("visual_evidence", ""))[:160],
-                "latencyMs": round((time.perf_counter() - t0) * 1000, 1),
+                "absError": None if pred is None else abs(pred - ep["gold_reward"]),
+                "raw_model_text": text[:2000],
+                "error": None if pred is not None else "no parseable predicted_score",
+                "usage": body.get("usageMetadata"),
             }
         except Exception as exc:
-            last_err = str(exc)
+            calls[t_level] = {
+                "pred": None,
+                "absError": None,
+                "raw_model_text": "",
+                "error": re.sub(r"key=[^&\s]+", "key=REDACTED", str(exc))[:500],
+                "usage": None,
+            }
     return {
         "row_idx": ep["row_idx"],
         "dataset": ep["dataset"],
         "task": ep["task"],
         "mp4Bytes": len(mp4_bytes),
         "gold": ep["gold_reward"],
-        "pred": 3,
-        "absError": abs(3 - ep["gold_reward"]),
-        "modelUsed": "error",
-        "visualEvidence": last_err,
+        "calls": calls,
         "latencyMs": round((time.perf_counter() - t0) * 1000, 1),
     }
 def run_cuda_parallel_experiments() -> dict:
@@ -262,21 +262,34 @@ def main():
         video_results = [f.result() for f in as_completed(video_futures)]
 
     video_results.sort(key=lambda x: x["row_idx"])
-    n_vid = max(1, len(video_results))
-    raw_mp4_mae_x100 = round(sum(r["absError"] for r in video_results) / n_vid * 100.0, 1)
-    exact_matches = sum(1 for r in video_results if r["absError"] == 0)
-    within_one = sum(1 for r in video_results if r["absError"] <= 1)
+
+    def level_summary(level: str) -> dict:
+        scored = [r for r in video_results if r["calls"][level]["pred"] is not None]
+        failed = [r["row_idx"] for r in video_results if r["calls"][level]["pred"] is None]
+        n = len(scored)
+        sum_abs = sum(r["calls"][level]["absError"] for r in scored)
+        exact = sum(1 for r in scored if r["calls"][level]["pred"] == r["gold"])
+        return {
+            "n_attempted": len(video_results),
+            "n_scored": n,
+            "n_failed": len(failed),
+            "failed_row_idx": failed,
+            "sum_abs_error": sum_abs,
+            "mae_x100": (100.0 * sum_abs / n) if n else None,
+            "exact_match_count": exact,
+            "exact_match": (exact / n) if n else None,
+        }
 
     report = {
         "executedAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "totalWallClockSec": round(time.perf_counter() - t_start, 2),
+        "note": "This 8-clip list is not the reported RoboReward result. See honest_roboreward_eval.json.",
         "gpuParallelExperiments": gpu_stats,
         "rawMp4MultimodalVideoBenchmark": {
-            "episodesEvaluated": len(video_results),
+            "episodesAttempted": len(video_results),
             "totalMp4BytesSent": sum(r["mp4Bytes"] for r in video_results),
-            "rawVideoMaeX100": raw_mp4_mae_x100,
-            "exactMatchPct": round(exact_matches / n_vid * 100.0, 1),
-            "within1AccuracyPct": round(within_one / n_vid * 100.0, 1),
+            "thinking_high": level_summary("high"),
+            "thinking_low": level_summary("low"),
             "episodes": video_results,
         },
     }
