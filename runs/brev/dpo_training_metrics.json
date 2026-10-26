@@ -1,0 +1,29 @@
+{
+  "ok": true,
+  "device": "cuda:0",
+  "gpuName": "NVIDIA GeForce RTX 3080 Laptop GPU",
+  "vramAllocatedMb": 18.21,
+  "dpoTuplesTrained": 133,
+  "epochs": 6,
+  "lossHistory": [
+    0.3315,
+    0.184,
+    0.1539,
+    0.1253,
+    0.0996,
+    0.0777
+  ],
+  "winRateHistoryPct": [
+    100.0,
+    100.0,
+    100.0,
+    100.0,
+    100.0,
+    100.0
+  ],
+  "klDivergence": 1.1347,
+  "finalRewardMargin": 2.719,
+  "finalWinRatePct": 100.0,
+  "checkpointPath": "C:\\Users\\agni_\\Documents\\argon\\runs\\brev\\kronos_policy_dpo.pt",
+  "elapsedMs": 15012.1
+}

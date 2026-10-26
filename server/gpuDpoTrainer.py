@@ -198,6 +198,8 @@ def run_gpu_dpo_training(dataset_path: str, output_dir: str) -> dict:
         "checkpointPath": str(ckpt_path),
         "elapsedMs": elapsed_ms,
     }
+    metrics_path = out_path / "dpo_training_metrics.json"
+    metrics_path.write_text(json.dumps(result, indent=2), encoding="utf-8")
     print("KRONOS_GPU_DPO_JSON=" + json.dumps(result))
     return result
 

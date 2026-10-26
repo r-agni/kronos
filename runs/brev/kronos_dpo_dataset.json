@@ -1,22 +1,22 @@
 {
   "schema": "kronos-1m-robotics-dpo-v1",
-  "generatedAt": "2026-10-26T00:21:42.440Z",
+  "generatedAt": "2026-10-26T00:56:33.423Z",
   "orchestrator": {
     "managedAgent": "antigravity-preview-09-2026",
     "model": "gemini-4-argon",
     "contextWindowTokens": 1000000
   },
   "rubricEvaluation": {
-    "rubricText": "Strict Slip Rubric: Penalize wheel slip > 15% and require clearance > 3.5m.",
-    "overallOutcomeScore1to5": 4.73,
-    "compliancePct": 93.1,
-    "normalStepsCount": 97,
-    "suboptimalStepsCount": 9,
-    "failureStepsCount": 2,
+    "rubricText": "Maintain wheel slip < 30%, obstacle clearance > 2.2m, and zero unbridged seam halts.",
+    "overallOutcomeScore1to5": 2.88,
+    "compliancePct": 65.8,
+    "normalStepsCount": 78,
+    "suboptimalStepsCount": 4,
+    "failureStepsCount": 39,
     "activeViolations": [
-      "Rubric violation: LiDAR clearance 2.18m < 2.2m threshold",
-      "Rubric violation: LiDAR clearance 1.29m < 2.2m threshold",
-      "64K context seam cliff halt (unbridged boundary tear ΔY = -2.4m)"
+      "Rubric violation: LiDAR clearance 1.59m < 2.2m threshold",
+      "Rubric violation: LiDAR clearance 0.00m < 2.2m threshold",
+      "Corridor blocked by unbridged chasm rupture ahead"
     ]
   },
   "temporalSegments": [
@@ -24,20 +24,20 @@
       "id": "seg_01",
       "index": 1,
       "label": "SEG-01: CONTINUOUS CRUISE",
-      "startSec": 1.64,
-      "endSec": 2.36,
+      "startSec": 1.15,
+      "endSec": 1.71,
       "instructionCaption": "Maintain 30.7 km/h center-corridor alignment under Earth 1.0g Nominal regime.",
       "stitchStatus": "continuous_1m",
       "dominantState": "navigating",
-      "meanReward": 0.94
+      "meanReward": 0.58
     },
     {
       "id": "seg_02",
       "index": 2,
       "label": "SEG-02: LIDAR SLALOM",
-      "startSec": 2.36,
-      "endSec": 5.52,
-      "instructionCaption": "Execute 32-beam LiDAR fan evasion around hazard at Z=-6.0m while maintaining lateral stability.",
+      "startSec": 1.71,
+      "endSec": 2.88,
+      "instructionCaption": "Execute 32-beam LiDAR fan evasion around hazard at Z=-1.6m while maintaining lateral stability.",
       "stitchStatus": "continuous_1m",
       "dominantState": "avoiding_hazard",
       "meanReward": 0.58
@@ -46,9 +46,9 @@
       "id": "seg_03",
       "index": 3,
       "label": "SEG-03: CONTINUOUS CRUISE",
-      "startSec": 5.52,
-      "endSec": 14.11,
-      "instructionCaption": "Maintain 24.8 km/h center-corridor alignment under Earth 1.0g Nominal regime.",
+      "startSec": 2.88,
+      "endSec": 11.49,
+      "instructionCaption": "Maintain 27.0 km/h center-corridor alignment under Earth 1.0g Nominal regime.",
       "stitchStatus": "continuous_1m",
       "dominantState": "navigating",
       "meanReward": 0.94
@@ -57,97 +57,97 @@
       "id": "seg_04",
       "index": 4,
       "label": "SEG-04: CONTINUOUS CRUISE",
-      "startSec": 14.11,
-      "endSec": 22.38,
-      "instructionCaption": "Maintain 31.4 km/h center-corridor alignment under Earth 1.0g Nominal regime.",
+      "startSec": 11.49,
+      "endSec": 19.74,
+      "instructionCaption": "Maintain 31.3 km/h center-corridor alignment under Earth 1.0g Nominal regime.",
       "stitchStatus": "continuous_1m",
       "dominantState": "navigating",
-      "meanReward": 0.9
+      "meanReward": 0.94
     },
     {
       "id": "seg_05",
       "index": 5,
-      "label": "SEG-05: 64K WINDOW STITCH",
-      "startSec": 22.38,
-      "endSec": 25.16,
-      "instructionCaption": "[STITCH ARTIFACT @ Z=22.1m] Lost prior boundary elevation context; temporal sub-task horizon truncated.",
-      "stitchStatus": "window_fractured",
+      "label": "SEG-05: CONTINUOUS CRUISE",
+      "startSec": 19.74,
+      "endSec": 22.54,
+      "instructionCaption": "Maintain 31.7 km/h center-corridor alignment under Earth 1.0g Nominal regime.",
+      "stitchStatus": "continuous_1m",
       "dominantState": "navigating",
       "meanReward": 0.94
     },
     {
       "id": "seg_06",
       "index": 6,
-      "label": "SEG-06: 64K WINDOW STITCH",
-      "startSec": 25.16,
-      "endSec": 26.43,
-      "instructionCaption": "[STITCH ARTIFACT @ Z=25.4m] Lost prior boundary elevation context; temporal sub-task horizon truncated.",
-      "stitchStatus": "window_fractured",
-      "dominantState": "route_blocked",
-      "meanReward": 0.12
+      "label": "SEG-06: LIDAR SLALOM",
+      "startSec": 22.54,
+      "endSec": 23.2,
+      "instructionCaption": "Execute 32-beam LiDAR fan evasion around hazard at Z=26.3m while maintaining lateral stability.",
+      "stitchStatus": "continuous_1m",
+      "dominantState": "avoiding_hazard",
+      "meanReward": 0.58
     },
     {
       "id": "seg_07",
       "index": 7,
-      "label": "SEG-07: 64K WINDOW STITCH",
-      "startSec": 26.43,
-      "endSec": 30.69,
-      "instructionCaption": "[STITCH ARTIFACT @ Z=25.8m] Lost prior boundary elevation context; temporal sub-task horizon truncated.",
-      "stitchStatus": "window_fractured",
-      "dominantState": "scaling_ramp",
-      "meanReward": 0.98
-    },
-    {
-      "id": "seg_08",
-      "index": 8,
-      "label": "SEG-08: COUNTERFACTUAL ASCENT",
-      "startSec": 30.69,
-      "endSec": 39.55,
-      "instructionCaption": "Traverse chasm/seam at Z=29.4m via synthesized thruster_hopper morphology.",
-      "stitchStatus": "continuous_1m",
-      "dominantState": "scaling_ramp",
-      "meanReward": 0.87
-    },
-    {
-      "id": "seg_09",
-      "index": 9,
-      "label": "SEG-09: COUNTERFACTUAL ASCENT",
-      "startSec": 39.55,
-      "endSec": 47.75,
-      "instructionCaption": "Traverse chasm/seam at Z=37.9m via synthesized thruster_hopper morphology.",
-      "stitchStatus": "continuous_1m",
-      "dominantState": "scaling_ramp",
-      "meanReward": 0.98
-    },
-    {
-      "id": "seg_10",
-      "index": 10,
-      "label": "SEG-10: COUNTERFACTUAL ASCENT",
-      "startSec": 47.75,
-      "endSec": 55.43,
-      "instructionCaption": "Traverse chasm/seam at Z=45.0m via synthesized thruster_hopper morphology.",
-      "stitchStatus": "continuous_1m",
-      "dominantState": "scaling_ramp",
-      "meanReward": 0.98
-    },
-    {
-      "id": "seg_11",
-      "index": 11,
-      "label": "SEG-11: CONTINUOUS CRUISE",
-      "startSec": 55.43,
-      "endSec": 61.25,
-      "instructionCaption": "Maintain 27.5 km/h center-corridor alignment under Earth 1.0g Nominal regime.",
+      "label": "SEG-07: CONTINUOUS CRUISE",
+      "startSec": 23.2,
+      "endSec": 24.34,
+      "instructionCaption": "Maintain 28.4 km/h center-corridor alignment under Earth 1.0g Nominal regime.",
       "stitchStatus": "continuous_1m",
       "dominantState": "navigating",
       "meanReward": 0.94
     },
     {
+      "id": "seg_08",
+      "index": 8,
+      "label": "SEG-08: SEAM / CHASM HALT",
+      "startSec": 24.34,
+      "endSec": 33,
+      "instructionCaption": "Halt forward drive at Z=28.4m cliff edge and trigger 4-branch counterfactual DPO synthesis.",
+      "stitchStatus": "continuous_1m",
+      "dominantState": "route_blocked",
+      "meanReward": 0.12
+    },
+    {
+      "id": "seg_09",
+      "index": 9,
+      "label": "SEG-09: SEAM / CHASM HALT",
+      "startSec": 33,
+      "endSec": 41.26,
+      "instructionCaption": "Halt forward drive at Z=28.6m cliff edge and trigger 4-branch counterfactual DPO synthesis.",
+      "stitchStatus": "continuous_1m",
+      "dominantState": "route_blocked",
+      "meanReward": 0.12
+    },
+    {
+      "id": "seg_10",
+      "index": 10,
+      "label": "SEG-10: SEAM / CHASM HALT",
+      "startSec": 41.26,
+      "endSec": 49.96,
+      "instructionCaption": "Halt forward drive at Z=28.6m cliff edge and trigger 4-branch counterfactual DPO synthesis.",
+      "stitchStatus": "continuous_1m",
+      "dominantState": "route_blocked",
+      "meanReward": 0.12
+    },
+    {
+      "id": "seg_11",
+      "index": 11,
+      "label": "SEG-11: SEAM / CHASM HALT",
+      "startSec": 49.96,
+      "endSec": 50.65,
+      "instructionCaption": "Halt forward drive at Z=28.6m cliff edge and trigger 4-branch counterfactual DPO synthesis.",
+      "stitchStatus": "continuous_1m",
+      "dominantState": "route_blocked",
+      "meanReward": 0.12
+    },
+    {
       "id": "seg_12",
       "index": 12,
       "label": "SEG-12: COUNTERFACTUAL ASCENT",
-      "startSec": 61.25,
-      "endSec": 69.92,
-      "instructionCaption": "Traverse chasm/seam at Z=57.2m via synthesized thruster_hopper morphology.",
+      "startSec": 50.65,
+      "endSec": 58.85,
+      "instructionCaption": "Traverse chasm/seam at Z=28.7m via synthesized thruster_hopper morphology.",
       "stitchStatus": "continuous_1m",
       "dominantState": "scaling_ramp",
       "meanReward": 0.98
@@ -156,9 +156,9 @@
       "id": "seg_13",
       "index": 13,
       "label": "SEG-13: COUNTERFACTUAL ASCENT",
-      "startSec": 69.92,
-      "endSec": 78.52,
-      "instructionCaption": "Traverse chasm/seam at Z=64.9m via synthesized thruster_hopper morphology.",
+      "startSec": 58.85,
+      "endSec": 66.89,
+      "instructionCaption": "Traverse chasm/seam at Z=36.1m via synthesized thruster_hopper morphology.",
       "stitchStatus": "continuous_1m",
       "dominantState": "scaling_ramp",
       "meanReward": 0.98
@@ -167,1631 +167,1835 @@
       "id": "seg_14",
       "index": 14,
       "label": "SEG-14: COUNTERFACTUAL ASCENT",
-      "startSec": 78.52,
-      "endSec": 82.39,
-      "instructionCaption": "Traverse chasm/seam at Z=72.7m via synthesized thruster_hopper morphology.",
+      "startSec": 66.89,
+      "endSec": 74.14,
+      "instructionCaption": "Traverse chasm/seam at Z=46.6m via synthesized thruster_hopper morphology.",
       "stitchStatus": "continuous_1m",
       "dominantState": "scaling_ramp",
-      "meanReward": 0.95
+      "meanReward": 0.98
+    },
+    {
+      "id": "seg_15",
+      "index": 15,
+      "label": "SEG-15: CONTINUOUS CRUISE",
+      "startSec": 74.14,
+      "endSec": 80.56,
+      "instructionCaption": "Maintain 31.7 km/h center-corridor alignment under Earth 1.0g Nominal regime.",
+      "stitchStatus": "continuous_1m",
+      "dominantState": "navigating",
+      "meanReward": 0.94
+    },
+    {
+      "id": "seg_16",
+      "index": 16,
+      "label": "SEG-16: COUNTERFACTUAL ASCENT",
+      "startSec": 80.56,
+      "endSec": 81.15,
+      "instructionCaption": "Traverse chasm/seam at Z=63.7m via synthesized thruster_hopper morphology.",
+      "stitchStatus": "continuous_1m",
+      "dominantState": "scaling_ramp",
+      "meanReward": 0.98
     }
   ],
   "denseProcessRewards0_5s": [
     {
       "id": "tick_1",
-      "timestampSec": 1.64,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (30.7 km/h, slip 14%)",
+      "timestampSec": 1.15,
+      "rating": "suboptimal",
+      "score": 0.58,
+      "reason": "Rubric violation: LiDAR clearance 1.59m < 2.2m threshold",
       "position": [
         0,
         0.4490003433227543,
-        -7.6735880000000005
+        -3.188514
       ],
       "wheelSlipRatio": 0.14,
-      "clearanceMeters": 6.0959978103637695
+      "clearanceMeters": 1.5943752527236938
     },
     {
       "id": "tick_2",
-      "timestampSec": 2.36,
+      "timestampSec": 1.71,
       "rating": "suboptimal",
       "score": 0.58,
-      "reason": "Reactive LiDAR avoidance maneuver (clearance 4.4m)",
+      "reason": "Rubric violation: LiDAR clearance 0.00m < 2.2m threshold",
       "position": [
-        0.03699266179182337,
-        0.026259586334230787,
-        -5.9506600415017346
+        0.023425898907822266,
+        0.03170574951171738,
+        -1.591981700856196
       ],
       "wheelSlipRatio": 0.14,
-      "clearanceMeters": 4.365266799926758
+      "clearanceMeters": 0
     },
     {
       "id": "tick_3",
-      "timestampSec": 3.06,
+      "timestampSec": 2.24,
       "rating": "suboptimal",
       "score": 0.58,
-      "reason": "Reactive LiDAR avoidance maneuver (clearance 3.1m)",
+      "reason": "Reactive LiDAR avoidance maneuver (clearance 8.2m)",
       "position": [
-        0.15204900516434922,
-        0.01938629913330264,
-        -4.67756388378391
+        0.07482922444003211,
+        0.020479988098144997,
+        -0.2936337456558
       ],
       "wheelSlipRatio": 0.14,
-      "clearanceMeters": 3.088315486907959
+      "clearanceMeters": 8.199666023254395
     },
     {
       "id": "tick_4",
-      "timestampSec": 3.69,
-      "rating": "suboptimal",
-      "score": 0.58,
-      "reason": "Rubric violation: LiDAR clearance 2.18m < 2.2m threshold",
+      "timestampSec": 2.88,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (27.0 km/h, slip 14%)",
       "position": [
-        0.2922020029075085,
-        0.017616710662843222,
-        -3.7684592528903673
+        0.2279054817004009,
+        0.018030860900879953,
+        1.5909122846083914
       ],
       "wheelSlipRatio": 0.14,
-      "clearanceMeters": 2.1757168769836426
+      "clearanceMeters": 14.646407127380371
     },
     {
       "id": "tick_5",
-      "timestampSec": 4.3,
-      "rating": "suboptimal",
-      "score": 0.58,
-      "reason": "Rubric violation: LiDAR clearance 1.29m < 2.2m threshold",
+      "timestampSec": 3.4,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (28.2 km/h, slip 14%)",
       "position": [
-        0.47867603165250294,
-        0.015774166107177766,
-        -2.88740731744805
+        0.3431680865920895,
+        0.016885261535645832,
+        2.745576193150915
       ],
       "wheelSlipRatio": 0.14,
-      "clearanceMeters": 1.2916102409362793
+      "clearanceMeters": 14.251075744628906
     },
     {
       "id": "tick_6",
-      "timestampSec": 5,
-      "rating": "suboptimal",
-      "score": 0.58,
-      "reason": "Reactive LiDAR avoidance maneuver (clearance 14.6m)",
+      "timestampSec": 3.94,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (28.6 km/h, slip 14%)",
       "position": [
-        0.7926013127412999,
-        0.012694595336915285,
-        -1.7466161937456985
+        0.38419565387669924,
+        0.016471351623536065,
+        3.1405192879873516
       ],
       "wheelSlipRatio": 0.14,
-      "clearanceMeters": 14.552770614624023
+      "clearanceMeters": 13.92214584350586
     },
     {
       "id": "tick_7",
-      "timestampSec": 5.52,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (24.8 km/h, slip 14%)",
-      "position": [
-        1.1541372130914123,
-        0.005208477020263186,
-        -0.6043653699689413
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 14.47252368927002
-    },
-    {
-      "id": "tick_8",
-      "timestampSec": 6.53,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (26.1 km/h, slip 14%)",
-      "position": [
-        1.3772021422965437,
-        -0.0010352592468254318,
-        0.07679592435005278
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 14.397211074829102
-    },
-    {
-      "id": "tick_9",
-      "timestampSec": 7.83,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (27.6 km/h, slip 14%)",
-      "position": [
-        1.6895662527996114,
-        -0.010618873596190233,
-        1.0356234490939693
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 14.312078475952148
-    },
-    {
-      "id": "tick_10",
-      "timestampSec": 8.63,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (28.4 km/h, slip 14%)",
-      "position": [
-        1.926958891581999,
-        -0.019832351684569514,
-        1.7824034464540999
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 14.182604789733887
-    },
-    {
-      "id": "tick_11",
-      "timestampSec": 9.22,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (29.5 km/h, slip 14%)",
-      "position": [
-        2.3557180317359006,
-        -0.041826431274414363,
-        3.2027177773549216
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 13.179394721984863
-    },
-    {
-      "id": "tick_12",
-      "timestampSec": 9.73,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (30.1 km/h, slip 14%)",
-      "position": [
-        2.6882508842725286,
-        -0.05960601806640709,
-        4.40446754711472
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 12.073089599609375
-    },
-    {
-      "id": "tick_13",
-      "timestampSec": 10.42,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (30.5 km/h, slip 14%)",
-      "position": [
-        2.9960177897524733,
-        -0.08107546615600766,
-        5.633213055933851
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 10.999588966369629
-    },
-    {
-      "id": "tick_14",
-      "timestampSec": 10.99,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (30.8 km/h, slip 14%)",
-      "position": [
-        3.18481197250281,
-        -0.09526454925537348,
-        6.4648184390422365
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 10.224103927612305
-    },
-    {
-      "id": "tick_15",
-      "timestampSec": 11.5,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (30.9 km/h, slip 14%)",
-      "position": [
-        3.3591465422827658,
-        -0.10862708282470894,
-        7.304857730601788
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 9.495438575744629
-    },
-    {
-      "id": "tick_16",
-      "timestampSec": 12.14,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (31.1 km/h, slip 14%)",
-      "position": [
-        3.5181715177445443,
-        -0.12113388442993228,
-        8.152192169950672
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 8.73654842376709
-    },
-    {
-      "id": "tick_17",
-      "timestampSec": 12.77,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (31.2 km/h, slip 14%)",
-      "position": [
-        3.6612684252762646,
-        -0.13422862625122095,
-        9.005802526077458
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 8.034856796264648
-    },
-    {
-      "id": "tick_18",
-      "timestampSec": 13.47,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (31.3 km/h, slip 14%)",
-      "position": [
-        3.788017422251977,
-        -0.14673714447021521,
-        9.864771651059495
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 7.29746150970459
-    },
-    {
-      "id": "tick_19",
-      "timestampSec": 14.11,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (31.4 km/h, slip 14%)",
-      "position": [
-        3.898169626374082,
-        -0.15797622680664153,
-        10.728271165467381
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 6.565803527832031
-    },
-    {
-      "id": "tick_20",
-      "timestampSec": 14.86,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (31.4 km/h, slip 14%)",
-      "position": [
-        3.9916238027090793,
-        -0.16772957992553855,
-        11.595551257072671
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 5.84862756729126
-    },
-    {
-      "id": "tick_21",
-      "timestampSec": 15.48,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (31.5 km/h, slip 14%)",
-      "position": [
-        4.068406650049413,
-        -0.17593712234497244,
-        12.465932829194392
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 5.135349750518799
-    },
-    {
-      "id": "tick_22",
-      "timestampSec": 16.13,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (31.5 km/h, slip 14%)",
-      "position": [
-        4.128656032682271,
-        -0.18258426284790213,
-        13.33880141656798
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 4.4816365242004395
-    },
-    {
-      "id": "tick_23",
-      "timestampSec": 16.71,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (31.5 km/h, slip 14%)",
-      "position": [
-        4.172606608100143,
-        -0.18768130111694514,
-        14.213602418757143
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 3.8443620204925537
-    },
-    {
-      "id": "tick_24",
-      "timestampSec": 17.35,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (31.6 km/h, slip 14%)",
-      "position": [
-        4.200577398084736,
-        -0.19125141143799057,
-        15.089837299727687
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 3.223903179168701
-    },
-    {
-      "id": "tick_25",
-      "timestampSec": 17.95,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (31.6 km/h, slip 14%)",
-      "position": [
-        4.2129609364358585,
-        -0.19332978439331244,
-        15.967060477700935
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 2.709552526473999
-    },
-    {
-      "id": "tick_26",
-      "timestampSec": 18.52,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (31.6 km/h, slip 14%)",
-      "position": [
-        4.210213700265893,
-        -0.19395418548584187,
-        16.84487668865577
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 2.3959405422210693
-    },
-    {
-      "id": "tick_27",
-      "timestampSec": 19.09,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (31.6 km/h, slip 14%)",
-      "position": [
-        4.192847593436522,
-        -0.1931658134460475,
-        17.722938654355925
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 2.2559585571289062
-    },
-    {
-      "id": "tick_28",
-      "timestampSec": 19.77,
-      "rating": "suboptimal",
-      "score": 0.58,
-      "reason": "Rubric violation: LiDAR clearance 2.18m < 2.2m threshold",
-      "position": [
-        4.161422301281271,
-        -0.19101874160766874,
-        18.600944924516288
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 2.178786516189575
-    },
-    {
-      "id": "tick_29",
-      "timestampSec": 20.43,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (31.6 km/h, slip 14%)",
-      "position": [
-        4.116538376469741,
-        -0.18756618499756028,
-        19.47863779467286
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 3.3396406173706055
-    },
-    {
-      "id": "tick_30",
-      "timestampSec": 21.02,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (31.6 km/h, slip 14%)",
-      "position": [
-        4.058830948070821,
-        -0.16791051101684756,
-        20.355801227833698
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 3.2134816646575928
-    },
-    {
-      "id": "tick_31",
-      "timestampSec": 21.65,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (31.7 km/h, slip 14%)",
-      "position": [
-        3.9889639708889884,
-        -0.14993540191650684,
-        21.232258730005118
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 3.1809515953063965
-    },
-    {
-      "id": "tick_32",
-      "timestampSec": 22.38,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (31.7 km/h, slip 14%)",
-      "position": [
-        3.9076249512193804,
-        -0.14028758621216197,
-        22.107871147894546
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 3.155871868133545
-    },
-    {
-      "id": "tick_33",
-      "timestampSec": 23.02,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (31.7 km/h, slip 14%)",
-      "position": [
-        3.815520099412198,
-        -0.13271687316894817,
-        22.982534372012395
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 3.024122714996338
-    },
-    {
-      "id": "tick_34",
-      "timestampSec": 23.68,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (31.7 km/h, slip 14%)",
-      "position": [
-        3.7133698700388553,
-        -0.12552209854126303,
-        23.856176940452578
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 3.0624425411224365
-    },
-    {
-      "id": "tick_35",
-      "timestampSec": 24.38,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (31.7 km/h, slip 14%)",
-      "position": [
-        3.601904857859295,
-        -0.11873845291138149,
-        24.72875754818182
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 3.3122711181640625
-    },
-    {
-      "id": "tick_36",
-      "timestampSec": 25.16,
-      "rating": "failure",
-      "score": 0.12,
-      "reason": "64K context seam cliff halt (unbridged boundary tear ΔY = -2.4m)",
-      "position": [
-        3.5045624455168483,
-        -0.11334869766235717,
-        25.44797072694655
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 3.664484977722168
-    },
-    {
-      "id": "tick_37",
-      "timestampSec": 25.87,
-      "rating": "failure",
-      "score": 0.12,
-      "reason": "64K context seam cliff halt (unbridged boundary tear ΔY = -2.4m)",
-      "position": [
-        3.47963688841704,
-        -0.11196702957153659,
-        25.632132889387822
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 3.7530035972595215
-    },
-    {
-      "id": "tick_38",
-      "timestampSec": 26.43,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        3.4514511603013287,
-        -0.1110728797912638,
-        25.838759694361887
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 3.8548312187194824
-    },
-    {
-      "id": "tick_39",
-      "timestampSec": 27.48,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        3.3338314139717946,
-        -0.11150285720825595,
-        26.666541047657645
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 3.931570053100586
-    },
-    {
-      "id": "tick_40",
-      "timestampSec": 28.3,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        3.2455110681909813,
-        -0.11477599334717135,
-        27.244681612837383
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 3.940948009490967
-    },
-    {
-      "id": "tick_41",
-      "timestampSec": 29.18,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        3.108913367775446,
-        -0.1274014472961444,
-        28.07541706407063
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 4.206083297729492
-    },
-    {
-      "id": "tick_42",
-      "timestampSec": 29.94,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        2.993060817122829,
-        0.18243662643432512,
-        28.728056310290548
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 5.057505130767822
-    },
-    {
-      "id": "tick_43",
-      "timestampSec": 30.69,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        2.8662718332234323,
-        0.4527616844177236,
-        29.398680361759816
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 5.703667163848877
-    },
-    {
-      "id": "tick_44",
-      "timestampSec": 31.53,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        2.7289257531592153,
-        0.5345347442626942,
-        30.082759358073595
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 7.253026485443115
-    },
-    {
-      "id": "tick_45",
-      "timestampSec": 32.29,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        2.5814643087070572,
-        0.5592715950012187,
-        30.77678859320484
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 6.502143383026123
-    },
-    {
-      "id": "tick_46",
-      "timestampSec": 32.97,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        2.424376550246297,
-        0.5667539024353004,
-        31.478063157427325
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 5.815457820892334
-    },
-    {
-      "id": "tick_47",
-      "timestampSec": 33.68,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        2.2581862994350463,
-        0.5690177040100081,
-        32.1845029002333
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 5.095647811889648
-    },
-    {
-      "id": "tick_48",
-      "timestampSec": 34.47,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        2.083442590878646,
-        0.5697022209167473,
-        32.89451647812021
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 4.39907169342041
-    },
-    {
-      "id": "tick_49",
-      "timestampSec": 35.29,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        1.9007128145238132,
-        0.569909519195555,
-        33.60689573660436
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 3.721437692642212
-    },
-    {
-      "id": "tick_50",
-      "timestampSec": 35.94,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        1.7105780222784022,
-        0.5699717636108377,
-        34.320733612912946
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 3.0716066360473633
-    },
-    {
-      "id": "tick_51",
-      "timestampSec": 36.63,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        1.513629844177277,
-        0.5699910926818833,
-        35.03536025637653
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 2.4540741443634033
-    },
-    {
-      "id": "tick_52",
-      "timestampSec": 37.31,
-      "rating": "suboptimal",
-      "score": 0.58,
-      "reason": "Rubric violation: LiDAR clearance 1.90m < 2.2m threshold",
-      "position": [
-        1.3104685340009499,
-        0.5699966888427717,
-        35.75029324197412
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 1.9013530015945435
-    },
-    {
-      "id": "tick_53",
-      "timestampSec": 37.97,
-      "rating": "suboptimal",
-      "score": 0.58,
-      "reason": "Rubric violation: LiDAR clearance 1.49m < 2.2m threshold",
-      "position": [
-        1.1017017649091865,
-        0.5699988517761204,
-        36.46519867186222
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 1.4864675998687744
-    },
-    {
-      "id": "tick_54",
-      "timestampSec": 38.68,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        0.887943892415515,
-        0.5699992980957009,
-        37.1798606768243
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 12.141915321350098
-    },
-    {
-      "id": "tick_55",
-      "timestampSec": 39.55,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        0.6698154834752691,
-        0.5699988861083962,
-        37.89415738865774
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 12.026925086975098
-    },
-    {
-      "id": "tick_56",
-      "timestampSec": 40.2,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        0.4479429740632916,
-        0.5699993324279764,
-        38.608041890138985
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 11.973160743713379
-    },
-    {
-      "id": "tick_57",
-      "timestampSec": 41.03,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        0.22295836475689557,
-        0.5699989204406722,
-        39.32152698841555
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 11.914936065673828
-    },
-    {
-      "id": "tick_58",
-      "timestampSec": 41.81,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -0.004501102702940185,
-        0.5699993667602525,
-        40.034672921629124
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 11.696237564086914
-    },
-    {
-      "id": "tick_59",
-      "timestampSec": 42.73,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -0.2337933221264395,
-        0.5699989547729477,
-        40.74757731383929
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 11.591900825500488
-    },
-    {
-      "id": "tick_60",
-      "timestampSec": 43.6,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -0.46427177232765493,
-        0.5699985427856431,
-        41.460366852846654
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 11.572478294372559
-    },
-    {
-      "id": "tick_61",
-      "timestampSec": 44.39,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -0.6952860497229709,
-        0.5699989891052241,
-        42.17319028943197
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 11.603191375732422
-    },
-    {
-      "id": "tick_62",
-      "timestampSec": 45.25,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -0.9261824894035793,
-        0.5699985771179192,
-        42.88621245274078
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 11.94810962677002
-    },
-    {
-      "id": "tick_63",
-      "timestampSec": 46.08,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -1.1563048775598928,
-        0.5699990234374986,
-        43.599609051217826
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 12.222965240478516
-    },
-    {
-      "id": "tick_64",
-      "timestampSec": 46.87,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -1.384995257319662,
-        0.5699986114501943,
-        44.3135620864371
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 12.598008155822754
-    },
-    {
-      "id": "tick_65",
-      "timestampSec": 47.75,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -1.6115948301576646,
-        0.5699990577697753,
-        45.02825575211972
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 12.921683311462402
-    },
-    {
-      "id": "tick_66",
-      "timestampSec": 48.56,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -1.835444955532036,
-        0.5699986457824706,
-        45.74387272548677
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 13.043663024902344
-    },
-    {
-      "id": "tick_67",
-      "timestampSec": 49.42,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -2.055888251947694,
-        0.5699990921020499,
-        46.460590785108245
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 13.141861915588379
-    },
-    {
-      "id": "tick_68",
-      "timestampSec": 50.29,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -2.2722698030054405,
-        0.5699986801147456,
-        47.178579710322026
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 13.270217895507812
-    },
-    {
-      "id": "tick_69",
-      "timestampSec": 51.15,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -2.4839384720173854,
-        0.5699991264343267,
-        47.8979984334499
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 13.566247940063477
-    },
-    {
-      "id": "tick_70",
-      "timestampSec": 51.98,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -2.69024832837011,
-        0.569998714447022,
-        48.61899242846037
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 13.762250900268555
-    },
-    {
-      "id": "tick_71",
-      "timestampSec": 53.1,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -2.8905601879581875,
-        0.5699991607666013,
-        49.34169132920656
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 35
-    },
-    {
-      "id": "tick_72",
-      "timestampSec": 53.64,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -3.084243268689061,
-        0.20576077270507817,
-        50.06620677749966
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 11.400493621826172
-    },
-    {
-      "id": "tick_73",
-      "timestampSec": 54.56,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -3.270676960299034,
-        -0.08133127593994172,
-        50.79263050651522
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 10.9893159866333
-    },
-    {
-      "id": "tick_74",
-      "timestampSec": 55.43,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (27.5 km/h, slip 14%)",
-      "position": [
-        -3.450606991979035,
-        -0.14262252426147534,
-        51.52739227946037
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 10.231674194335938
-    },
-    {
-      "id": "tick_75",
-      "timestampSec": 56.27,
-      "rating": "normal",
-      "score": 0.94,
-      "reason": "Nominal trajectory (28.3 km/h, slip 14%)",
-      "position": [
-        -3.6260317763920473,
-        -0.15016230392456176,
-        52.28734790345035
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 9.802960395812988
-    },
-    {
-      "id": "tick_76",
-      "timestampSec": 57.12,
+      "timestampSec": 4.51,
       "rating": "normal",
       "score": 0.94,
       "reason": "Nominal trajectory (28.9 km/h, slip 14%)",
       "position": [
-        -3.7938344617380992,
-        -0.14887268066406303,
-        53.068476435634985
+        0.42608547567033084,
+        0.016045425415040226,
+        3.5396888512941693
       ],
       "wheelSlipRatio": 0.14,
-      "clearanceMeters": 9.924346923828125
+      "clearanceMeters": 13.585269927978516
     },
     {
-      "id": "tick_77",
-      "timestampSec": 58,
+      "id": "tick_8",
+      "timestampSec": 5.3,
       "rating": "normal",
       "score": 0.94,
       "reason": "Nominal trajectory (29.4 km/h, slip 14%)",
       "position": [
-        -3.9514897646665594,
-        -0.1489546318054211,
-        53.867416080349415
+        0.5115224826982474,
+        0.015168682098390271,
+        4.349120581338621
       ],
       "wheelSlipRatio": 0.14,
-      "clearanceMeters": 10.3937349319458
+      "clearanceMeters": 12.94799518585205
     },
     {
-      "id": "tick_78",
-      "timestampSec": 58.87,
+      "id": "tick_9",
+      "timestampSec": 6.03,
       "rating": "normal",
       "score": 0.94,
       "reason": "Nominal trajectory (29.9 km/h, slip 14%)",
       "position": [
-        -4.096969872660149,
-        -0.1529950942993175,
-        54.68133459993342
+        0.5977977556301826,
+        0.014272197723390735,
+        5.171087013099372
       ],
       "wheelSlipRatio": 0.14,
-      "clearanceMeters": 10.073240280151367
+      "clearanceMeters": 12.373412132263184
     },
     {
-      "id": "tick_79",
-      "timestampSec": 59.69,
+      "id": "tick_10",
+      "timestampSec": 6.63,
       "rating": "normal",
       "score": 0.94,
       "reason": "Nominal trajectory (30.2 km/h, slip 14%)",
       "position": [
-        -4.22866057727405,
-        -0.15890494918823306,
-        55.507828720031036
+        0.6834968020042401,
+        0.013373138427736526,
+        6.003336470286081
       ],
       "wheelSlipRatio": 0.14,
-      "clearanceMeters": 9.721100807189941
+      "clearanceMeters": 11.693105697631836
     },
     {
-      "id": "tick_80",
-      "timestampSec": 60.47,
+      "id": "tick_11",
+      "timestampSec": 7.23,
       "rating": "normal",
       "score": 0.94,
       "reason": "Nominal trajectory (30.5 km/h, slip 14%)",
       "position": [
-        -4.345322762865147,
-        -0.16599325942993276,
-        56.3448403415537
+        0.7674436703606534,
+        0.012483520507815043,
+        6.844042127757734
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 11.06163501739502
+    },
+    {
+      "id": "tick_12",
+      "timestampSec": 7.9,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (30.7 km/h, slip 14%)",
+      "position": [
+        0.8486710188681578,
+        0.011615360260012518,
+        7.691717038409445
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 10.398797988891602
+    },
+    {
+      "id": "tick_13",
+      "timestampSec": 8.71,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (30.9 km/h, slip 14%)",
+      "position": [
+        0.9263914162634508,
+        0.01022534942627236,
+        8.545146945379084
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 9.776941299438477
+    },
+    {
+      "id": "tick_14",
+      "timestampSec": 9.25,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.0 km/h, slip 14%)",
+      "position": [
+        0.9999712536248393,
+        0.008171867370606989,
+        9.403336976373826
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 9.116878509521484
+    },
+    {
+      "id": "tick_15",
+      "timestampSec": 10.15,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.2 km/h, slip 14%)",
+      "position": [
+        1.068907791238671,
+        0.006017105102539672,
+        10.265469221797822
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 8.50511360168457
+    },
+    {
+      "id": "tick_16",
+      "timestampSec": 10.68,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.3 km/h, slip 14%)",
+      "position": [
+        1.132809386585919,
+        0.003941307067872367,
+        11.130868885253031
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 7.906952381134033
+    },
+    {
+      "id": "tick_17",
+      "timestampSec": 11.49,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.3 km/h, slip 14%)",
+      "position": [
+        1.1913786990978912,
+        0.0020062713623063173,
+        11.998977215243752
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 7.318343639373779
+    },
+    {
+      "id": "tick_18",
+      "timestampSec": 12.06,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.4 km/h, slip 14%)",
+      "position": [
+        1.2443985523905257,
+        0.0002334556579600303,
+        12.869329821827536
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 6.733506202697754
+    },
+    {
+      "id": "tick_19",
+      "timestampSec": 12.75,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.5 km/h, slip 14%)",
+      "position": [
+        1.2917200979665022,
+        -0.0013642654418943214,
+        13.741539283199236
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 6.229740619659424
+    },
+    {
+      "id": "tick_20",
+      "timestampSec": 13.46,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.5 km/h, slip 14%)",
+      "position": [
+        1.3332529308009604,
+        -0.002783458709715549,
+        14.61528117848518
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 5.764262676239014
+    },
+    {
+      "id": "tick_21",
+      "timestampSec": 14.15,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.5 km/h, slip 14%)",
+      "position": [
+        1.3689568356114508,
+        -0.004019832611081627,
+        15.49028286189635
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 5.519784927368164
+    },
+    {
+      "id": "tick_22",
+      "timestampSec": 14.89,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.6 km/h, slip 14%)",
+      "position": [
+        1.3988348804248767,
+        -0.005072528839108975,
+        16.36631443275123
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 5.383706569671631
+    },
+    {
+      "id": "tick_23",
+      "timestampSec": 15.7,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.6 km/h, slip 14%)",
+      "position": [
+        1.4229276141200575,
+        -0.0059432640075650365,
+        17.243181465238933
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 6.590451240539551
+    },
+    {
+      "id": "tick_24",
+      "timestampSec": 16.26,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.6 km/h, slip 14%)",
+      "position": [
+        1.4413081630494975,
+        -0.006632038116452153,
+        18.120719148184712
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 6.240435600280762
+    },
+    {
+      "id": "tick_25",
+      "timestampSec": 16.95,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.6 km/h, slip 14%)",
+      "position": [
+        1.454078056708364,
+        -0.007144001007078109,
+        18.998787553739547
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 6.0274763107299805
+    },
+    {
+      "id": "tick_26",
+      "timestampSec": 17.67,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.6 km/h, slip 14%)",
+      "position": [
+        1.4613636429647188,
+        -0.007479152679440706,
+        19.877267808772945
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 5.885767936706543
+    },
+    {
+      "id": "tick_27",
+      "timestampSec": 18.28,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.6 km/h, slip 14%)",
+      "position": [
+        1.4633129794937094,
+        -0.004504673004147551,
+        20.7560589867791
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 5.747457981109619
+    },
+    {
+      "id": "tick_28",
+      "timestampSec": 19.01,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.6 km/h, slip 14%)",
+      "position": [
+        1.4600931100222747,
+        -0.0036793937683080227,
+        21.635075573583425
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 5.570598602294922
+    },
+    {
+      "id": "tick_29",
+      "timestampSec": 19.74,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.7 km/h, slip 14%)",
+      "position": [
+        1.4518876522096629,
+        -0.003527885437010093,
+        22.514245388811073
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 5.49400520324707
+    },
+    {
+      "id": "tick_30",
+      "timestampSec": 20.27,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.7 km/h, slip 14%)",
+      "position": [
+        1.4388946389416226,
+        -0.003910243988034321,
+        23.39350786831215
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 5.4964470863342285
+    },
+    {
+      "id": "tick_31",
+      "timestampSec": 20.77,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.7 km/h, slip 14%)",
+      "position": [
+        1.4306681420937557,
+        -0.004257205963132068,
+        23.833157749806155
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 5.6195387840271
+    },
+    {
+      "id": "tick_32",
+      "timestampSec": 21.35,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.7 km/h, slip 14%)",
+      "position": [
+        1.410891881182842,
+        -0.0059776649475077135,
+        24.71246760922931
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 5.828805446624756
+    },
+    {
+      "id": "tick_33",
+      "timestampSec": 21.93,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (30.2 km/h, slip 14%)",
+      "position": [
+        1.3936510903894046,
+        -0.009713428497312328,
+        25.549182349628108
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 5.883965492248535
+    },
+    {
+      "id": "tick_34",
+      "timestampSec": 22.54,
+      "rating": "suboptimal",
+      "score": 0.58,
+      "reason": "Reactive LiDAR avoidance maneuver (clearance 5.7m)",
+      "position": [
+        1.3857872111810494,
+        -0.0159254074096657,
+        26.332901528915098
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 5.743304252624512
+    },
+    {
+      "id": "tick_35",
+      "timestampSec": 23.2,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (28.4 km/h, slip 14%)",
+      "position": [
+        1.3893549350990397,
+        -0.028289730072018487,
+        27.11648358779383
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 5.657258987426758
+    },
+    {
+      "id": "tick_36",
+      "timestampSec": 23.84,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (29.0 km/h, slip 14%)",
+      "position": [
+        1.4010734909001297,
+        -0.04831959152221424,
+        27.91830723695866
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 5.6313347816467285
+    },
+    {
+      "id": "tick_37",
+      "timestampSec": 24.34,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.408266869905526,
+        -0.07035531616210813,
+        28.35047608022359
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.645044803619385
+    },
+    {
+      "id": "tick_38",
+      "timestampSec": 25.56,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.4101088108932716,
+        -0.0779867286682113,
+        28.46113749615052
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.649126052856445
+    },
+    {
+      "id": "tick_39",
+      "timestampSec": 26.39,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.4120718410815516,
+        -0.08941484451293824,
+        28.579073793560486
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648741245269775
+    },
+    {
+      "id": "tick_40",
+      "timestampSec": 27.05,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.4124006390599952,
+        -0.0911488304138168,
+        28.598827547937294
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648935794830322
+    },
+    {
+      "id": "tick_41",
+      "timestampSec": 27.74,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.4127532748918763,
+        -0.09317742156982314,
+        28.62001344950642
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.64890193939209
+    },
+    {
+      "id": "tick_42",
+      "timestampSec": 28.36,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.412902263530846,
+        -0.09411167144775218,
+        28.628964492919373
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648776531219482
+    },
+    {
+      "id": "tick_43",
+      "timestampSec": 29.12,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.4129813296570137,
+        -0.09464100646972506,
+        28.63371468281785
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648661136627197
+    },
+    {
+      "id": "tick_44",
+      "timestampSec": 29.77,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.4129986166691164,
+        -0.09476243972778178,
+        28.63475326399345
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648628234863281
+    },
+    {
+      "id": "tick_45",
+      "timestampSec": 30.5,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.41300592043173,
+        -0.09481520843505592,
+        28.635192064540142
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.6486124992370605
+    },
+    {
+      "id": "tick_46",
+      "timestampSec": 31.02,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.4130090062714342,
+        -0.09483793640136379,
+        28.63537745777112
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648604393005371
+    },
+    {
+      "id": "tick_47",
+      "timestampSec": 31.73,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.4130103100387092,
+        -0.09484778976440156,
+        28.63545578641121
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648601055145264
+    },
+    {
+      "id": "tick_48",
+      "timestampSec": 32.27,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.413010643882148,
+        -0.09484971237182324,
+        28.635475843290262
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.6486005783081055
+    },
+    {
+      "id": "tick_49",
+      "timestampSec": 33,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.413011001929236,
+        -0.09485269927978085,
+        28.635497354293047
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648599147796631
+    },
+    {
+      "id": "tick_50",
+      "timestampSec": 33.58,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.4130111532041307,
+        -0.09485396957397005,
+        28.635506442691725
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648599147796631
+    },
+    {
+      "id": "tick_51",
+      "timestampSec": 34.21,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.413011191939672,
+        -0.0948541755676216,
+        28.635508769872597
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648599147796631
+    },
+    {
+      "id": "tick_52",
+      "timestampSec": 34.81,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.4130112334835399,
+        -0.09485458755492608,
+        28.63551126577408
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648598670959473
+    },
+    {
+      "id": "tick_53",
+      "timestampSec": 35.54,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.4130112510358241,
+        -0.09485499954223073,
+        28.63551232029246
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648597717285156
+    },
+    {
+      "id": "tick_54",
+      "timestampSec": 36.24,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.4130112584516643,
+        -0.09485541152953542,
+        28.635512765826473
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648597717285156
+    },
+    {
+      "id": "tick_55",
+      "timestampSec": 36.79,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.413011260350569,
+        -0.09485475921630351,
+        28.635512879910184
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648599147796631
+    },
+    {
+      "id": "tick_56",
+      "timestampSec": 37.38,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.413011262387144,
+        -0.09485517120360762,
+        28.63551300226496
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648598670959473
+    },
+    {
+      "id": "tick_57",
+      "timestampSec": 38.13,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.413011263247597,
+        -0.0948547248840274,
+        28.635513053959855
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648599147796631
+    },
+    {
+      "id": "tick_58",
+      "timestampSec": 38.68,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.4130112634679253,
+        -0.09485493087767927,
+        28.635513067196882
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648598670959473
+    },
+    {
+      "id": "tick_59",
+      "timestampSec": 39.33,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.4130112637042271,
+        -0.09485534286498401,
+        28.635513081393594
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648597717285156
+    },
+    {
+      "id": "tick_60",
+      "timestampSec": 40.06,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.4130112638040646,
+        -0.09485489654540462,
+        28.635513087391704
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648599147796631
+    },
+    {
+      "id": "tick_61",
+      "timestampSec": 40.76,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.413011263846246,
+        -0.094855308532709,
+        28.635513089925908
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648597717285156
+    },
+    {
+      "id": "tick_62",
+      "timestampSec": 41.26,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.413011263857047,
+        -0.09485551452636078,
+        28.63551309057482
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648597717285156
+    },
+    {
+      "id": "tick_63",
+      "timestampSec": 41.84,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.413011263868631,
+        -0.09485506820678133,
+        28.635513091270774
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648598670959473
+    },
+    {
+      "id": "tick_64",
+      "timestampSec": 42.61,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.4130112638735253,
+        -0.09485548019408568,
+        28.635513091564814
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648597717285156
+    },
+    {
+      "id": "tick_65",
+      "timestampSec": 43.34,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.4130112638755932,
+        -0.09485503387450457,
+        28.635513091689045
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648598670959473
+    },
+    {
+      "id": "tick_66",
+      "timestampSec": 43.92,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.413011263876467,
+        -0.09485544586180931,
+        28.635513091741533
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648597717285156
+    },
+    {
+      "id": "tick_67",
+      "timestampSec": 44.55,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.4130112638766872,
+        -0.09485499954222991,
+        28.63551309175476
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648598670959473
+    },
+    {
+      "id": "tick_68",
+      "timestampSec": 45.28,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.4130112638768433,
+        -0.09485541152953429,
+        28.63551309176413
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648597717285156
+    },
+    {
+      "id": "tick_69",
+      "timestampSec": 45.91,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.4130112638769092,
+        -0.09485496520995318,
+        28.635513091768086
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648598670959473
+    },
+    {
+      "id": "tick_70",
+      "timestampSec": 46.57,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.413011263876937,
+        -0.09485537719725794,
+        28.635513091769756
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648597717285156
+    },
+    {
+      "id": "tick_71",
+      "timestampSec": 47.23,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.4130112638769488,
+        -0.09485493087767854,
+        28.635513091770463
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648598670959473
+    },
+    {
+      "id": "tick_72",
+      "timestampSec": 48.05,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.4130112638769539,
+        -0.09485534286498293,
+        28.63551309177076
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648597717285156
+    },
+    {
+      "id": "tick_73",
+      "timestampSec": 48.66,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.413011263876956,
+        -0.09485489654540182,
+        28.63551309177089
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648599147796631
+    },
+    {
+      "id": "tick_74",
+      "timestampSec": 49.22,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.4130112638769565,
+        -0.0948551025390547,
+        28.63551309177092
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648598670959473
+    },
+    {
+      "id": "tick_75",
+      "timestampSec": 49.96,
+      "rating": "failure",
+      "score": 0.12,
+      "reason": "Corridor blocked by unbridged chasm rupture ahead",
+      "position": [
+        1.4130112638769574,
+        -0.09485486221312651,
+        28.635513091770964
+      ],
+      "wheelSlipRatio": 0.38,
+      "clearanceMeters": 5.648599147796631
+    },
+    {
+      "id": "tick_76",
+      "timestampSec": 50.65,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        1.4140103347746718,
+        0.02994567108155107,
+        28.697104989430827
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 5.853945255279541
+    },
+    {
+      "id": "tick_77",
+      "timestampSec": 51.24,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        1.4180755209214286,
+        0.3613579008483981,
+        28.971786229621493
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 6.331790924072266
+    },
+    {
+      "id": "tick_78",
+      "timestampSec": 52.08,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        1.4233240155561575,
+        0.6327468479858483,
+        29.404082758280637
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 6.688276290893555
+    },
+    {
+      "id": "tick_79",
+      "timestampSec": 52.76,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        1.4258512834019865,
+        0.732309953211679,
+        29.6660609850021
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 6.870489120483398
+    },
+    {
+      "id": "tick_80",
+      "timestampSec": 53.46,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        1.4298068957506287,
+        0.9387962649529382,
+        30.26130339416649
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 8.288467407226562
+    },
+    {
+      "id": "tick_81",
+      "timestampSec": 54.02,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        1.4313395167189247,
+        1.104935883068418,
+        30.930704443362014
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 10.010295867919922
+    },
+    {
+      "id": "tick_82",
+      "timestampSec": 54.8,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        1.429568094619586,
+        1.2042267198329806,
+        31.654944372293375
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 10.79845142364502
+    },
+    {
+      "id": "tick_83",
+      "timestampSec": 55.44,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        1.4238669635048231,
+        1.2689781338352009,
+        32.41972435045801
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 12.049513816833496
+    },
+    {
+      "id": "tick_84",
+      "timestampSec": 55.95,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        1.4194029404652817,
+        1.2934197255435045,
+        32.81389232696921
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 12.207537651062012
+    },
+    {
+      "id": "tick_85",
+      "timestampSec": 56.8,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        1.407054880363171,
+        1.3320274712411573,
+        33.62052463038857
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 12.879523277282715
+    },
+    {
+      "id": "tick_86",
+      "timestampSec": 57.51,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        1.3899777159835192,
+        1.3614538300684669,
+        34.446154963343005
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 12.96796989440918
+    },
+    {
+      "id": "tick_87",
+      "timestampSec": 58.16,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        1.3680494023672314,
+        1.3851623730883054,
+        35.285787247551156
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 12.997357368469238
+    },
+    {
+      "id": "tick_88",
+      "timestampSec": 58.85,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        1.3412185634398421,
+        1.4052786335897534,
+        36.1357194228466
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 13.34259033203125
+    },
+    {
+      "id": "tick_89",
+      "timestampSec": 59.51,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        1.309486634629074,
+        1.4231242947357283,
+        36.99320726964695
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 13.47107982635498
+    },
+    {
+      "id": "tick_90",
+      "timestampSec": 60.28,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        1.2728953057385084,
+        1.4395349684001588,
+        37.85621579910537
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 12.990167617797852
+    },
+    {
+      "id": "tick_91",
+      "timestampSec": 60.9,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        1.2315178392202164,
+        1.4550379960785977,
+        38.72323541656457
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 12.628931999206543
+    },
+    {
+      "id": "tick_92",
+      "timestampSec": 61.6,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        1.1854531471733338,
+        1.4699668251197031,
+        39.59314599619771
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 12.248190879821777
+    },
+    {
+      "id": "tick_93",
+      "timestampSec": 62.13,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        1.1348217870977162,
+        1.4845324242350624,
+        40.465116391483825
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 11.976645469665527
+    },
+    {
+      "id": "tick_94",
+      "timestampSec": 62.84,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        1.0797632622386442,
+        1.4988687147672817,
+        41.33853015087482
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 12.205718994140625
+    },
+    {
+      "id": "tick_95",
+      "timestampSec": 63.36,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        1.0204341870973965,
+        1.5130592434422776,
+        42.21293060841384
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 11.786453247070312
+    },
+    {
+      "id": "tick_96",
+      "timestampSec": 64.08,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        0.9570070094018039,
+        1.5271582354746949,
+        43.087980295088435
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 11.314312934875488
+    },
+    {
+      "id": "tick_97",
+      "timestampSec": 64.82,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        0.8896690753175032,
+        1.5411978200812522,
+        43.96343093088869
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 10.989877700805664
+    },
+    {
+      "id": "tick_98",
+      "timestampSec": 65.64,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        0.8186218931667361,
+        1.5551981136410706,
+        44.83910123007225
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 11.167681694030762
+    },
+    {
+      "id": "tick_99",
+      "timestampSec": 66.24,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        0.7440804992980158,
+        1.5691730549373224,
+        45.71486047189833
       ],
       "wheelSlipRatio": 0.14,
       "clearanceMeters": 35
     },
     {
-      "id": "tick_81",
-      "timestampSec": 61.25,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -4.443959779965535,
-        -0.1727236557006844,
-        57.169146667231644
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 6.285388946533203
-    },
-    {
-      "id": "tick_82",
-      "timestampSec": 61.89,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -4.486648925669642,
-        -0.17630643463134926,
-        57.574941486466095
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 5.988546848297119
-    },
-    {
-      "id": "tick_83",
-      "timestampSec": 62.56,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -4.559586022834469,
-        -0.1844126968383808,
-        58.37627174576031
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 5.400015830993652
-    },
-    {
-      "id": "tick_84",
-      "timestampSec": 63.49,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -4.616695611778079,
-        -0.19364419937133842,
-        59.16652447016762
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 4.816634654998779
-    },
-    {
-      "id": "tick_85",
-      "timestampSec": 63.99,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -4.639522774850764,
-        -0.19800889587402382,
-        59.55829312975616
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 4.527195930480957
-    },
-    {
-      "id": "tick_86",
-      "timestampSec": 64.84,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -4.674005051111859,
-        -0.11730614471435614,
-        60.336362392780224
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 4.299488544464111
-    },
-    {
-      "id": "tick_87",
-      "timestampSec": 65.74,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -4.693847686373504,
-        0.0035499191284180318,
-        61.10843384798097
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 4.233142852783203
-    },
-    {
-      "id": "tick_88",
-      "timestampSec": 66.67,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -4.6992612985819715,
-        0.1358111648559568,
-        61.875702436466945
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 4.21557092666626
-    },
-    {
-      "id": "tick_89",
-      "timestampSec": 67.49,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -4.690386262902684,
-        0.27089709854126,
-        62.63903655567615
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 4.210343837738037
-    },
-    {
-      "id": "tick_90",
-      "timestampSec": 68.33,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -4.667326206872059,
-        0.4062928810119619,
-        63.3990508320797
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 4.2102837562561035
-    },
-    {
-      "id": "tick_91",
-      "timestampSec": 69.11,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -4.6301720655731105,
-        0.5412972755432117,
-        64.15616381650094
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 4.212378025054932
-    },
-    {
-      "id": "tick_92",
-      "timestampSec": 69.92,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -4.579019301411098,
-        0.6757326126098622,
-        64.91064381135267
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 4.213054656982422
-    },
-    {
-      "id": "tick_93",
-      "timestampSec": 70.74,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -4.513980128692549,
-        0.8095714263916005,
-        65.66264536517392
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 4.214115142822266
-    },
-    {
-      "id": "tick_94",
-      "timestampSec": 71.53,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -4.435192057921286,
-        0.9428128585815411,
-        66.41223842582441
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 4.216148853302002
-    },
-    {
-      "id": "tick_95",
-      "timestampSec": 72.31,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -4.3428237085580745,
-        1.0754620590209945,
-        67.15943170959895
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 4.217665195465088
-    },
-    {
-      "id": "tick_96",
-      "timestampSec": 73.1,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -4.237078580821935,
-        1.2075190277099606,
-        67.90419149985797
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 4.2183451652526855
-    },
-    {
-      "id": "tick_97",
-      "timestampSec": 73.82,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -4.179263432397494,
-        1.273324352264404,
-        68.27564049133507
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 4.21904182434082
-    },
-    {
-      "id": "tick_98",
-      "timestampSec": 74.45,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -4.053916217587242,
-        1.404482673645019,
-        69.01663061106788
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 4.221127986907959
-    },
-    {
-      "id": "tick_99",
-      "timestampSec": 75.3,
-      "rating": "normal",
-      "score": 0.98,
-      "reason": "Optimal counterfactual traversal (thruster_hopper)",
-      "position": [
-        -3.9158654835907365,
-        1.5350307388305662,
-        69.75500987728337
-      ],
-      "wheelSlipRatio": 0.14,
-      "clearanceMeters": 4.222682952880859
-    },
-    {
       "id": "tick_100",
-      "timestampSec": 76.16,
+      "timestampSec": 66.89,
       "rating": "normal",
       "score": 0.98,
       "reason": "Optimal counterfactual traversal (thruster_hopper)",
       "position": [
-        -3.7654475078556215,
-        1.6649556732177746,
-        70.49069788480534
+        0.666272863451925,
+        1.583131599123516,
+        46.59061632183213
       ],
       "wheelSlipRatio": 0.14,
       "clearanceMeters": 35
     },
     {
       "id": "tick_101",
-      "timestampSec": 76.95,
+      "timestampSec": 67.67,
       "rating": "normal",
       "score": 0.98,
       "reason": "Optimal counterfactual traversal (thruster_hopper)",
       "position": [
-        -3.603036076586251,
-        1.7942506103515639,
-        71.22362066167118
+        0.58543929412981,
+        1.5970786191910102,
+        47.4663057825804
       ],
       "wheelSlipRatio": 0.14,
       "clearanceMeters": 35
     },
     {
       "id": "tick_102",
-      "timestampSec": 77.69,
+      "timestampSec": 68.21,
       "rating": "normal",
       "score": 0.98,
       "reason": "Optimal counterfactual traversal (thruster_hopper)",
       "position": [
-        -3.429041319258759,
-        1.922909542083743,
-        71.95371648885886
+        0.5439661032357274,
+        1.6040484864783,
+        47.90411225486464
       ],
       "wheelSlipRatio": 0.14,
       "clearanceMeters": 35
     },
     {
       "id": "tick_103",
-      "timestampSec": 78.52,
+      "timestampSec": 68.9,
       "rating": "normal",
       "score": 0.98,
       "reason": "Optimal counterfactual traversal (thruster_hopper)",
       "position": [
-        -3.2439082221346647,
-        1.432511199951176,
-        72.68094053308508
+        0.4590696722694951,
+        1.6179820983932376,
+        48.77963200662252
       ],
       "wheelSlipRatio": 0.14,
       "clearanceMeters": 35
     },
     {
       "id": "tick_104",
-      "timestampSec": 79.37,
-      "rating": "suboptimal",
-      "score": 0.58,
-      "reason": "Rubric violation: LiDAR clearance 0.58m < 3.5m threshold",
+      "timestampSec": 69.66,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
       "position": [
-        -3.0481149109902486,
-        0.9864667243957566,
-        73.40526847111208
+        0.37179790957591125,
+        1.631909213595458,
+        49.655015985798826
       ],
       "wheelSlipRatio": 0.14,
-      "clearanceMeters": 0.5848379135131836
+      "clearanceMeters": 35
     },
     {
       "id": "tick_105",
-      "timestampSec": 80.22,
+      "timestampSec": 70.22,
       "rating": "normal",
       "score": 0.98,
       "reason": "Optimal counterfactual traversal (thruster_hopper)",
       "position": [
-        -2.8421707761847173,
-        0.8838334083557176,
-        74.12669924503189
+        0.2824291804438017,
+        1.6458333038666262,
+        50.53026073524287
       ],
       "wheelSlipRatio": 0.14,
-      "clearanceMeters": 8.39957332611084
+      "clearanceMeters": 35
     },
     {
       "id": "tick_106",
-      "timestampSec": 81.05,
+      "timestampSec": 70.86,
       "rating": "normal",
       "score": 0.98,
       "reason": "Optimal counterfactual traversal (thruster_hopper)",
       "position": [
-        -2.6266145000668244,
-        0.8849590950012252,
-        74.84525705860769
+        0.19125108093656584,
+        1.6597515786348036,
+        51.4053723842219
       ],
       "wheelSlipRatio": 0.14,
-      "clearanceMeters": 8.086296081542969
+      "clearanceMeters": 35
     },
     {
       "id": "tick_107",
-      "timestampSec": 81.87,
+      "timestampSec": 71.61,
       "rating": "normal",
       "score": 0.98,
       "reason": "Optimal counterfactual traversal (thruster_hopper)",
       "position": [
-        -2.4020120363301314,
-        0.9173511848449749,
-        75.56099270275907
+        0.09855962552734623,
+        1.5302651610220823,
+        52.280364642707546
       ],
       "wheelSlipRatio": 0.14,
-      "clearanceMeters": 7.9925127029418945
+      "clearanceMeters": 35
     },
     {
       "id": "tick_108",
-      "timestampSec": 82.39,
+      "timestampSec": 72.25,
       "rating": "normal",
       "score": 0.98,
       "reason": "Optimal counterfactual traversal (thruster_hopper)",
       "position": [
-        -2.286502302235784,
-        0.9376387786865277,
-        75.91782554344454
+        0.004658392858003624,
+        1.4290367047020895,
+        53.155257200820905
       ],
       "wheelSlipRatio": 0.14,
-      "clearanceMeters": 7.974732875823975
+      "clearanceMeters": 35
+    },
+    {
+      "id": "tick_109",
+      "timestampSec": 72.93,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        -0.09014236723592554,
+        1.4098251215635442,
+        54.03007442058062
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 35
+    },
+    {
+      "id": "tick_110",
+      "timestampSec": 73.53,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        -0.18552666206794644,
+        1.409581582591935,
+        54.90484423804889
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 35
+    },
+    {
+      "id": "tick_111",
+      "timestampSec": 74.14,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.7 km/h, slip 14%)",
+      "position": [
+        -0.2807167090636379,
+        1.1159940248400468,
+        55.77964472226538
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 35
+    },
+    {
+      "id": "tick_112",
+      "timestampSec": 74.93,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.7 km/h, slip 14%)",
+      "position": [
+        -0.3278881400544906,
+        0.9429921848988965,
+        56.21709351041987
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 35
+    },
+    {
+      "id": "tick_113",
+      "timestampSec": 75.74,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.7 km/h, slip 14%)",
+      "position": [
+        -0.4663226512275038,
+        0.5262708022876301,
+        57.52977608966762
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 21.28830337524414
+    },
+    {
+      "id": "tick_114",
+      "timestampSec": 76.41,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.7 km/h, slip 14%)",
+      "position": [
+        -0.5550967369199222,
+        0.3479372384824014,
+        58.40526740755831
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 20.400911331176758
+    },
+    {
+      "id": "tick_115",
+      "timestampSec": 77.1,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.7 km/h, slip 14%)",
+      "position": [
+        -0.6403320279430815,
+        0.22942881913997565,
+        59.28111382242392
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 19.5180606842041
+    },
+    {
+      "id": "tick_116",
+      "timestampSec": 77.62,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.7 km/h, slip 14%)",
+      "position": [
+        -0.7215347407012238,
+        -6.99806688311247,
+        60.15734611999111
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 12.951021194458008
+    },
+    {
+      "id": "tick_117",
+      "timestampSec": 78.22,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.7 km/h, slip 14%)",
+      "position": [
+        -0.7983057866213538,
+        -13.195790566422444,
+        61.033980078759434
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 12.464189529418945
+    },
+    {
+      "id": "tick_118",
+      "timestampSec": 78.96,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.7 km/h, slip 14%)",
+      "position": [
+        -0.8703264826854112,
+        -15.145190641618026,
+        61.911018914855894
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 12.287236213684082
+    },
+    {
+      "id": "tick_119",
+      "timestampSec": 79.8,
+      "rating": "normal",
+      "score": 0.94,
+      "reason": "Nominal trajectory (31.7 km/h, slip 14%)",
+      "position": [
+        -0.9373469276398875,
+        -15.797904345535434,
+        62.78845549943171
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 10.536558151245117
+    },
+    {
+      "id": "tick_120",
+      "timestampSec": 80.56,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        -0.9992623200912891,
+        -15.912858473220313,
+        63.666268528075896
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 9.658245086669922
+    },
+    {
+      "id": "tick_121",
+      "timestampSec": 81.15,
+      "rating": "normal",
+      "score": 0.98,
+      "reason": "Optimal counterfactual traversal (thruster_hopper)",
+      "position": [
+        -1.0284256332803494,
+        -15.774360448772782,
+        64.10529889465425
+      ],
+      "wheelSlipRatio": 0.14,
+      "clearanceMeters": 12.171929359436035
     }
   ],
   "counterfactualDpoPreferencePairs": [
     {
-      "forkId": "fork_1792974052679",
-      "simTimeSec": 32.75,
-      "triggerReason": "Operator triggered 4x Counterfactual Multiverse DPO Fork",
+      "forkId": "fork_1792976158114",
+      "simTimeSec": 45.91,
+      "triggerReason": "Auto-Fork: Corridor Block detected by 0.5s Process Reward",
       "stateVector": {
         "position": [
-          2.50409166847749,
-          0.5640993652343723,
-          31.126663101039263
+          1.4130112638769092,
+          -0.09485496520995318,
+          28.635513091768086
         ],
-        "headingRad": -0.21764120761365513,
+        "headingRad": 0.01664329791026059,
         "physicsRegime": "Earth 1.0g Nominal"
       },
       "chosen": {
         "policy": "argon_1m_counterfactual_optimal",
         "outcomeScore": 4.9,
-        "actionDsl": "MORPH_ROVER { mode: \"thruster_hopper\", suspensionHeight: 1.45, trackWidthScale: 1.32, thrusterBoost: true }\nDEPLOY_COUNTERMEASURE { type: \"deployable_bridge\", position: [0, 0.3, 41.1], dimensions: [6.0, 0.5, 18.0] }",
+        "actionDsl": "MORPH_ROVER { mode: \"thruster_hopper\", suspensionHeight: 1.45, trackWidthScale: 1.32, thrusterBoost: true }\nDEPLOY_COUNTERMEASURE { type: \"deployable_bridge\", position: [0, 0.3, 38.6], dimensions: [6.0, 0.5, 18.0] }",
         "trajectory": [
           [
-            2.5,
-            0.56,
-            31.13
+            1.41,
+            -0.09,
+            28.64
           ],
           [
-            2.19,
-            1.13,
-            32.5
+            1.43,
+            0.35,
+            30.05
           ],
           [
-            1.86,
-            1.58,
-            33.87
+            1.44,
+            0.57,
+            31.46
           ],
           [
-            1.53,
-            2,
-            35.24
+            1.45,
+            0.61,
+            32.87
           ],
           [
-            1.18,
-            2.36,
-            36.61
+            1.45,
+            0.45,
+            34.28
           ],
           [
-            0.83,
-            2.66,
-            37.97
-          ],
-          [
-            0.46,
-            2.88,
-            39.34
-          ],
-          [
-            0.08,
-            3.02,
-            40.69
-          ],
-          [
-            -0.3,
-            3.06,
-            42.05
-          ],
-          [
-            -0.7,
-            3.02,
-            43.4
-          ],
-          [
-            -1.11,
-            0.51,
-            44.75
-          ],
-          [
-            -1.52,
-            0.91,
-            46.1
-          ],
-          [
-            -1.95,
-            1.09,
-            47.44
-          ],
-          [
-            -2.39,
-            1.04,
-            48.78
-          ],
-          [
-            -2.83,
-            0.78,
-            50.12
-          ],
-          [
-            -3.29,
-            0.4,
-            51.46
-          ],
-          [
-            -3.76,
+            1.44,
             0.2,
-            52.79
+            35.69
+          ],
+          [
+            1.43,
+            0.2,
+            37.1
+          ],
+          [
+            1.41,
+            0.2,
+            38.51
+          ],
+          [
+            1.39,
+            0.2,
+            39.91
+          ],
+          [
+            1.36,
+            0.2,
+            41.32
+          ],
+          [
+            1.32,
+            0.2,
+            42.73
+          ],
+          [
+            1.28,
+            0.2,
+            44.14
+          ],
+          [
+            1.23,
+            0.37,
+            45.55
+          ],
+          [
+            1.17,
+            0.55,
+            46.96
+          ],
+          [
+            1.11,
+            0.53,
+            48.37
+          ],
+          [
+            1.05,
+            0.33,
+            49.78
+          ],
+          [
+            0.98,
+            0.2,
+            51.19
           ]
         ]
       },
@@ -1799,95 +2003,95 @@
         {
           "policy": "vla_baseline_64k",
           "outcomeScore": 1,
-          "actionDsl": "// REJECTED: Unmodified forward velocity into seam/chasm @ Z=43.1m",
+          "actionDsl": "// REJECTED: Unmodified forward velocity into seam/chasm @ Z=40.6m",
           "trajectory": [
             [
-              2.5,
-              0.56,
-              31.13
+              1.41,
+              -0.09,
+              28.64
             ],
             [
-              2.23,
+              1.44,
               0.1,
-              32.37
+              29.91
             ],
             [
-              2.23,
+              1.44,
               0.1,
-              32.37
+              29.91
             ],
             [
-              2.23,
+              1.44,
               0.1,
-              32.37
+              29.91
             ],
             [
-              2.23,
+              1.44,
               0.1,
-              32.37
+              29.91
             ],
             [
-              2.23,
+              1.44,
               0.1,
-              32.37
+              29.91
             ],
             [
-              2.23,
+              1.44,
               0.1,
-              32.37
+              29.91
             ],
             [
-              2.23,
+              1.44,
               0.1,
-              32.37
+              29.91
             ],
             [
-              2.23,
+              1.44,
               0.1,
-              32.37
+              29.91
             ],
             [
-              2.23,
+              1.44,
               0.1,
-              32.37
+              29.91
             ],
             [
-              2.23,
+              1.44,
               0.1,
-              32.37
+              29.91
             ],
             [
-              2.23,
+              1.44,
               0.1,
-              32.37
+              29.91
             ],
             [
-              2.23,
+              1.44,
               0.1,
-              32.37
+              29.91
             ],
             [
-              2.23,
+              1.44,
               0.1,
-              32.37
+              29.91
             ],
             [
-              2.23,
+              1.44,
               0.1,
-              32.37
+              29.91
             ],
             [
-              2.23,
+              1.44,
               0.1,
-              32.37
+              29.91
             ],
             [
-              2.23,
+              1.44,
               0.1,
-              32.37
+              29.91
             ]
           ],
-          "rejectionReason": "Rollout halted at Z=32.4m due to unbridged elevation drop."
+          "rejectionReason": "Rollout halted at Z=29.9m due to unbridged elevation drop."
         },
         {
           "policy": "reactive_lidar_swerve",
@@ -1895,92 +2099,92 @@
           "actionDsl": "// REJECTED: High-slip lateral swerve (steer=-0.65 rad)",
           "trajectory": [
             [
-              2.5,
-              0.56,
-              31.13
+              1.41,
+              -0.09,
+              28.64
             ],
             [
-              2.14,
-              0.57,
-              32.24
-            ],
-            [
-              1.67,
-              0.57,
-              33.31
-            ],
-            [
-              1.1,
-              0.57,
-              34.33
-            ],
-            [
-              0.43,
-              0.57,
-              35.29
-            ],
-            [
-              -0.33,
-              0.57,
-              36.18
-            ],
-            [
-              -1.17,
-              0.57,
-              37
-            ],
-            [
-              -2.08,
-              0.57,
-              37.72
-            ],
-            [
-              -2.96,
-              0.57,
-              38.5
-            ],
-            [
-              -3.8,
+              1.32,
               0.2,
-              39.32
+              29.8
             ],
             [
-              -4.59,
+              1.11,
               0.2,
-              40.18
+              30.95
             ],
             [
-              -5.33,
+              0.79,
               0.2,
-              41.08
+              32.08
             ],
             [
-              -6.03,
+              0.37,
               0.2,
-              42.02
+              33.17
             ],
             [
-              -6.67,
+              -0.17,
               0.2,
-              43
+              34.21
             ],
             [
-              -7.27,
+              -0.8,
               0.2,
-              44
+              35.2
             ],
             [
-              -7.81,
+              -1.52,
               0.2,
-              45.04
+              36.12
             ],
             [
-              -8.29,
+              -2.19,
               0.2,
-              46.11
+              37.07
+            ],
+            [
+              -2.81,
+              0.2,
+              38.06
+            ],
+            [
+              -3.38,
+              0.2,
+              39.09
+            ],
+            [
+              -3.9,
+              0.2,
+              40.14
+            ],
+            [
+              -4.36,
+              0.2,
+              41.21
+            ],
+            [
+              -4.76,
+              0.2,
+              42.31
+            ],
+            [
+              -5.1,
+              0.2,
+              43.43
+            ],
+            [
+              -5.39,
+              0.2,
+              44.57
+            ],
+            [
+              -5.61,
+              0.2,
+              45.71
             ]
           ],
-          "rejectionReason": "Traversed 15.0m with 7 wheel-slip violations."
+          "rejectionReason": "Traversed 17.1m with 7 wheel-slip violations."
         },
         {
           "policy": "codesign_widetrack_crawl",
@@ -1988,293 +2192,293 @@
           "actionDsl": "MORPH_ROVER { mode: \"wide_track_heavy\", suspensionHeight: 1.35, trackWidthScale: 1.38, thrusterBoost: false }",
           "trajectory": [
             [
-              2.5,
-              0.56,
-              31.13
+              1.41,
+              -0.09,
+              28.64
             ],
             [
-              2.37,
-              0.64,
-              31.89
+              1.46,
+              0.2,
+              29.41
             ],
             [
-              2.26,
-              0.64,
-              32.67
+              1.54,
+              0.2,
+              30.19
             ],
             [
-              2.19,
-              0.64,
-              33.44
+              1.65,
+              0.2,
+              30.96
             ],
             [
-              2.15,
-              0.64,
-              34.22
+              1.79,
+              0.2,
+              31.73
             ],
             [
-              2.15,
-              0.64,
-              35
+              1.97,
+              0.2,
+              32.49
             ],
             [
               2.17,
-              0.64,
-              35.78
+              0.2,
+              33.24
             ],
             [
-              2.23,
-              0.64,
-              36.56
+              2.41,
+              0.2,
+              33.98
             ],
             [
-              2.27,
-              1.53,
-              37.34
+              2.63,
+              0.2,
+              34.73
             ],
             [
-              2.29,
-              2.06,
-              38.12
+              2.83,
+              0.2,
+              35.49
             ],
             [
-              2.29,
-              0.64,
-              38.9
+              3.01,
+              0.2,
+              36.25
             ],
             [
-              2.26,
-              0.64,
-              39.68
+              3.16,
+              0.2,
+              37.01
             ],
             [
-              2.22,
-              0.64,
-              40.46
+              3.3,
+              0.2,
+              37.78
             ],
             [
-              2.15,
-              0.64,
-              41.23
+              3.41,
+              0.2,
+              38.55
             ],
             [
-              2.06,
-              0.64,
-              42.01
+              3.51,
+              0.2,
+              39.32
             ],
             [
-              1.95,
-              0.64,
-              42.78
+              3.58,
+              0.2,
+              40.1
             ],
             [
-              1.82,
-              0.64,
-              43.55
+              3.64,
+              0.2,
+              40.88
             ]
           ],
-          "rejectionReason": "Traversed 12.4m (0.59 mean reward, 0 violations)."
+          "rejectionReason": "Traversed 12.2m (0.59 mean reward, 0 violations)."
         }
       ]
     },
     {
-      "forkId": "fork_1792974045098",
-      "simTimeSec": 25.16,
-      "triggerReason": "Auto-Fork: 64K Seam Cliff Halt detected by 0.5s Process Reward",
+      "forkId": "fork_1792976150021",
+      "simTimeSec": 37.82,
+      "triggerReason": "Operator triggered 4x Counterfactual Multiverse DPO Fork",
       "stateVector": {
         "position": [
-          3.5045624455168483,
-          -0.11334869766235717,
-          25.44797072694655
+          1.4130112629086307,
+          -0.09485537719726038,
+          28.6355130335952
         ],
-        "headingRad": -0.13452822642222056,
+        "headingRad": 0.01664329791026059,
         "physicsRegime": "Earth 1.0g Nominal"
       },
       "chosen": {
         "policy": "argon_1m_counterfactual_optimal",
         "outcomeScore": 4.9,
-        "actionDsl": "MORPH_ROVER { mode: \"thruster_hopper\", suspensionHeight: 1.45, trackWidthScale: 1.32, thrusterBoost: true }\nDEPLOY_COUNTERMEASURE { type: \"deployable_bridge\", position: [0, 0.3, 35.4], dimensions: [6.0, 0.5, 18.0] }",
+        "actionDsl": "MORPH_ROVER { mode: \"thruster_hopper\", suspensionHeight: 1.45, trackWidthScale: 1.32, thrusterBoost: true }\nDEPLOY_COUNTERMEASURE { type: \"deployable_bridge\", position: [0, 0.3, 38.6], dimensions: [6.0, 0.5, 18.0] }",
         "trajectory": [
           [
-            3.5,
-            -0.11,
-            25.45
+            1.41,
+            -0.09,
+            28.64
           ],
           [
-            3.3,
-            0.45,
-            26.84
-          ],
-          [
-            3.08,
-            0.87,
-            28.24
-          ],
-          [
-            2.85,
-            1.21,
-            29.63
-          ],
-          [
-            2.6,
             1.43,
-            31.01
+            0.35,
+            30.05
           ],
           [
-            2.34,
             1.44,
-            32.4
+            0.57,
+            31.46
           ],
           [
-            2.06,
-            1.22,
-            33.78
+            1.45,
+            0.61,
+            32.87
           ],
           [
-            1.77,
-            0.76,
-            35.16
+            1.45,
+            0.45,
+            34.28
           ],
           [
-            1.47,
+            1.44,
             0.2,
-            36.54
+            35.69
           ],
           [
-            1.15,
-            0.2,
-            37.91
+            1.43,
+            1.55,
+            37.1
           ],
           [
-            0.81,
-            0.2,
-            39.28
+            1.41,
+            1.08,
+            38.51
           ],
           [
-            0.46,
+            1.39,
             0.2,
-            40.65
+            39.91
           ],
           [
-            0.1,
+            1.36,
             0.2,
-            42.01
+            41.32
           ],
           [
-            -0.28,
+            1.32,
             0.2,
-            43.37
+            42.73
           ],
           [
-            -0.67,
+            1.28,
             0.2,
-            44.72
+            44.14
           ],
           [
-            -1.08,
-            0.2,
-            46.07
+            1.23,
+            0.37,
+            45.55
           ],
           [
-            -1.5,
+            1.17,
+            0.55,
+            46.96
+          ],
+          [
+            1.11,
+            0.53,
+            48.37
+          ],
+          [
+            1.05,
+            0.33,
+            49.78
+          ],
+          [
+            0.98,
             0.2,
-            47.42
+            51.19
           ]
         ]
       },
       "rejected": [
         {
           "policy": "vla_baseline_64k",
-          "outcomeScore": 1.1,
-          "actionDsl": "// REJECTED: Unmodified forward velocity into seam/chasm @ Z=37.4m",
+          "outcomeScore": 1,
+          "actionDsl": "// REJECTED: Unmodified forward velocity into seam/chasm @ Z=40.6m",
           "trajectory": [
             [
-              3.5,
-              -0.11,
-              25.45
+              1.41,
+              -0.09,
+              28.64
             ],
             [
-              3.34,
-              0.2,
-              26.71
-            ],
-            [
-              3.17,
-              0.2,
-              27.98
-            ],
-            [
-              3.01,
+              1.44,
               0.1,
-              29.24
+              29.91
             ],
             [
-              3.01,
+              1.44,
               0.1,
-              29.24
+              29.91
             ],
             [
-              3.01,
+              1.44,
               0.1,
-              29.24
+              29.91
             ],
             [
-              3.01,
+              1.44,
               0.1,
-              29.24
+              29.91
             ],
             [
-              3.01,
+              1.44,
               0.1,
-              29.24
+              29.91
             ],
             [
-              3.01,
+              1.44,
               0.1,
-              29.24
+              29.91
             ],
             [
-              3.01,
+              1.44,
               0.1,
-              29.24
+              29.91
             ],
             [
-              3.01,
+              1.44,
               0.1,
-              29.24
+              29.91
             ],
             [
-              3.01,
+              1.44,
               0.1,
-              29.24
+              29.91
             ],
             [
-              3.01,
+              1.44,
               0.1,
-              29.24
+              29.91
             ],
             [
-              3.01,
+              1.44,
               0.1,
-              29.24
+              29.91
             ],
             [
-              3.01,
+              1.44,
               0.1,
-              29.24
+              29.91
             ],
             [
-              3.01,
+              1.44,
               0.1,
-              29.24
+              29.91
             ],
             [
-              3.01,
+              1.44,
               0.1,
-              29.24
+              29.91
+            ],
+            [
+              1.44,
+              0.1,
+              29.91
+            ],
+            [
+              1.44,
+              0.1,
+              29.91
             ]
           ],
-          "rejectionReason": "Rollout halted at Z=29.2m due to unbridged elevation drop."
+          "rejectionReason": "Rollout halted at Z=29.9m due to unbridged elevation drop."
         },
         {
           "policy": "reactive_lidar_swerve",
@@ -2282,92 +2486,92 @@
           "actionDsl": "// REJECTED: High-slip lateral swerve (steer=-0.65 rad)",
           "trajectory": [
             [
-              3.5,
-              -0.11,
-              25.45
+              1.41,
+              -0.09,
+              28.64
             ],
             [
-              3.24,
+              1.32,
               0.2,
-              26.59
+              29.8
             ],
             [
-              2.86,
+              1.11,
               0.2,
-              27.69
+              30.95
             ],
             [
-              2.37,
+              0.79,
               0.2,
-              28.76
+              32.08
             ],
             [
-              1.79,
+              0.37,
               0.2,
-              29.77
+              33.17
             ],
             [
-              1.1,
+              -0.17,
               0.2,
-              30.72
+              34.21
             ],
             [
-              0.33,
+              -0.8,
               0.2,
-              31.6
+              35.2
             ],
             [
-              -0.52,
+              -1.52,
               0.2,
-              32.4
+              36.12
             ],
             [
-              -1.33,
+              -2.19,
               0.2,
-              33.25
-            ],
-            [
-              -2.09,
-              0.2,
-              34.13
+              37.07
             ],
             [
               -2.81,
               0.2,
-              35.06
+              38.06
             ],
             [
-              -3.48,
-              0.2,
-              36.02
-            ],
-            [
-              -4.09,
-              0.2,
-              37.01
-            ],
-            [
-              -4.66,
-              0.2,
-              38.04
-            ],
-            [
-              -5.17,
+              -3.38,
               0.2,
               39.09
             ],
             [
-              -5.62,
+              -3.9,
               0.2,
-              40.17
+              40.14
             ],
             [
-              -6.01,
+              -4.36,
               0.2,
-              41.27
+              41.21
+            ],
+            [
+              -4.76,
+              0.2,
+              42.31
+            ],
+            [
+              -5.1,
+              0.2,
+              43.43
+            ],
+            [
+              -5.39,
+              0.2,
+              44.57
+            ],
+            [
+              -5.61,
+              0.2,
+              45.71
             ]
           ],
-          "rejectionReason": "Traversed 15.8m with 7 wheel-slip violations."
+          "rejectionReason": "Traversed 17.1m with 7 wheel-slip violations."
         },
         {
           "policy": "codesign_widetrack_crawl",
@@ -2375,92 +2579,866 @@
           "actionDsl": "MORPH_ROVER { mode: \"wide_track_heavy\", suspensionHeight: 1.35, trackWidthScale: 1.38, thrusterBoost: false }",
           "trajectory": [
             [
-              3.5,
-              -0.11,
-              25.45
+              1.41,
+              -0.09,
+              28.64
             ],
             [
-              3.43,
+              1.46,
               0.2,
-              26.22
+              29.41
             ],
             [
-              3.39,
+              1.54,
               0.2,
-              27
+              30.19
             ],
             [
-              3.39,
+              1.65,
               0.2,
-              27.78
+              30.96
+            ],
+            [
+              1.79,
+              0.2,
+              31.73
+            ],
+            [
+              1.97,
+              0.2,
+              32.49
+            ],
+            [
+              2.17,
+              0.2,
+              33.24
+            ],
+            [
+              2.41,
+              0.2,
+              33.98
+            ],
+            [
+              2.63,
+              0.2,
+              34.73
+            ],
+            [
+              2.83,
+              0.2,
+              35.49
+            ],
+            [
+              3.01,
+              0.2,
+              36.25
+            ],
+            [
+              3.16,
+              0.2,
+              37.01
+            ],
+            [
+              3.3,
+              0.2,
+              37.78
             ],
             [
               3.41,
               0.2,
-              28.56
+              38.55
             ],
             [
-              3.47,
+              3.51,
               0.2,
-              29.34
+              39.32
             ],
             [
-              3.56,
+              3.58,
               0.2,
-              30.12
+              40.1
             ],
             [
-              3.69,
+              3.64,
               0.2,
-              30.89
-            ],
-            [
-              3.79,
-              0.2,
-              31.66
-            ],
-            [
-              3.87,
-              0.2,
-              32.43
-            ],
-            [
-              3.93,
-              0.2,
-              33.21
-            ],
-            [
-              3.97,
-              0.2,
-              33.99
-            ],
-            [
-              3.99,
-              0.2,
-              34.77
-            ],
-            [
-              3.99,
-              0.2,
-              35.55
-            ],
-            [
-              3.97,
-              0.2,
-              36.33
-            ],
-            [
-              3.92,
-              0.2,
-              37.11
-            ],
-            [
-              3.86,
-              0.2,
-              37.89
+              40.88
             ]
           ],
-          "rejectionReason": "Traversed 12.4m (0.59 mean reward, 0 violations)."
+          "rejectionReason": "Traversed 12.2m (0.59 mean reward, 0 violations)."
+        }
+      ]
+    },
+    {
+      "forkId": "fork_1792976144476",
+      "simTimeSec": 32.27,
+      "triggerReason": "Auto-Fork: Corridor Block detected by 0.5s Process Reward",
+      "stateVector": {
+        "position": [
+          1.413010643882148,
+          -0.09484971237182324,
+          28.635475843290262
+        ],
+        "headingRad": 0.01664329791026059,
+        "physicsRegime": "Earth 1.0g Nominal"
+      },
+      "chosen": {
+        "policy": "argon_1m_counterfactual_optimal",
+        "outcomeScore": 4.9,
+        "actionDsl": "MORPH_ROVER { mode: \"thruster_hopper\", suspensionHeight: 1.45, trackWidthScale: 1.32, thrusterBoost: true }\nDEPLOY_COUNTERMEASURE { type: \"deployable_bridge\", position: [0, 0.3, 38.6], dimensions: [6.0, 0.5, 18.0] }",
+        "trajectory": [
+          [
+            1.41,
+            -0.09,
+            28.64
+          ],
+          [
+            1.43,
+            0.35,
+            30.05
+          ],
+          [
+            1.44,
+            0.57,
+            31.46
+          ],
+          [
+            1.45,
+            0.61,
+            32.87
+          ],
+          [
+            1.45,
+            0.45,
+            34.28
+          ],
+          [
+            1.44,
+            3.3,
+            35.69
+          ],
+          [
+            1.43,
+            0.2,
+            37.1
+          ],
+          [
+            1.41,
+            5.5,
+            38.51
+          ],
+          [
+            1.39,
+            0.2,
+            39.91
+          ],
+          [
+            1.36,
+            0.2,
+            41.32
+          ],
+          [
+            1.32,
+            0.2,
+            42.73
+          ],
+          [
+            1.28,
+            0.2,
+            44.14
+          ],
+          [
+            1.23,
+            0.37,
+            45.55
+          ],
+          [
+            1.17,
+            0.55,
+            46.96
+          ],
+          [
+            1.11,
+            0.53,
+            48.37
+          ],
+          [
+            1.05,
+            0.33,
+            49.78
+          ],
+          [
+            0.98,
+            0.2,
+            51.19
+          ]
+        ]
+      },
+      "rejected": [
+        {
+          "policy": "vla_baseline_64k",
+          "outcomeScore": 1,
+          "actionDsl": "// REJECTED: Unmodified forward velocity into seam/chasm @ Z=40.6m",
+          "trajectory": [
+            [
+              1.41,
+              -0.09,
+              28.64
+            ],
+            [
+              1.44,
+              0.1,
+              29.91
+            ],
+            [
+              1.44,
+              0.1,
+              29.91
+            ],
+            [
+              1.44,
+              0.1,
+              29.91
+            ],
+            [
+              1.44,
+              0.1,
+              29.91
+            ],
+            [
+              1.44,
+              0.1,
+              29.91
+            ],
+            [
+              1.44,
+              0.1,
+              29.91
+            ],
+            [
+              1.44,
+              0.1,
+              29.91
+            ],
+            [
+              1.44,
+              0.1,
+              29.91
+            ],
+            [
+              1.44,
+              0.1,
+              29.91
+            ],
+            [
+              1.44,
+              0.1,
+              29.91
+            ],
+            [
+              1.44,
+              0.1,
+              29.91
+            ],
+            [
+              1.44,
+              0.1,
+              29.91
+            ],
+            [
+              1.44,
+              0.1,
+              29.91
+            ],
+            [
+              1.44,
+              0.1,
+              29.91
+            ],
+            [
+              1.44,
+              0.1,
+              29.91
+            ],
+            [
+              1.44,
+              0.1,
+              29.91
+            ]
+          ],
+          "rejectionReason": "Rollout halted at Z=29.9m due to unbridged elevation drop."
+        },
+        {
+          "policy": "reactive_lidar_swerve",
+          "outcomeScore": 3.5,
+          "actionDsl": "// REJECTED: High-slip lateral swerve (steer=-0.65 rad)",
+          "trajectory": [
+            [
+              1.41,
+              -0.09,
+              28.64
+            ],
+            [
+              1.32,
+              0.2,
+              29.8
+            ],
+            [
+              1.11,
+              0.2,
+              30.95
+            ],
+            [
+              0.79,
+              0.2,
+              32.08
+            ],
+            [
+              0.37,
+              0.2,
+              33.17
+            ],
+            [
+              -0.17,
+              0.2,
+              34.21
+            ],
+            [
+              -0.8,
+              0.2,
+              35.2
+            ],
+            [
+              -1.52,
+              0.2,
+              36.12
+            ],
+            [
+              -2.19,
+              0.2,
+              37.07
+            ],
+            [
+              -2.81,
+              0.2,
+              38.06
+            ],
+            [
+              -3.38,
+              0.2,
+              39.09
+            ],
+            [
+              -3.9,
+              0.2,
+              40.14
+            ],
+            [
+              -4.36,
+              0.2,
+              41.21
+            ],
+            [
+              -4.76,
+              0.2,
+              42.31
+            ],
+            [
+              -5.1,
+              0.2,
+              43.43
+            ],
+            [
+              -5.39,
+              0.2,
+              44.57
+            ],
+            [
+              -5.61,
+              0.2,
+              45.71
+            ]
+          ],
+          "rejectionReason": "Traversed 17.1m with 7 wheel-slip violations."
+        },
+        {
+          "policy": "codesign_widetrack_crawl",
+          "outcomeScore": 3.6,
+          "actionDsl": "MORPH_ROVER { mode: \"wide_track_heavy\", suspensionHeight: 1.35, trackWidthScale: 1.38, thrusterBoost: false }",
+          "trajectory": [
+            [
+              1.41,
+              -0.09,
+              28.64
+            ],
+            [
+              1.46,
+              0.2,
+              29.41
+            ],
+            [
+              1.54,
+              0.2,
+              30.19
+            ],
+            [
+              1.65,
+              0.2,
+              30.96
+            ],
+            [
+              1.79,
+              0.2,
+              31.73
+            ],
+            [
+              1.97,
+              0.2,
+              32.49
+            ],
+            [
+              2.17,
+              0.2,
+              33.24
+            ],
+            [
+              2.41,
+              0.2,
+              33.98
+            ],
+            [
+              2.63,
+              1.43,
+              34.73
+            ],
+            [
+              2.83,
+              1.48,
+              35.49
+            ],
+            [
+              3.01,
+              0.2,
+              36.25
+            ],
+            [
+              3.16,
+              1.99,
+              37.01
+            ],
+            [
+              3.3,
+              2.02,
+              37.78
+            ],
+            [
+              3.41,
+              0.2,
+              38.55
+            ],
+            [
+              3.51,
+              0.2,
+              39.32
+            ],
+            [
+              3.58,
+              0.2,
+              40.1
+            ],
+            [
+              3.64,
+              0.2,
+              40.88
+            ]
+          ],
+          "rejectionReason": "Traversed 12.2m (0.59 mean reward, 0 violations)."
+        }
+      ]
+    },
+    {
+      "forkId": "fork_1792976136546",
+      "simTimeSec": 24.34,
+      "triggerReason": "Auto-Fork: Corridor Block detected by 0.5s Process Reward",
+      "stateVector": {
+        "position": [
+          1.408266869905526,
+          -0.07035531616210813,
+          28.35047608022359
+        ],
+        "headingRad": 0.01664329791026059,
+        "physicsRegime": "Earth 1.0g Nominal"
+      },
+      "chosen": {
+        "policy": "argon_1m_counterfactual_optimal",
+        "outcomeScore": 4.9,
+        "actionDsl": "MORPH_ROVER { mode: \"thruster_hopper\", suspensionHeight: 1.45, trackWidthScale: 1.32, thrusterBoost: true }\nDEPLOY_COUNTERMEASURE { type: \"deployable_bridge\", position: [0, 0.3, 38.4], dimensions: [6.0, 0.5, 18.0] }",
+        "trajectory": [
+          [
+            1.41,
+            -0.07,
+            28.35
+          ],
+          [
+            1.43,
+            0.37,
+            29.76
+          ],
+          [
+            1.44,
+            0.63,
+            31.17
+          ],
+          [
+            1.44,
+            0.71,
+            32.58
+          ],
+          [
+            1.44,
+            0.57,
+            33.99
+          ],
+          [
+            1.44,
+            9.37,
+            35.4
+          ],
+          [
+            1.42,
+            0.2,
+            36.81
+          ],
+          [
+            1.41,
+            11.46,
+            38.22
+          ],
+          [
+            1.38,
+            0.2,
+            39.63
+          ],
+          [
+            1.35,
+            0.2,
+            41.04
+          ],
+          [
+            1.32,
+            0.2,
+            42.45
+          ],
+          [
+            1.27,
+            0.2,
+            43.86
+          ],
+          [
+            1.23,
+            0.24,
+            45.27
+          ],
+          [
+            1.17,
+            0.45,
+            46.68
+          ],
+          [
+            1.11,
+            0.46,
+            48.09
+          ],
+          [
+            1.05,
+            0.28,
+            49.49
+          ],
+          [
+            0.97,
+            0.2,
+            50.9
+          ]
+        ]
+      },
+      "rejected": [
+        {
+          "policy": "vla_baseline_64k",
+          "outcomeScore": 1,
+          "actionDsl": "// REJECTED: Unmodified forward velocity into seam/chasm @ Z=40.4m",
+          "trajectory": [
+            [
+              1.41,
+              -0.07,
+              28.35
+            ],
+            [
+              1.43,
+              0.1,
+              29.63
+            ],
+            [
+              1.43,
+              0.1,
+              29.63
+            ],
+            [
+              1.43,
+              0.1,
+              29.63
+            ],
+            [
+              1.43,
+              0.1,
+              29.63
+            ],
+            [
+              1.43,
+              0.1,
+              29.63
+            ],
+            [
+              1.43,
+              0.1,
+              29.63
+            ],
+            [
+              1.43,
+              0.1,
+              29.63
+            ],
+            [
+              1.43,
+              0.1,
+              29.63
+            ],
+            [
+              1.43,
+              0.1,
+              29.63
+            ],
+            [
+              1.43,
+              0.1,
+              29.63
+            ],
+            [
+              1.43,
+              0.1,
+              29.63
+            ],
+            [
+              1.43,
+              0.1,
+              29.63
+            ],
+            [
+              1.43,
+              0.1,
+              29.63
+            ],
+            [
+              1.43,
+              0.1,
+              29.63
+            ],
+            [
+              1.43,
+              0.1,
+              29.63
+            ],
+            [
+              1.43,
+              0.1,
+              29.63
+            ]
+          ],
+          "rejectionReason": "Rollout halted at Z=29.6m due to unbridged elevation drop."
+        },
+        {
+          "policy": "reactive_lidar_swerve",
+          "outcomeScore": 3.5,
+          "actionDsl": "// REJECTED: High-slip lateral swerve (steer=-0.65 rad)",
+          "trajectory": [
+            [
+              1.41,
+              -0.07,
+              28.35
+            ],
+            [
+              1.31,
+              0.2,
+              29.52
+            ],
+            [
+              1.11,
+              0.2,
+              30.67
+            ],
+            [
+              0.79,
+              0.2,
+              31.79
+            ],
+            [
+              0.36,
+              0.2,
+              32.88
+            ],
+            [
+              -0.17,
+              0.2,
+              33.93
+            ],
+            [
+              -0.8,
+              0.2,
+              34.91
+            ],
+            [
+              -1.52,
+              0.2,
+              35.83
+            ],
+            [
+              -2.2,
+              0.2,
+              36.79
+            ],
+            [
+              -2.82,
+              0.2,
+              37.78
+            ],
+            [
+              -3.39,
+              0.2,
+              38.8
+            ],
+            [
+              -3.9,
+              0.2,
+              39.85
+            ],
+            [
+              -4.36,
+              0.2,
+              40.93
+            ],
+            [
+              -4.76,
+              0.2,
+              42.03
+            ],
+            [
+              -5.11,
+              0.2,
+              43.15
+            ],
+            [
+              -5.39,
+              0.2,
+              44.28
+            ],
+            [
+              -5.62,
+              0.2,
+              45.43
+            ]
+          ],
+          "rejectionReason": "Traversed 17.1m with 7 wheel-slip violations."
+        },
+        {
+          "policy": "codesign_widetrack_crawl",
+          "outcomeScore": 3.6,
+          "actionDsl": "MORPH_ROVER { mode: \"wide_track_heavy\", suspensionHeight: 1.35, trackWidthScale: 1.38, thrusterBoost: false }",
+          "trajectory": [
+            [
+              1.41,
+              -0.07,
+              28.35
+            ],
+            [
+              1.45,
+              0.2,
+              29.13
+            ],
+            [
+              1.53,
+              0.2,
+              29.91
+            ],
+            [
+              1.64,
+              0.2,
+              30.68
+            ],
+            [
+              1.79,
+              0.2,
+              31.44
+            ],
+            [
+              1.96,
+              0.2,
+              32.2
+            ],
+            [
+              2.17,
+              0.2,
+              32.96
+            ],
+            [
+              2.41,
+              0.2,
+              33.7
+            ],
+            [
+              2.63,
+              7.08,
+              34.45
+            ],
+            [
+              2.82,
+              7.48,
+              35.2
+            ],
+            [
+              3,
+              6.79,
+              35.96
+            ],
+            [
+              3.16,
+              7.65,
+              36.73
+            ],
+            [
+              3.29,
+              8.05,
+              37.49
+            ],
+            [
+              3.41,
+              0.2,
+              38.26
+            ],
+            [
+              3.5,
+              0.2,
+              39.04
+            ],
+            [
+              3.58,
+              0.2,
+              39.82
+            ],
+            [
+              3.63,
+              0.2,
+              40.59
+            ]
+          ],
+          "rejectionReason": "Traversed 12.2m (0.59 mean reward, 0 violations)."
         }
       ]
     }
