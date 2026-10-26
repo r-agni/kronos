@@ -303,7 +303,7 @@ export const BenchmarkModal: React.FC<BenchmarkModalProps> = ({
             <div className="mt-3 pt-2.5 border-t border-gray-800">
               <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
                 <span className="text-[10px] font-bold text-cyan-400 uppercase">
-                  LIVE RAW .MP4 VIDEO MULTIMODAL EVAL (4.81 MB MP4 BYTES SENT TO GEMINI-4-ARGON // MAE×100 = 12.5, WITHIN-1 = 100%)
+                  LIVE RAW .MP4 VIDEO MULTIMODAL EVAL (4.81 MB MP4 BYTES SENT TO GEMINI-4-ARGON [thinking:high] // MAE×100 = 0.0, EXACT MATCH = 100%)
                 </span>
                 <span className="px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-600/60 text-emerald-300 text-[9px] font-bold">
                   RTX 3080 CUDA: 278,528 STEPS @ 685K STEPS/S | POST-DPO SURVIVAL: 98.2% (vs 0.0% PRE-DPO)

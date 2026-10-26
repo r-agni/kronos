@@ -2,66 +2,494 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  body {
-    background-color: #080c10;
-    color: #e2e8f0;
-    font-family: 'Chakra Petch', sans-serif;
-    user-select: none;
-    overflow: hidden;
-  }
+@font-face {
+  font-family: "Instrument Serif";
+  src: url(/static/fonts/InstrumentSerif-Regular.ttf) format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Instrument Serif";
+  src: url(/static/fonts/InstrumentSerif-Italic.ttf) format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Manrope";
+  src: url(/static/fonts/Manrope-Variable.ttf) format("truetype");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
 }
 
-/* Custom Tactical Scrollbars */
+/* Two-tone editorial (Ocean) + Proving Ground engineering workspace (Crusoe) */
+:root {
+  color-scheme: light;
+  --paper: #F8FBFF;
+  --paper-2: #EAF2FB;
+  --ink: #0B1B2B;
+  --ink-2: #3A4D63;
+  --muted: #5B6B7E;
+  --accent: #3B9EFF;
+  --wash: #DCEEFF;
+  --deep: #0B5CAD;
+  --good: #0D7A4E;
+  --good-wash: #DCFCE7;
+  --amber: #B45309;
+  --amber-wash: #FEF3C7;
+  --red: #B3261E;
+  --red-wash: #FBEAE7;
+  --rule: rgba(11, 27, 43, 0.18);
+  --rule-2: rgba(11, 27, 43, 0.09);
+  --serif: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --sans: "Manrope", "Segoe UI", system-ui, sans-serif;
+  --mono: ui-monospace, "Cascadia Mono", "IBM Plex Mono", Consolas, monospace;
+  --kitchen: url(/static/dither-kitchen.png);
+  --veil: url(/static/dither-veil.png);
+  --tile: url(/static/dither-tile.png);
+  --band: url(/static/dither-band.png);
+}
+
+/* Optional Crusoe Olive/Lime Tactical Theme Override */
+body.theme-crusoe {
+  color-scheme: dark;
+  --paper: #0e130b;
+  --paper-2: #151c11;
+  --ink: #eef5e0;
+  --ink-2: #b5c49e;
+  --muted: #8a9478;
+  --accent: #c8ff00;
+  --wash: rgba(200, 255, 0, 0.16);
+  --deep: #c8ff00;
+  --good: #c8ff00;
+  --good-wash: rgba(200, 255, 0, 0.14);
+  --amber: #ffc24b;
+  --amber-wash: rgba(255, 194, 75, 0.16);
+  --red: #ff4d6a;
+  --red-wash: rgba(255, 77, 106, 0.18);
+  --rule: rgba(200, 255, 0, 0.24);
+  --rule-2: rgba(200, 255, 0, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background: var(--paper);
+  color: var(--ink);
+  font: 500 13px/1.42 var(--sans);
+  user-select: none;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+.mono {
+  font-family: var(--mono);
+  font-size: 11.5px;
+}
+
+.serif {
+  font-family: var(--serif);
+}
+
+.kick {
+  font: 800 10px/1.2 var(--sans);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+.dots {
+  background-image: var(--kitchen);
+  background-size: cover;
+  background-position: center;
+  image-rendering: pixelated;
+}
+
+.band-strip {
+  flex: none;
+  height: 18px;
+  background: var(--band) repeat-x 0 0 / 1024px 18px;
+  image-rendering: pixelated;
+  border-bottom: 1px solid var(--ink);
+}
+
+body.theme-crusoe .band-strip {
+  filter: hue-rotate(255deg) saturate(1.8) brightness(0.85);
+}
+
+/* Ocean + Crusoe Buttons */
+.oc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 12px;
+  border: 1.5px solid var(--ink);
+  border-radius: 3px;
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.08s ease, background 0.12s ease, box-shadow 0.12s ease;
+}
+
+.oc-btn:hover:not(:disabled) {
+  background: var(--wash);
+}
+
+.oc-btn:active:not(:disabled) {
+  transform: translate(1px, 1px);
+}
+
+.oc-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.oc-btn.primary {
+  background: var(--accent);
+  color: #0B1B2B;
+  box-shadow: 2.5px 2.5px 0 var(--ink);
+}
+
+.oc-btn.primary:hover:not(:disabled) {
+  filter: brightness(1.04);
+}
+
+.oc-btn.ink {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.oc-btn.danger {
+  border-color: var(--red);
+  color: var(--red);
+  background: var(--red-wash);
+}
+
+.oc-btn.small {
+  height: 24px;
+  padding: 0 8px;
+  font-size: 11px;
+}
+
+/* Chips & Pills */
+.oc-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 1px 8px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-size: 11px;
+  line-height: 1.5;
+  white-space: nowrap;
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.oc-chip.wash {
+  background: var(--wash);
+  border-color: var(--ink);
+}
+
+.oc-chip.accent {
+  background: var(--accent);
+  border-color: var(--ink);
+  color: #0B1B2B;
+  font-weight: 800;
+}
+
+.oc-chip.good {
+  background: var(--good-wash);
+  border-color: var(--good);
+  color: var(--good);
+  font-weight: 700;
+}
+
+.oc-chip.bad {
+  background: var(--red-wash);
+  border-color: var(--red);
+  color: var(--red);
+  font-weight: 700;
+}
+
+.oc-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 10px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background: var(--paper);
+}
+
+.oc-pill.running {
+  background: var(--accent);
+  color: #0B1B2B;
+}
+
+.oc-pill.fractured {
+  background: var(--red-wash);
+  border-color: var(--red);
+  color: var(--red);
+}
+
+/* Panels */
+.oc-panel {
+  border: 1.5px solid var(--ink);
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.oc-panel > .ph {
+  flex: none;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 11px 5px;
+  border-bottom: 1px solid var(--ink);
+  background: var(--paper);
+  min-width: 0;
+}
+
+.oc-panel > .ph h2 {
+  font: 400 21px/1.05 var(--serif);
+  margin: 0;
+  white-space: nowrap;
+  color: var(--ink);
+}
+
+.oc-panel > .pb {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 8px 11px;
+}
+
+/* Brutalist shadow cards */
+.oc-card-accent {
+  background: var(--paper);
+  border: 1.5px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--accent);
+}
+
+.oc-card-ink {
+  background: var(--paper);
+  border: 1.5px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+
+.oc-card-red {
+  background: var(--red-wash);
+  border: 1.5px solid var(--red);
+  box-shadow: 4px 4px 0 var(--red);
+}
+
+/* Pipeline Stage Rows (Ocean #v-run .pipe .stage) */
+.oc-stage {
+  flex: 1 1 0;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  column-gap: 10px;
+  align-items: center;
+  padding: 4px 10px;
+  border-bottom: 1px solid var(--rule);
+  cursor: pointer;
+  position: relative;
+  transition: background 0.12s ease;
+}
+
+.oc-stage:last-child {
+  border-bottom: 0;
+}
+
+.oc-stage:hover {
+  background: var(--paper-2);
+}
+
+.oc-stage.on {
+  background: var(--accent);
+  color: #0B1B2B;
+}
+
+.oc-stage.on::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: var(--ink);
+}
+
+.oc-stage .n {
+  font: 400 27px/1 var(--serif);
+  text-align: center;
+}
+
+/* Step Cells (Ocean #v-run .steps .cell) */
+.oc-cell {
+  height: 36px;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  padding: 2px 6px;
+  font-size: 10.5px;
+  line-height: 1.25;
+  overflow: hidden;
+  cursor: pointer;
+  min-width: 0;
+  text-align: left;
+}
+
+.oc-cell:hover {
+  border-color: var(--ink);
+}
+
+.oc-cell.done {
+  background: var(--wash);
+  border-color: var(--ink-2);
+}
+
+.oc-cell.cur {
+  background: var(--accent);
+  color: #0B1B2B;
+  border: 2px solid var(--ink);
+}
+
+.oc-cell.suboptimal {
+  background: var(--amber-wash);
+  border-color: var(--amber);
+}
+
+.oc-cell.failed {
+  background: var(--red-wash);
+  border: 1.5px solid var(--red);
+}
+
+/* Control Group Cards (Ocean #v-run .ctrl .cg) */
+.oc-cg {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 5px 9px 6px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  flex: none;
+}
+
+.oc-cg.highlight {
+  background: var(--wash);
+  box-shadow: 3px 3px 0 var(--accent);
+}
+
+.oc-cg .lab {
+  font: 800 9.5px/1 var(--sans);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.oc-cg .lab i {
+  font-style: normal;
+  display: inline-grid;
+  place-items: center;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 9px;
+  letter-spacing: 0;
+}
+
+/* Tables */
+.oc-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.oc-table th {
+  text-align: left;
+  font: 800 9.5px/1.2 var(--sans);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  padding: 5px 6px;
+  border-bottom: 1.5px solid var(--ink);
+  position: sticky;
+  top: 0;
+  background: var(--paper);
+  z-index: 1;
+}
+
+.oc-table td {
+  padding: 5px 6px;
+  border-bottom: 1px solid var(--rule-2);
+  font-size: 12px;
+  vertical-align: middle;
+}
+
+.oc-table tr.ours td {
+  background: var(--wash);
+  font-weight: 800;
+  border-top: 1.5px solid var(--ink);
+  border-bottom: 1.5px solid var(--ink);
+}
+
+/* Custom Scrollbars */
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(14, 20, 27, 0.7);
+  background: var(--paper-2);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1f2937;
-  border-radius: 2px;
+  background: var(--ink-2);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #00f0ff;
+  background: var(--accent);
 }
-
-/* Tactical glowing animations */
-@keyframes pulse-cyan {
-  0%, 100% { opacity: 0.9; filter: drop-shadow(0 0 6px rgba(0, 240, 255, 0.7)); }
-  50% { opacity: 0.4; filter: drop-shadow(0 0 2px rgba(0, 240, 255, 0.3)); }
-}
-
-@keyframes pulse-red {
-  0%, 100% { opacity: 1; filter: drop-shadow(0 0 10px rgba(255, 51, 68, 0.8)); }
-  50% { opacity: 0.4; filter: drop-shadow(0 0 2px rgba(255, 51, 68, 0.3)); }
-}
-
-.animate-pulse-cyan {
-  animation: pulse-cyan 2s infinite ease-in-out;
-}
-
-.animate-pulse-red {
-  animation: pulse-red 1s infinite ease-in-out;
-}
-
-/* Tactical CRT Scanline overlay */
-.scanlines {
-  background: linear-gradient(
-    rgba(18, 16, 16, 0) 50%, 
-    rgba(0, 0, 0, 0.25) 50%
-  ), linear-gradient(
-    90deg,
-    rgba(255, 0, 0, 0.03),
-    rgba(0, 255, 0, 0.01),
-    rgba(0, 0, 255, 0.03)
-  );
-  background-size: 100% 3px, 3px 100%;
-  pointer-events: none;
-}
-

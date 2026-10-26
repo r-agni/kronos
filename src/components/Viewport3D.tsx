@@ -1043,58 +1043,67 @@ export const Viewport3D: React.FC<Viewport3DProps> = ({
   }, []);
 
   return (
-    <div className="relative w-full h-full overflow-hidden bg-black select-none">
+    <div className="relative w-full h-full overflow-hidden bg-[#080c10] select-none">
       <div ref={containerRef} className="w-full h-full" />
 
-      <div className="absolute top-4 left-4 z-20 flex flex-wrap items-center gap-2">
-        <div className="bg-[#0b1017]/90 backdrop-blur-md border border-gray-800 p-1 rounded-lg flex space-x-1 text-[11px] font-mono text-gray-300">
+      {/* Ocean + Crusoe Top-Right Camera & Vision Controls */}
+      <div className="absolute top-3 right-3 z-20 flex flex-wrap items-center gap-1.5">
+        <div
+          className="flex border-[1.5px] border-[#0B1B2B] bg-[#F8FBFF] text-[#0B1B2B] text-[10.5px] font-extrabold tracking-wider uppercase overflow-hidden shadow-[3px_3px_0_#0B1B2B]"
+          role="group"
+          aria-label="Camera View"
+        >
           <button
             onClick={() => setCameraMode('chase')}
-            className={`px-2.5 py-1 rounded transition ${
-              cameraMode === 'chase' ? 'bg-cyan-500 text-black font-bold' : 'hover:bg-gray-800'
+            className={`px-2 py-1 transition ${
+              cameraMode === 'chase' ? 'bg-[#3B9EFF] text-[#0B1B2B]' : 'hover:bg-[#DCEEFF]'
             }`}
           >
-            CHASE CAM
+            CHASE
           </button>
           <button
             onClick={() => setCameraMode('isometric')}
-            className={`px-2.5 py-1 rounded transition ${
-              cameraMode === 'isometric' ? 'bg-cyan-500 text-black font-bold' : 'hover:bg-gray-800'
+            className={`px-2 py-1 border-l border-[#0B1B2B] transition ${
+              cameraMode === 'isometric' ? 'bg-[#3B9EFF] text-[#0B1B2B]' : 'hover:bg-[#DCEEFF]'
             }`}
           >
-            TACTICAL ORBIT
+            ORBIT
           </button>
           <button
             onClick={() => setCameraMode('cockpit')}
-            className={`px-2.5 py-1 rounded transition ${
-              cameraMode === 'cockpit' ? 'bg-cyan-500 text-black font-bold' : 'hover:bg-gray-800'
+            className={`px-2 py-1 border-l border-[#0B1B2B] transition ${
+              cameraMode === 'cockpit' ? 'bg-[#3B9EFF] text-[#0B1B2B]' : 'hover:bg-[#DCEEFF]'
             }`}
           >
-            ROVER MAST POV
+            MAST POV
           </button>
         </div>
 
-        <div className="bg-[#0b1017]/90 backdrop-blur-md border border-gray-800 p-1 rounded-lg flex space-x-1 text-[11px] font-mono text-gray-300">
+        <div
+          className="flex border-[1.5px] border-[#0B1B2B] bg-[#F8FBFF] text-[#0B1B2B] text-[10.5px] font-extrabold tracking-wider uppercase overflow-hidden shadow-[3px_3px_0_#0B1B2B]"
+          role="group"
+          aria-label="Sensor Mode"
+        >
           <button
             onClick={() => setVisionMode('standard')}
-            className={`px-2.5 py-1 rounded transition ${
-              visionMode === 'standard' ? 'bg-cyan-500 text-black font-bold' : 'hover:bg-gray-800'
+            className={`px-2 py-1 transition ${
+              visionMode === 'standard' ? 'bg-[#3B9EFF] text-[#0B1B2B]' : 'hover:bg-[#DCEEFF]'
             }`}
           >
             STD
           </button>
           <button
             onClick={() => setVisionMode('nvg')}
-            className={`px-2.5 py-1 rounded transition ${
-              visionMode === 'nvg' ? 'bg-cyan-500 text-black font-bold' : 'hover:bg-gray-800'
+            className={`px-2 py-1 border-l border-[#0B1B2B] transition ${
+              visionMode === 'nvg' ? 'bg-[#3B9EFF] text-[#0B1B2B]' : 'hover:bg-[#DCEEFF]'
             }`}
           >
             NVG
           </button>
           <button
             onClick={() => setVisionMode('flir')}
-            className={`px-2.5 py-1 rounded transition ${
-              visionMode === 'flir' ? 'bg-cyan-500 text-black font-bold' : 'hover:bg-gray-800'
+            className={`px-2 py-1 border-l border-[#0B1B2B] transition ${
+              visionMode === 'flir' ? 'bg-[#3B9EFF] text-[#0B1B2B]' : 'hover:bg-[#DCEEFF]'
             }`}
           >
             FLIR
@@ -1107,45 +1116,48 @@ export const Viewport3D: React.FC<Viewport3DProps> = ({
             isAutonomousRef.current = next;
             setIsAutonomous(next);
           }}
-          className={`px-3 py-1.5 rounded-lg border text-xs font-mono font-bold transition flex items-center space-x-1.5 ${
+          className={`px-2.5 py-1 border-[1.5px] border-[#0B1B2B] text-[10.5px] font-extrabold tracking-wider uppercase shadow-[3px_3px_0_#0B1B2B] transition flex items-center gap-1.5 ${
             isAutonomous
-              ? 'bg-emerald-950/80 border-emerald-500/80 text-emerald-300 shadow-[0_0_10px_rgba(16,185,129,0.3)]'
-              : 'bg-amber-950/80 border-amber-500/80 text-amber-300'
+              ? 'bg-[#3B9EFF] text-[#0B1B2B]'
+              : 'bg-[#FEF3C7] text-[#B45309]'
           }`}
           title="Toggle Autonomous Navigation AI vs Manual WASD Controls"
         >
-          <span className={`w-2 h-2 rounded-full ${isAutonomous ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
-          <span>{isAutonomous ? 'AI AUTOPILOT: ON' : 'MANUAL DRIVE: WASD'}</span>
+          <span className={`w-2 h-2 rounded-full border border-[#0B1B2B] ${isAutonomous ? 'bg-[#0D7A4E]' : 'bg-[#B45309]'}`} />
+          <span>{isAutonomous ? 'AUTOPILOT' : 'WASD'}</span>
         </button>
 
         <button
           onClick={() => setJudgeMode(prev => !prev)}
-          className={`px-3 py-1.5 rounded-lg border text-xs font-mono font-bold transition ${
+          className={`px-2.5 py-1 border-[1.5px] border-[#0B1B2B] text-[10.5px] font-extrabold tracking-wider uppercase shadow-[3px_3px_0_#0B1B2B] transition ${
             judgeMode
-              ? 'bg-violet-950/80 border-violet-400 text-violet-200 shadow-[0_0_10px_rgba(167,139,250,0.35)]'
-              : 'bg-gray-900 border-gray-700 text-gray-300 hover:border-violet-400 hover:text-violet-200'
+              ? 'bg-[#0B1B2B] text-[#F8FBFF]'
+              : 'bg-[#F8FBFF] text-[#0B1B2B] hover:bg-[#DCEEFF]'
           }`}
-          title="Replay the checked-in Argon transcript for sector requests, including while the socket is connected"
+          title="Replay the checked-in Argon transcript for sector requests"
         >
-          {judgeMode ? 'JUDGE MODE: REPLAY' : 'JUDGE MODE: OFF'}
+          {judgeMode ? 'REPLAY: ON' : 'REPLAY: OFF'}
         </button>
       </div>
 
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-        <div className="w-8 h-8 border border-cyan-400/20 rounded-full flex items-center justify-center">
-          <div className="w-1.5 h-1.5 bg-cyan-400/40 rounded-full" />
+        <div className="w-7 h-7 border border-cyan-400/25 rounded-full flex items-center justify-center">
+          <div className="w-1.5 h-1.5 bg-cyan-400/50 rounded-full" />
         </div>
       </div>
 
       {hudBanner && (
-        <div className="absolute top-14 left-4 z-20 pointer-events-none">
+        <div className="absolute bottom-3 left-3 right-3 z-20 pointer-events-none flex justify-start">
           <div
-            className={`px-3 py-1.5 rounded-lg border text-[11px] font-mono font-bold tracking-wide backdrop-blur-md shadow-lg ${
+            className={`px-3 py-1.5 border-[1.5px] border-[#0B1B2B] text-[11.5px] font-bold tracking-wide max-w-full truncate ${
               hudBanner.includes('BLOCKED') || hudBanner.includes('FRACTURED')
-                ? 'bg-red-950/90 border-red-500 text-red-200 animate-pulse'
-                : 'bg-cyan-950/85 border-cyan-500/80 text-cyan-200'
+                ? 'bg-[#FBEAE7] text-[#B3261E] shadow-[4px_4px_0_#B3261E]'
+                : 'bg-[#F8FBFF] text-[#0B1B2B] shadow-[4px_4px_0_#3B9EFF]'
             }`}
           >
+            <span className="font-extrabold uppercase mr-1.5 text-[10px] tracking-widest px-1.5 py-0.5 bg-[#0B1B2B] text-[#F8FBFF]">
+              EVENT
+            </span>
             {hudBanner}
           </div>
         </div>
